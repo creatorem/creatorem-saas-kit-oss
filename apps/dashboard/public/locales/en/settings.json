@@ -1,0 +1,68 @@
+{
+    "groups": {
+        "aboutYou": "About you"
+    },
+    "profile": {
+        "title": "Profile",
+        "description": "User profile settings",
+        "form": {
+            "title": "Profile",
+            "description": "Edit your profile information here.",
+            "submit": "Save Profile",
+            "profileImage": "Profile image",
+            "name": {
+                "label": "Name",
+                "description": "May appear when you are mentioned or when you add content to the platform"
+            },
+            "bio": {
+                "label": "Bio",
+                "description": "Tell us more about yourself"
+            },
+            "phone": {
+                "label": "Phone",
+                "description": "Used for authentication purposes only"
+            }
+        },
+        "email": {
+            "title": "Email",
+            "description": "Edit your email address here.",
+            "submit": "Update Email",
+            "label": "Email",
+            "fieldDescription": "Required for login and notifications",
+            "confirm": {
+                "label": "Confirm Email",
+                "description": "Please confirm your email address",
+                "placeholder": "john@doe.com",
+                "error": {
+                    "invalid": "Please enter a valid email address",
+                    "mismatch": "Email addresses do not match"
+                }
+            }
+        },
+        "appearance": {
+            "title": "Appearance",
+            "description": "Customize your appearance settings.",
+            "submit": "Save Appearance",
+            "theme": {
+                "label": "Theme",
+                "description": "Choose your preferred theme"
+            }
+        }
+    },
+    "security": {
+        "title": "Security",
+        "description": "Manage your security settings",
+        "authentication": {
+            "title": "Authentication",
+            "description": "Manage your password or login provider"
+        },
+        "session": {
+            "title": "Session",
+            "description": "Manage your session settings"
+        },
+        "mfa": {
+            "title": "Multi-Factor Authentication",
+            "description": "Manage your multi-factor authentication settings"
+        }
+    }
+}

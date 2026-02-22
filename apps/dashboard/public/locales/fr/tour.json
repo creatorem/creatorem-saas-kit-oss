@@ -1,0 +1,32 @@
+{
+    "steps": {
+        "welcome": {
+            "title": "Bienvenue sur votre tableau de bord !",
+            "description": "Ce tableau de bord est votre centre de contrôle pour surveiller et gérer l'activité de votre entreprise. Laissez-nous vous présenter les fonctionnalités clés qui vous aideront à rester au fait de vos données."
+        },
+        "aiAssistant": {
+            "title": "Assistant IA",
+            "description": "Accédez à votre assistant IA à tout moment en cliquant sur ce bouton. Obtenez une aide instantanée, des informations et des réponses à vos questions sur vos données et opérations."
+        },
+        "aiPromptInput": {
+            "title": "Saisie de prompt IA",
+            "description": "Entrez votre prompt ici pour obtenir de l'aide de l'assistant IA. Vous pouvez également utiliser la saisie vocale pour dicter votre prompt."
+        },
+        "themePreferences": {
+            "title": "Préférences de thème",
+            "description": "Personnalisez votre expérience de visualisation en basculant entre les modes clair et sombre selon vos préférences."
+        },
+        "quickSearch": {
+            "title": "Recherche rapide",
+            "description": "Utilisez la fonction de recherche pour trouver rapidement des données, des paramètres ou des fonctionnalités dans votre tableau de bord."
+        },
+        "orders": {
+            "title": "Commandes",
+            "description": "Accédez à la page des commandes pour consulter et gérer vos commandes."
+        },
+        "allSet": {
+            "title": "Vous êtes prêt !",
+            "description": "Vous connaissez maintenant les éléments essentiels de votre tableau de bord. Explorez à votre rythme et n'oubliez pas que l'assistant IA est toujours là pour vous aider si vous avez besoin de conseils."
+        }
+    }
+}

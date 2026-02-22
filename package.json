@@ -1,0 +1,72 @@
+{
+  "name": "creatorem-saas-kit",
+  "version": "1.0.0",
+  "private": true,
+  "sideEffects": false,
+  "engines": {
+    "node": ">=v20"
+  },
+  "homepage": "https://creatorem.com",
+  "author": {
+    "url": "https://creatorem.com",
+    "name": "Creatorem"
+  },
+  "scripts": {
+    "build": "turbo build --cache-dir=.turbo",
+    "clean": "git clean -xdf node_modules dist .next",
+    "dev": "cross-env FORCE_COLOR=1 turbo dev --parallel",
+    "lint": "biome lint .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
+    "check": "biome check .",
+    "typecheck": "turbo typecheck --affected --cache-dir=.turbo",
+    "analyze": "turbo analyze --cache-dir=.turbo",
+    "test": "turbo test --cache-dir=.turbo",
+    "syncpack:list": "pnpm dlx syncpack list-mismatches",
+    "syncpack:fix": "pnpm dlx syncpack fix-mismatches",
+    "supabase:start": "supabase status || supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:test": "supabase db test",
+    "db:generate-migration": "node cli/dist/cli.js generate-migration",
+    "db:generate:app-schemas": "node cli/dist/cli.js generate-schemas apps/pco-dashboard/cm-supabase/setup.json",
+    "db:reset": "node cli/dist/cli.js generate-migration && supabase db reset",
+    "supabase:deploy": "supabase link --project-ref $SUPABASE_PROJECT_REF && supabase db push",
+    "db:types": "supabase gen types typescript --local > kit/db/core/src/database.types.ts && pnpm run --filter @kit/drizzle drizzle:pull",
+    "supabase:db:dump:local": "supabase db dump --local --data-only",
+    "detect-untranslated": "tsx tooling/scripts/src/detect-untranslated-text.ts"
+  },
+  "packageManager": "pnpm@10.28.0",
+  "pnpm": {
+    "overrides": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0",
+      "react-is": "19.1.0",
+      "rimraf": "3.0.2",
+      "lightningcss": "1.30.1"
+    }
+  },
+  "dependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@kit/tsconfig": "workspace:*",
+    "@manypkg/cli": "^0.23.0",
+    "@t3-oss/env-core": "^0.13.8",
+    "@testing-library/jest-dom": "^6.7.0",
+    "@turbo/gen": "^2.5.5",
+    "@types/jest": "^29.5.14",
+    "@types/minimatch": "3.0.5",
+    "@types/react": "~19.1.10",
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "js-yaml": "^4.1.0",
+    "supabase": "^2.51.0",
+    "ts-jest": "^29.4.1",
+    "turbo": "^2.5.5",
+    "typescript": "~5.9.2",
+    "zod": "^3.25.76"
+  }
+}

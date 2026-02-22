@@ -1,0 +1,180 @@
+{
+    "navigation": {
+        "dashboard": "Tableau de bord",
+        "orders": "Commandes",
+        "products": "Produits",
+        "clients": "Clients",
+        "aiChat": "IA Chat",
+        "settings": "Paramètres",
+        "back": "Retour",
+        "mainNavigation": "Navigation principale"
+    },
+    "search": {
+        "search": "Rechercher",
+        "searchPlaceholder": "Tapez une commande ou recherchez...",
+        "noResults": "Aucun résultat trouvé.",
+        "searchShortcut": "⌘K"
+    },
+    "page": {
+        "toggleSidebar": "Basculer la barre latérale"
+    },
+    "welcome": {
+        "message": "Bienvenue {{name}} 👋"
+    },
+    "organizations": {
+        "dashboard": "Tableau de bord des organisations",
+        "memberships": "Adhésions",
+        "invitations": "Invitations"
+    },
+    "common": {
+        "loading": "Chargement...",
+        "error": "Erreur",
+        "success": "Succès",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "create": "Créer",
+        "update": "Mettre à jour",
+        "close": "Fermer",
+        "confirm": "Confirmer",
+        "back": "Retour",
+        "next": "Suivant",
+        "previous": "Précédent",
+        "submit": "Soumettre",
+        "reset": "Réinitialiser",
+        "refresh": "Actualiser",
+        "retry": "Réessayer",
+        "continue": "Continuer",
+        "skip": "Passer",
+        "description": "Ce composant démontre l'utilisation de l'i18n",
+        "htmlExample": "Ceci est un <strong>texte en gras</strong> avec <em>emphase italique</em>"
+    },
+    "actions": {
+        "add": "Ajouter",
+        "remove": "Supprimer",
+        "view": "Voir",
+        "download": "Télécharger",
+        "upload": "Téléverser",
+        "export": "Exporter",
+        "import": "Importer",
+        "filter": "Filtrer",
+        "sort": "Trier",
+        "search": "Rechercher"
+    },
+    "status": {
+        "active": "Actif",
+        "inactive": "Inactif",
+        "pending": "En attente",
+        "completed": "Terminé",
+        "cancelled": "Annulé",
+        "draft": "Brouillon",
+        "published": "Publié",
+        "archived": "Archivé"
+    },
+    "time": {
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "thisWeek": "Cette semaine",
+        "lastWeek": "La semaine dernière",
+        "thisMonth": "Ce mois",
+        "lastMonth": "Le mois dernier",
+        "thisYear": "Cette année",
+        "lastYear": "L'année dernière"
+    },
+    "validation": {
+        "required": "Ce champ est requis",
+        "invalidEmail": "Veuillez entrer une adresse e-mail valide",
+        "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères",
+        "invalidPhone": "Veuillez entrer un numéro de téléphone valide"
+    },
+    "errors": {
+        "pageNotFound": "Quelque chose manque",
+        "pageNotFoundDescription": "Désolé, la page que vous recherchez n'existe pas ou a été déplacée.",
+        "goBack": "Retour",
+        "backToHome": "Retour à l'accueil",
+        "signOut": "Se déconnecter",
+        "themeToggle": "Basculer le thème"
+    },
+    "auth": {
+        "signInTitle": "Connectez-vous à votre compte",
+        "signInDescription": "Bon retour ! Veuillez entrer vos détails",
+        "signUpTitle": "Créer un compte",
+        "signUpDescription": "Remplissez le formulaire ci-dessous pour créer un compte.",
+        "dontHaveAccount": "Vous n'avez pas de compte ?",
+        "alreadyHaveAccount": "Vous avez déjà un compte ?",
+        "signUp": "S'inscrire",
+        "signIn": "Se connecter",
+        "termsAgreement": "En vous inscrivant, vous acceptez nos <termsLink>Conditions d'utilisation</termsLink> et notre <privacyLink>Politique de confidentialité</privacyLink>. Besoin d'aide ? <contactLink>Contactez-nous</contactLink>."
+    },
+    "invitations": {
+        "joinOrganization": "Rejoindre l'organisation",
+        "invitationNotFound": "Page d'invitation introuvable",
+        "userAlreadyInOrganization": "L'utilisateur est déjà dans l'organisation. Redirection vers la page de l'organisation.",
+        "unableToAcceptInvitation": "Impossible d'accepter l'invitation"
+    },
+    "onboarding": {
+        "title": "Intégration"
+    },
+    "bookings": {
+        "title": "Réservations",
+        "createBooking": "Créer une réservation",
+        "newBooking": "Nouvelle réservation"
+    },
+    "settings": {
+        "title": "Paramètres",
+        "manageAccountSettings": "Gérer les paramètres de votre compte"
+    },
+    "analytics": {
+        "loading": "Chargement des analyses de réservation...",
+        "title": "Analyses des réservations",
+        "description": "Aperçu de vos performances de réservation et de vos insights clients"
+    },
+    "booking": {
+        "create": "Créer une réservation",
+        "tag": {
+            "create": "Créer une nouvelle étiquette",
+            "add": "Ajouter",
+            "cancel": "Annuler",
+            "createTag": "Créer l'étiquette",
+            "hideCreateForm": "Masquer le formulaire de création",
+            "createNewTag": "Créer une nouvelle étiquette",
+            "tagCreated": "Étiquette créée avec succès",
+            "failedToCreateTag": "Échec de la création de l'étiquette",
+            "tagName": "Nom de l'étiquette",
+            "enterTagName": "Entrez le nom de l'étiquette",
+            "tagColor": "Couleur de l'étiquette",
+            "creating": "Création..."
+        },
+        "meta": {
+            "created": "Créé :",
+            "lastUpdated": "Dernière mise à jour :",
+            "duplicate": "Dupliquer la réservation",
+            "export": "Exporter les détails",
+            "share": "Partager la réservation",
+            "edit": "Modifier la réservation",
+            "sendReminder": "Envoyer un rappel",
+            "markComplete": "Marquer comme terminé",
+            "cancel": "Annuler la réservation",
+            "tags": "Étiquettes"
+        },
+        "emptyState": {
+            "description": "Créez votre première réservation pour commencer.",
+            "noBookingsFound": "Aucune réservation trouvée"
+        }
+    },
+    "userMenu": {
+        "profile": "Profil",
+        "billing": "Facturation",
+        "commandMenu": "Menu de commandes",
+        "theme": "Thème",
+        "signOut": "Se déconnecter",
+        "signOutError": "Impossible de se déconnecter"
+    },
+    "footer": {
+        "copyright": "© {{year}} {{appName}}",
+        "termsOfUse": "Conditions d'utilisation",
+        "privacyPolicy": "Politique de confidentialité",
+        "signOut": "Se déconnecter"
+    }
+}

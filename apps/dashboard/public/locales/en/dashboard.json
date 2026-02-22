@@ -1,0 +1,142 @@
+{
+    "navigation": {
+        "dashboard": "Dashboard",
+        "orders": "Orders",
+        "products": "Products",
+        "clients": "Clients",
+        "aiChat": "AI Chat",
+        "settings": "Settings",
+        "back": "Back",
+        "mainNavigation": "Main Navigation"
+    },
+    "search": {
+        "search": "Search",
+        "searchPlaceholder": "Type a command or search...",
+        "noResults": "No results found.",
+        "searchShortcut": "⌘K"
+    },
+    "page": {
+        "toggleSidebar": "Toggle sidebar"
+    },
+    "welcome": {
+        "message": "Welcome {{name}} 👋"
+    },
+    "organizations": {
+        "dashboard": "Organizations Dashboard",
+        "memberships": "Memberships",
+        "invitations": "Invitations"
+    },
+    "common": {
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "create": "Create",
+        "update": "Update",
+        "close": "Close",
+        "confirm": "Confirm",
+        "back": "Back",
+        "next": "Next",
+        "previous": "Previous",
+        "submit": "Submit",
+        "reset": "Reset",
+        "refresh": "Refresh",
+        "retry": "Retry",
+        "continue": "Continue",
+        "skip": "Skip",
+        "description": "This component demonstrates i18n usage",
+        "htmlExample": "This is a <strong>bold text</strong> with <em>italic emphasis</em>"
+    },
+    "actions": {
+        "add": "Add",
+        "remove": "Remove",
+        "view": "View",
+        "download": "Download",
+        "upload": "Upload",
+        "export": "Export",
+        "import": "Import",
+        "filter": "Filter",
+        "sort": "Sort",
+        "search": "Search"
+    },
+    "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "pending": "Pending",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "draft": "Draft",
+        "published": "Published",
+        "archived": "Archived"
+    },
+    "time": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "thisWeek": "This Week",
+        "lastWeek": "Last Week",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month",
+        "thisYear": "This Year",
+        "lastYear": "Last Year"
+    },
+    "validation": {
+        "required": "This field is required",
+        "invalidEmail": "Please enter a valid email address",
+        "passwordTooShort": "Password must be at least 8 characters long",
+        "invalidPhone": "Please enter a valid phone number"
+    },
+    "errors": {
+        "pageNotFound": "Something's missing",
+        "pageNotFoundDescription": "Sorry, the page you are looking for doesn't exist or has been moved.",
+        "goBack": "Go back",
+        "backToHome": "Back to Home",
+        "signOut": "Sign out",
+        "themeToggle": "Theme toggle"
+    },
+    "auth": {
+        "signInTitle": "Sign in to your account",
+        "signInDescription": "Welcome back! Please enter your details",
+        "signUpTitle": "Create an account",
+        "signUpDescription": "Fill the form below to create an account.",
+        "dontHaveAccount": "Don't have an account?",
+        "alreadyHaveAccount": "Already have an account?",
+        "signUp": "Sign up",
+        "signIn": "Sign in",
+        "termsAgreement": "By signing up, you agree to our <termsLink>Terms of Use</termsLink> and <privacyLink>Privacy Policy</privacyLink>. Need help? <contactLink>Get in touch</contactLink>."
+    },
+    "invitations": {
+        "joinOrganization": "Join organization",
+        "invitationNotFound": "Invitation page not found",
+        "userAlreadyInOrganization": "User is already in the organization. Redirecting to organization page.",
+        "unableToAcceptInvitation": "Unable to accept invitation"
+    },
+    "onboarding": {
+        "title": "Onboarding"
+    },
+    "settings": {
+        "title": "Settings",
+        "manageAccountSettings": "Manage your account settings"
+    },
+    "analytics": {
+        "loading": "Loading order analytics...",
+        "title": "Order Analytics",
+        "description": "Overview of your order performance and customer insights"
+    },
+    "userMenu": {
+        "profile": "Profile",
+        "billing": "Billing",
+        "commandMenu": "Command Menu",
+        "theme": "Theme",
+        "signOut": "Sign out",
+        "signOutError": "Couldn't sign out"
+    },
+    "footer": {
+        "copyright": "© {{year}} {{appName}}",
+        "termsOfUse": "Terms of Use",
+        "privacyPolicy": "Privacy Policy",
+        "signOut": "Sign out"
+    }
+}

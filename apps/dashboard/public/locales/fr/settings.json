@@ -1,0 +1,68 @@
+{
+    "groups": {
+        "aboutYou": "À propos de vous"
+    },
+    "profile": {
+        "title": "Profil",
+        "description": "Paramètres du profil utilisateur",
+        "form": {
+            "title": "Profil",
+            "description": "Modifiez vos informations de profil ici.",
+            "submit": "Enregistrer le profil",
+            "profileImage": "Image de profil",
+            "name": {
+                "label": "Nom",
+                "description": "Peut apparaître lorsque vous êtes mentionné ou lorsque vous ajoutez du contenu à la plateforme"
+            },
+            "bio": {
+                "label": "Bio",
+                "description": "Parlez-nous de vous"
+            },
+            "phone": {
+                "label": "Téléphone",
+                "description": "Utilisé uniquement à des fins d'authentification"
+            }
+        },
+        "email": {
+            "title": "Email",
+            "description": "Modifiez votre adresse e-mail ici.",
+            "submit": "Mettre à jour l'email",
+            "label": "Email",
+            "fieldDescription": "Requis pour la connexion et les notifications",
+            "confirm": {
+                "label": "Confirmer l'email",
+                "description": "Veuillez confirmer votre adresse e-mail",
+                "placeholder": "jean@dupont.com",
+                "error": {
+                    "invalid": "Veuillez saisir une adresse e-mail valide",
+                    "mismatch": "Les adresses e-mail ne correspondent pas"
+                }
+            }
+        },
+        "appearance": {
+            "title": "Apparence",
+            "description": "Personnalisez vos paramètres d'apparence.",
+            "submit": "Enregistrer l'apparence",
+            "theme": {
+                "label": "Thème",
+                "description": "Choisissez votre thème préféré"
+            }
+        }
+    },
+    "security": {
+        "title": "Sécurité",
+        "description": "Gérez vos paramètres de sécurité",
+        "authentication": {
+            "title": "Authentification",
+            "description": "Gérez votre mot de passe ou votre fournisseur de connexion"
+        },
+        "session": {
+            "title": "Session",
+            "description": "Gérez les paramètres de votre session"
+        },
+        "mfa": {
+            "title": "Authentification multi-facteurs",
+            "description": "Gérez vos paramètres d'authentification multi-facteurs"
+        }
+    }
+}

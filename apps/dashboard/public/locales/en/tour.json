@@ -1,0 +1,32 @@
+{
+    "steps": {
+        "welcome": {
+            "title": "Welcome to Your Dashboard!",
+            "description": "This dashboard is your central hub for monitoring and managing your business activity. Let us show you around the key features that will help you stay on top of your data."
+        },
+        "aiAssistant": {
+            "title": "AI Assistant",
+            "description": "Access your AI assistant anytime by clicking this button. Get instant help, insights, and answers to your questions about your data and operations."
+        },
+        "aiPromptInput": {
+            "title": "AI Prompt Input",
+            "description": "Enter your prompt here to get help from the AI assistant. You can also use the voice input to speak your prompt."
+        },
+        "themePreferences": {
+            "title": "Theme Preferences",
+            "description": "Customize your viewing experience by switching between light and dark modes to suit your preferences."
+        },
+        "quickSearch": {
+            "title": "Quick Search",
+            "description": "Use the search feature to quickly find any data, settings, or features across your dashboard."
+        },
+        "orders": {
+            "title": "Orders",
+            "description": "Navigate to the orders page to view and manage your orders."
+        },
+        "allSet": {
+            "title": "You're All Set!",
+            "description": "You now know the essentials of your dashboard. Explore at your own pace and remember that the AI assistant is always here to help if you need guidance."
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "title": "AI Chat",
+    "greetings": {
+        "morning": "morning",
+        "afternoon": "afternoon",
+        "evening": "good evening",
+        "night": "hi night owl"
+    },
+    "actions": {
+        "seeConversations": "See all your ai conversations",
+        "seeArchivedConversations": "See archived conversations"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "title": "IA Chat",
+    "greetings": {
+        "morning": "bonjour",
+        "afternoon": "bon après-midi",
+        "evening": "bonsoir",
+        "night": "salut oiseau de nuit"
+    },
+    "actions": {
+        "seeConversations": "Voir toutes vos conversations IA",
+        "seeArchivedConversations": "Voir les conversations archivées"
+    }
+}

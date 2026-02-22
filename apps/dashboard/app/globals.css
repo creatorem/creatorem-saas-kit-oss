@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@import '@kit/tailwind-config/theme.css';
+@import '@kit/tailwind-config/base.css';
+@import '@kit/tailwind-config/utilities.css';
+@import '@kit/ai/style.css';
+
+/* monorepo source */
+@source "../../../kit/**/src/**/*.{ts,tsx}";
