@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "exports": {
-    "./react-native": "./src/native/index.ts",
-    "./import": "./src/www/index.ts",
-    "./default": "./src/www/index.ts",
-    "./types": "./src/www/index.ts",
-    "./envs": "./envs.ts"
+    ".": {
+      "react-native": "./src/native/index.ts",
+      "import": "./src/www/index.ts",
+      "default": "./src/www/index.ts",
+      "types": "./src/www/index.ts"
+    },
+    "./envs": {
+      "types": "./envs.ts",
+      "import": "./envs.ts"
+    }
   },
   "main": "./src/www/index.ts",
   "react-native": "./src/native/index.ts",

@@ -249,6 +249,18 @@ export interface FilterList {
         };
     };
 
+    /**
+     * Used in mobile app
+     */
+    get_dashboard_slug: {
+        clientTrpc: TrpcClientWithQuery<Router<unknown>>;
+        loadingUI: React.ReactNode;
+        return: {
+            slug?: string,
+            component?: React.ReactNode
+        }
+    };
+
     /* SERVER SIDE FILTERS */
     /**
      * Used each time we need to build an url with a "[slug]"
