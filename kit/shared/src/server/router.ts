@@ -1,3 +1,4 @@
+import { aiRouter } from '@kit/ai/router';
 import { authRouter } from '@kit/auth/router';
 import { getSettingsRouter } from '@kit/settings/router';
 import { settingsSchemas } from '../config/settings.schema.config';
@@ -13,5 +14,6 @@ export const appRouter = ctx.router({
     ...clientRouter,
     ...productRouter,
     ...authRouter,
-    ...getSettingsRouter(settingsSchemas)
+    ...getSettingsRouter(settingsSchemas),
+    ...aiRouter,
 });

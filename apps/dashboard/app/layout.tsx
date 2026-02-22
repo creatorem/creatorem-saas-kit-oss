@@ -9,7 +9,7 @@ import { getRootTheme } from '~/lib/root-theme';
 import { AppProvider } from '../components/providers/app-provider';
 
 import './globals.css';
- 
+
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,

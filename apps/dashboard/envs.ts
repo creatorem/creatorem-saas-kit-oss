@@ -1,17 +1,18 @@
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
-import { supabaseEnvs } from '@kit/supabase-server/envs';
 import { monitoringEnvs } from '@kit/monitoring/envs';
 import { utilsEnvs, utilsRouteEnvs } from '@kit/utils/envs';
 import { googleAnalyticsEnvs } from '@kit/analytics/envs';
+import { supabaseServerEnvs } from '@kit/supabase-server/envs';
+import { wwwSupabaseClientEnvs } from '@kit/supabase-client/envs';
 
 export const envs = () =>
     createEnv({
         extends: [
             utilsEnvs(),
             utilsRouteEnvs(),
-            supabaseEnvs.client.next(),
-            supabaseEnvs.server(),
+            wwwSupabaseClientEnvs(),
+            supabaseServerEnvs(),
             monitoringEnvs(),
             googleAnalyticsEnvs()
         ],

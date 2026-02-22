@@ -1,7 +1,7 @@
 import { createEnv } from '@t3-oss/env-core';
 import { z } from 'zod';
 
-export const nativeAuthEnvs = createEnv({
+export const nativeAuthEnvs = () => createEnv({
     clientPrefix: 'EXPO_PUBLIC_',
     client: {
         EXPO_PUBLIC_SUPABASE_GOOGLE_CLIENT_ID: z.string().min(1),
@@ -12,7 +12,7 @@ export const nativeAuthEnvs = createEnv({
     emptyStringAsUndefined: true,
 })
 
-export const wwwAuthEnvs = createEnv({
+export const wwwAuthEnvs = () => createEnv({
     clientPrefix: 'NEXT_PUBLIC_',
     client: {},
     server: {
@@ -31,11 +31,11 @@ export const envs = {
      * @name native Used in the src/native folder
      * @description Get the keys for the native environment
      */
-    native: () => nativeAuthEnvs,
+    native: nativeAuthEnvs,
 
     /**
-     * @name web Used in the src/www folder
+     * @name www Used in the src/www folder
      * @description Get the keys for the web environment
      */
-    www: () => wwwAuthEnvs,
+    www: wwwAuthEnvs,
 };
