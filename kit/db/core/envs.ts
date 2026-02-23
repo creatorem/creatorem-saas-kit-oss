@@ -1,7 +1,7 @@
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 
-export const envs = () =>
+export const dbEnvs = () =>
     createEnv({
         client: {},
         server: {
@@ -16,3 +16,5 @@ export const envs = () =>
         },
         emptyStringAsUndefined: true,
     });
+
+export const envs = dbEnvs

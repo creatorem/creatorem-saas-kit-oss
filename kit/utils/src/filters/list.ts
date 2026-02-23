@@ -254,11 +254,10 @@ export interface FilterList {
      */
     get_dashboard_slug: {
         clientTrpc: TrpcClientWithQuery<Router<unknown>>;
-        loadingUI: React.ReactNode;
-        return: {
+        return: () => Promise<{
             slug?: string,
             component?: React.ReactNode
-        }
+        }>
     };
 
     /* SERVER SIDE FILTERS */
