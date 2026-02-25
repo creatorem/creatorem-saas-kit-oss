@@ -1,0 +1,38 @@
+{
+    "name": "@kit/lemon-squeezy",
+    "private": true,
+    "version": "0.0.0",
+    "scripts": {
+        "clean": "git clean -xdf .turbo node_modules",
+        "lint": "pnpm exec biome check",
+        "lint:fix": "pnpm exec biome check --fix",
+        "typecheck": "tsc --noEmit"
+    },
+    "exports": {
+        ".": "./src/index.ts",
+        "./components": "./src/components/index.ts",
+        "./envs": "./envs.ts"
+    },
+    "dependencies": {
+        "@lemonsqueezy/lemonsqueezy.js": "4.0.0"
+    },
+    "devDependencies": {
+        "@kit/billing-types": "workspace:*",
+        "@kit/utils": "workspace:*",
+        "@kit/supabase": "workspace:*",
+        "@kit/tsconfig": "workspace:*",
+        "@kit/ui": "workspace:*",
+        "@t3-oss/env-nextjs": "0.13.8",
+        "@types/react": "~19.1.10",
+        "next": "16.0.8",
+        "react": "19.1.0",
+        "zod": "^3.25.76"
+    },
+    "typesVersions": {
+        "*": {
+            "*": [
+                "src/*"
+            ]
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "settings": {
+        "title": "Keybindings",
+        "description": "Customize keyboard shortcuts for faster navigation",
+        "shortcuts": {
+            "title": "Keyboard Shortcuts",
+            "description": "Customize keyboard shortcuts to match your workflow. Changes are saved automatically.",
+            "info": "Keybindings are stored in your user settings and will sync across devices."
+        }
+    }
+}

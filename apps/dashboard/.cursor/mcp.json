@@ -1,0 +1,36 @@
+{
+    "mcpServers": {
+        "supabase-online": {
+            "command": "npx",
+            "args": ["-y", "@supabase/mcp-server-supabase@latest", "--access-token", "<personal-access-token>"]
+        },
+        "supabase-local": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-postgres",
+                "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+            ]
+        },
+        "context7": {
+            "command": "npx",
+            "args": ["-y", "@upstash/context7-mcp@latest"]
+        },
+        "assistant-ui": {
+            "command": "npx",
+            "args": ["-y", "@assistant-ui/mcp-docs-server"]
+        },
+        "playwright": {
+            "command": "npx",
+            "args": ["@playwright/mcp@latest"]
+        },
+        "shadcn": {
+            "command": "npx",
+            "args": ["shadcn@latest", "mcp"]
+        },
+        "motion": {
+            "command": "npx",
+            "args": ["-y", "motion-ai"]
+        }
+    }
+}

@@ -1,0 +1,67 @@
+{
+  "name": "@kit/supabase-client",
+  "version": "1.0.0",
+  "private": true,
+  "exports": {
+    ".": {
+      "react-native": "./src/native/index.ts",
+      "import": "./src/www/index.ts",
+      "default": "./src/www/index.ts",
+      "types": "./src/www/index.ts"
+    },
+    "./envs": {
+      "types": "./envs.ts",
+      "import": "./envs.ts"
+    }
+  },
+  "main": "./src/www/index.ts",
+  "react-native": "./src/native/index.ts",
+  "types": "./src/www/index.ts",
+  "scripts": {
+    "clean": "git clean -xdf .turbo node_modules",
+    "lint": "pnpm exec biome check",
+    "lint:fix": "pnpm exec biome check --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@kit/tailwind-config": "workspace:*",
+    "@kit/tsconfig": "workspace:*",
+    "@kit/db": "workspace:*",
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@supabase/ssr": "^0.5.2",
+    "@types/aes-js": "^3.1.4",
+    "aes-js": "^3.1.2",
+    "expo-secure-store": "^15.0.7",
+    "react-native-get-random-values": "^1.11.0",
+    "zod": "^3.25.76"
+  },
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@supabase/ssr": "^0.5.2",
+    "aes-js": "^3.1.2",
+    "expo-secure-store": "^15.0.7",
+    "react-native-get-random-values": "^1.11.0"
+  },
+  "peerDependenciesMeta": {
+    "@react-native-async-storage/async-storage": {
+      "optional": true
+    },
+    "aes-js": {
+      "optional": true
+    },
+    "expo-secure-store": {
+      "optional": true
+    },
+    "react-native-get-random-values": {
+      "optional": true
+    },
+    "@supabase/ssr": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.55.0",
+    "@t3-oss/env-core": "^0.13.8",
+    "@tanstack/react-query": "5.90.12"
+  }
+}

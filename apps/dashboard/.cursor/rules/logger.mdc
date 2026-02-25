@@ -1,0 +1,95 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Logger Usage Guidelines
+
+This guide outlines the proper usage of the logger from the `@kit/utils` package.
+
+## Core Logger
+
+The logger is a Pino-based singleton exposed from `@kit/utils`.
+
+```typescript
+import { logger } from '@kit/utils';
+```
+
+## Log Levels
+
+Use the appropriate log level for each situation:
+
+| Level | Usage |
+|-------|-------|
+| `debug` | Development details and verbose information |
+| `info` | General application progress and milestones |
+| `warn` | Non-critical issues that should be addressed |
+| `error` | Errors that affect functionality but don't crash the application |
+| `fatal` | Critical failures that prevent application function |
+
+## Usage Patterns
+
+### 1. String Messages
+```typescript
+logger.info('User logged in');
+logger.error('Failed to process payment');
+```
+
+### 2. Structured Logging
+```typescript
+logger.info({ userId, action: 'login' }, 'User logged in');
+logger.error({ orderId, error }, 'Payment processing failed');
+```
+
+### 3. Context Objects
+Always include relevant context with error logs:
+```typescript
+try {
+  await processPayment(orderId);
+} catch (error) {
+  logger.error({ error, orderId, userId }, 'Payment processing failed');
+  // Handle error appropriately
+}
+```
+
+## Best Practices
+
+### 1. Structured Data
+- ✅ Include structured data for better searchability
+- ✅ Add relevant IDs and context objects
+- ✅ Pass errors as objects, not string messages
+
+### 2. Security & Privacy
+- ❌ Never log sensitive information (passwords, tokens, full PII)
+- ✅ Redact or mask sensitive data
+- ✅ Be careful with user-provided content
+
+### 3. Performance
+- ❌ Avoid excessive logging in hot paths
+- ✅ Use appropriate log levels for production
+- ✅ Consider logger overhead in performance-critical code
+
+## Common Patterns
+
+### Error Handling
+```typescript
+try {
+  await riskyOperation();
+} catch (error) {
+  logger.error({ error, context: { userId, resourceId } }, 'Operation failed');
+  throw new Error('Unable to complete operation');
+}
+```
+
+### Feature Tracking
+```typescript
+logger.info({ feature: 'subscription', action: 'upgrade', userId }, 'Subscription upgraded');
+```
+
+### Debug Information
+```typescript
+logger.debug({ query, results: results.length }, 'Search results returned');
+```
+
+Remember: Good logging practices make debugging and monitoring much easier. Be thoughtful about what you log and how you structure your log messages.
+

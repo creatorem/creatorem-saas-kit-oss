@@ -1,0 +1,47 @@
+{
+    "validation": {
+        "minCharacters": "A minimum of 3 characters is required.",
+        "slugTaken": "This slug is already taken."
+    },
+    "fields": {
+        "name": {
+            "label": "Name"
+        },
+        "slug": {
+            "label": "Slug"
+        }
+    },
+    "steps": {
+        "organization": {
+            "label": "Organization",
+            "header": {
+                "title": "Create your first organization",
+                "description": "We just need some basic info to get your organization set up. You'll be able to edit this later."
+            }
+        },
+        "size": {
+            "label": "Size",
+            "question": "What is the size of your organization ?",
+            "description": "This helps us tailor features and recommendations to your organization size.",
+            "answers": {
+                "justMe": "Just me",
+                "2-10": "2-10",
+                "11-50": "11-50",
+                "51-100": "51-100",
+                "+100": "+100"
+            }
+        }
+    },
+    "paths": {
+        "createOrganization": {
+            "title": "Create organization",
+            "description": "We just need some basic info to get your organization set up. You'll be able to edit this later.",
+            "submit": "Create organization"
+        },
+        "createProfile": {
+            "title": "Set up your profile",
+            "description": "Make sure your profile information is correct. You'll be able to change this later.",
+            "submit": "Create profile"
+        }
+    }
+}

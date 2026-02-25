@@ -1,0 +1,193 @@
+{
+    "groups": {
+        "organization": "Organisation"
+    },
+    "index": {
+        "title": "Organisation",
+        "description": "Configurer les paramètres de l'organisation",
+        "organizationInfo": {
+            "title": "Informations de l'organisation",
+            "titleDescription": "Mettez à jour les informations de base et l'image de marque de votre organisation.",
+            "submit": "Enregistrer les informations",
+            "logo": {
+                "label": "Logo"
+            },
+            "name": {
+                "label": "Nom",
+                "description": "Ne changera pas l'URL de l'organisation",
+                "placeholder": "Mon Organisation"
+            },
+            "website": {
+                "label": "Site web",
+                "placeholder": "https://exemple.com"
+            },
+            "description": {
+                "label": "Description",
+                "description": "Une brève description de votre organisation (max 1000 caractères)"
+            },
+            "address": {
+                "label": "Adresse",
+                "placeholder": "123 Rue Principale, Ville, Pays"
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "info@exemple.com"
+            }
+        },
+        "additionalSettings": {
+            "title": "Paramètres supplémentaires",
+            "description": "Configurez les détails et préférences supplémentaires de l'organisation.",
+            "submit": "Enregistrer les paramètres",
+            "industry": {
+                "label": "Industrie",
+                "placeholder": "Technologie, Santé, Finance, etc."
+            },
+            "size": {
+                "label": "Taille de l'organisation",
+                "description": "Nombre d'employés dans votre organisation",
+                "options": {
+                    "1-10": "1-10 employés",
+                    "11-50": "11-50 employés",
+                    "51-200": "51-200 employés",
+                    "201-500": "201-500 employés",
+                    "501-1000": "501-1000 employés",
+                    "1000+": "1000+ employés"
+                }
+            },
+            "country": {
+                "label": "Pays",
+                "placeholder": "France, Canada, Belgique, etc."
+            }
+        }
+    },
+    "members": {
+        "title": "Membres",
+        "description": "Gérer les membres de l'organisation et leurs rôles",
+        "content": {
+            "title": "Membres",
+            "description": "Gérez les membres de l'organisation, leurs rôles et leurs permissions. Invitez de nouveaux membres ou mettez à jour l'accès des membres existants."
+        }
+    },
+    "roles": {
+        "title": "Rôles et permissions",
+        "description": "Gérer les rôles de l'organisation et leurs permissions",
+        "content": {
+            "title": "Rôles et permissions",
+            "description": "Créez des rôles personnalisés et configurez leurs permissions. Les rôles déterminent les actions que les membres peuvent effectuer au sein de votre organisation."
+        }
+    },
+    "invitations": {
+        "title": "Invitations",
+        "description": "Voir et gérer les invitations d'organisation qui vous ont été envoyées",
+        "content": {
+            "title": "Invitations d'organisation",
+            "description": "Consultez et répondez aux invitations d'organisation envoyées à votre adresse e-mail. Acceptez les invitations pour rejoindre des organisations ou refusez-les."
+        },
+        "button": {
+            "inviteMember": "Inviter un membre",
+            "cancel": "Annuler",
+            "sendInvitation": "Envoyer l'invitation",
+            "accept": "Accepter",
+            "accepting": "Acceptation...",
+            "decline": "Refuser",
+            "remove": "Supprimer",
+            "delete": "Supprimer",
+            "resendInvitation": "Renvoyer l'invitation"
+        },
+        "form": {
+            "title": "Inviter un membre",
+            "description": "Entrez l'adresse e-mail et le rôle de la personne que vous souhaitez inviter dans cette organisation.",
+            "email": {
+                "label": "Adresse e-mail",
+                "placeholder": "Entrez une adresse e-mail..."
+            },
+            "role": {
+                "label": "Rôle",
+                "placeholder": "Sélectionnez un rôle...",
+                "unknown": "Inconnu",
+                "allRoles": "Tous les rôles"
+            }
+        },
+        "toast": {
+            "invitationSentSuccess": "Invitation envoyée avec succès",
+            "invitationSentError": "Échec de l'envoi de l'invitation",
+            "invitationAcceptedSuccess": "Invitation acceptée avec succès",
+            "invitationAcceptedError": "Échec de l'acceptation de l'invitation",
+            "invitationDeclinedSuccess": "Invitation refusée",
+            "invitationDeclinedError": "Échec du refus de l'invitation",
+            "invitationDeletedSuccess": "Invitation supprimée avec succès",
+            "invitationDeletedError": "Échec de la suppression de l'invitation",
+            "invitationResentSuccess": "Invitation renvoyée avec succès",
+            "invitationResentError": "Échec du renvoi de l'invitation"
+        },
+        "userView": {
+            "title": "Invitations d'organisation ({{count}})",
+            "search": {
+                "placeholder": "Rechercher des organisations..."
+            },
+            "empty": {
+                "noMatching": "Aucune invitation correspondante",
+                "noInvitations": "Aucune invitation trouvée",
+                "tryAdjusting": "Essayez d'ajuster vos critères de recherche.",
+                "noDescription": "Vous n'avez aucune invitation d'organisation en attente."
+            },
+            "invitedAs": "Invité en tant que",
+            "invited": "Invité {{time}}",
+            "sections": {
+                "pending": "En attente ({{count}})",
+                "expired": "Expirées ({{count}})"
+            },
+            "status": {
+                "expired": "Expirée"
+            },
+            "accept": {
+                "header": "Accepter l'invitation à \"{{organizationName}}\"",
+                "content": "Une fois l'invitation acceptée, vous rejoindrez l'organisation \"{{organizationName}}\" en tant que \"{{roleName}}\".",
+                "ariaLabel": "Accepter l'invitation à {{organizationName}}"
+            },
+            "decline": {
+                "header": "Refuser l'invitation",
+                "removeHeader": "Supprimer l'invitation",
+                "content": "Êtes-vous sûr de vouloir {{action}} l'invitation à rejoindre {{organizationName}} ?",
+                "contentWarning": " Cette action ne peut pas être annulée.",
+                "ariaLabel": "Refuser l'invitation",
+                "removeAriaLabel": "Supprimer l'invitation"
+            }
+        },
+        "organizationView": {
+            "title": "Invitations en attente ({{count}})",
+            "search": {
+                "placeholder": "Rechercher des invitations par e-mail..."
+            },
+            "empty": {
+                "title": "Aucune invitation en attente",
+                "tryAdjusting": "Essayez d'ajuster vos critères de recherche ou de filtre.",
+                "noDescription": "Votre organisation n'a aucune invitation en attente."
+            },
+            "sections": {
+                "pending": "En attente ({{count}})",
+                "expired": "Expirées ({{count}})"
+            },
+            "invited": "Invité {{time}}",
+            "status": {
+                "expired": "Expirée"
+            },
+            "actions": {
+                "ariaLabel": "Actions d'invitation"
+            },
+            "delete": {
+                "title": "Supprimer l'invitation",
+                "removeTitle": "Retirer l'invitation",
+                "description": "Êtes-vous sûr de vouloir {{action}} l'invitation pour {{email}} ?",
+                "warning": "Cette action ne peut pas être annulée.",
+                "ariaLabel": "{{action}} l'invitation pour {{email}}",
+                "menuItem": "Supprimer l'invitation",
+                "menuItemExpired": "Retirer l'invitation expirée"
+            }
+        },
+        "revoked": {
+            "title": "L'invitation a été révoquée",
+            "description": "Si vous pensez avoir atteint ce message par erreur, veuillez parler avec l'administrateur de votre équipe et lui demander de vous réinviter."
+        }
+    }
+}

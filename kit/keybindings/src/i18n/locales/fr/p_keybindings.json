@@ -1,0 +1,11 @@
+{
+    "settings": {
+        "title": "Raccourcis clavier",
+        "description": "Personnalisez les raccourcis clavier pour une navigation plus rapide",
+        "shortcuts": {
+            "title": "Raccourcis clavier",
+            "description": "Personnalisez les raccourcis clavier pour correspondre à votre flux de travail. Les modifications sont enregistrées automatiquement.",
+            "info": "Les raccourcis clavier sont stockés dans vos paramètres utilisateur et se synchroniseront sur tous les appareils."
+        }
+    }
+}

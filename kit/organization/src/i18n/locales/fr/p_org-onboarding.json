@@ -1,0 +1,47 @@
+{
+    "validation": {
+        "minCharacters": "Un minimum de 3 caractères est requis.",
+        "slugTaken": "Ce slug est déjà pris."
+    },
+    "fields": {
+        "name": {
+            "label": "Nom"
+        },
+        "slug": {
+            "label": "Slug"
+        }
+    },
+    "steps": {
+        "organization": {
+            "label": "Organisation",
+            "header": {
+                "title": "Créez votre première organisation",
+                "description": "Nous avons juste besoin de quelques informations de base pour configurer votre organisation. Vous pourrez modifier cela plus tard."
+            }
+        },
+        "size": {
+            "label": "Taille",
+            "question": "Quelle est la taille de votre organisation ?",
+            "description": "Cela nous aide à adapter les fonctionnalités et recommandations à la taille de votre organisation.",
+            "answers": {
+                "justMe": "Juste moi",
+                "2-10": "2-10",
+                "11-50": "11-50",
+                "51-100": "51-100",
+                "+100": "+100"
+            }
+        }
+    },
+    "paths": {
+        "createOrganization": {
+            "title": "Créer une organisation",
+            "description": "Nous avons juste besoin de quelques informations de base pour configurer votre organisation. Vous pourrez modifier cela plus tard.",
+            "submit": "Créer une organisation"
+        },
+        "createProfile": {
+            "title": "Configurez votre profil",
+            "description": "Assurez-vous que les informations de votre profil sont correctes. Vous pourrez les modifier plus tard.",
+            "submit": "Créer le profil"
+        }
+    }
+}

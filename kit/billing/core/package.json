@@ -1,0 +1,51 @@
+{
+    "name": "@kit/billing",
+    "private": true,
+    "version": "1.0.0",
+    "scripts": {
+        "clean": "git clean -xdf .turbo node_modules",
+        "lint": "pnpm exec biome check",
+        "lint:fix": "pnpm exec biome check --fix",
+        "typecheck": "tsc --noEmit"
+    },
+    "exports": {
+        "./www/use-filters": "./src/www/filters/use-filters.ts",
+        "./www/cross-env-filters": "./src/www/filters/cross-env-filters.ts",
+        ".": "./src/index.ts",
+        "./router": "./src/router/router.ts",
+        "./ui": "./src/react/index.ts",
+        "./pricing": "./src/react/pricing/index.ts",
+        "./pricing-product-trigger": "./src/react/pricing/pricing-product-trigger.tsx",
+        "./server": "./src/server/index.ts",
+        "./actions/*": "./src/actions/*.ts",
+        "./types": "./src/types/index.ts",
+        "./envs": "./envs.ts"
+    },
+    "dependencies": {
+        "@creatorem/next-trpc": "^1.0.16"
+    },
+    "devDependencies": {
+        "@hookform/resolvers": "^4.1.3",
+        "@kit/billing-types": "workspace:*",
+        "@kit/db": "workspace:*",
+        "@kit/drizzle": "workspace:*",
+        "@kit/lemon-squeezy": "workspace:*",
+        "@kit/organization": "workspace:*",
+        "@kit/utils": "workspace:*",
+        "@kit/stripe": "workspace:*",
+        "@kit/auth": "workspace:*",
+        "@kit/supabase": "workspace:*",
+        "@kit/supabase-server": "workspace:*",
+        "@kit/tsconfig": "workspace:*",
+        "@kit/ui": "workspace:*",
+        "react-hook-form": "^7.62.0",
+        "zod": "^3.25.76"
+    },
+    "typesVersions": {
+        "*": {
+            "*": [
+                "src/*"
+            ]
+        }
+    }
+}
