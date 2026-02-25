@@ -13,11 +13,13 @@ import {
 import { Icon } from '@kit/ui/icon';
 import { Input } from '@kit/ui/input';
 import { ScrollArea } from '@kit/ui/scroll-area';
-import { dashboardRoutes, replaceOrgSlug } from '@kit/utils/config';
+// import { dashboardRoutes} from '@kit/utils/config';
+import { replaceSlugInUrl } from '@kit/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { OrgConfig, wwwConfig } from '../../config';
 
 interface OrganizationSwitcherTriggerProps extends React.ComponentPropsWithoutRef<'div'> {
     organization: {
@@ -47,12 +49,14 @@ interface OrganizationSwitcherProps {
     onClose?: () => void;
     className?: string;
     triggerWrapper?: (trigger: React.ReactNode) => React.ReactNode;
+    orgConfig: OrgConfig
 }
 
 export function OrganizationSwitcher({
     onClose,
     className,
     triggerWrapper,
+    orgConfig
 }: OrganizationSwitcherProps): React.JSX.Element {
     const { t } = useTranslation('p_org');
     const router = useRouter();
@@ -77,10 +81,10 @@ export function OrganizationSwitcher({
 
     const handleOrgChange = useCallback(
         async (orgOfMember: Organization) => {
-            router.push(replaceOrgSlug(dashboardRoutes.paths.dashboard.slug.index, orgOfMember.slug));
+            router.push(replaceSlugInUrl(wwwConfig(orgConfig).urls.organizationRoot + '/[slug]', orgOfMember.slug));
             onClose?.();
         },
-        [onClose, router],
+        [onClose, router, orgConfig],
     );
 
     const defaultTrigger = <OrganizationSwitcherTrigger organization={organization} className={className} />;
@@ -141,7 +145,7 @@ export function OrganizationSwitcher({
                 {userMemberships.length > 1 && (
                     <DropdownMenuItem asChild className="cursor-pointer gap-2 p-2">
                         <Link
-                            href={dashboardRoutes.paths.dashboard.index}
+                            href={wwwConfig(orgConfig).urls.organizationRoot}
                             className="text-muted-foreground"
                             onClick={onClose}
                         >
@@ -153,19 +157,21 @@ export function OrganizationSwitcher({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="cursor-pointer gap-2 p-2">
                     <Link
-                        href={replaceOrgSlug(dashboardRoutes.paths.dashboard.slug.settings.index, organization.slug)}
+                        // href={replaceSlugInUrl(dashboardRoutes.paths.dashboard.slug.settings.index, organization.slug)}
+                        href=""
                         onClick={onClose}
-                    >
+                        >
                         <Icon name="User" className="text-muted-foreground size-4 shrink-0" />
                         {t('organizationSwitcher.accountSettings')}
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="cursor-pointer gap-2 p-2">
                     <Link
-                        href={replaceOrgSlug(
-                            dashboardRoutes.paths.dashboard.slug.settings.organization.index,
-                            organization.slug,
-                        )}
+                        href=""
+                        // href={replaceSlugInUrl(
+                        //     dashboardRoutes.paths.dashboard.slug.settings.organization.index,
+                        //     organization.slug,
+                        // )}
                         onClick={onClose}
                     >
                         <Icon name="Settings" className="text-muted-foreground size-4 shrink-0" />
@@ -174,7 +180,7 @@ export function OrganizationSwitcher({
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="cursor-pointer gap-2 p-2">
-                    <Link href={dashboardRoutes.paths.onboarding.organization} onClick={onClose}>
+                    <Link href={wwwConfig(orgConfig).urls.onboarding.index + '/organization'} onClick={onClose}>
                         <Icon name="Plus" className="text-muted-foreground size-4 shrink-0" />
                         {t('organizationSwitcher.addOrganization')}
                     </Link>

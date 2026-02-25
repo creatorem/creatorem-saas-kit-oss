@@ -1,0 +1,355 @@
+---
+description: 
+globs: *.tsx
+alwaysApply: false
+---
+# React Development Guidelines
+
+This guide outlines best practices for React development in Next.js applications, focusing on client components and hooks usage.
+
+## Client Components
+
+### 1. Client Component Declaration
+- ✅ Always include 'use client' directive at the top of client component files
+- ✅ Keep client components minimal and focused
+- ✅ Avoid mixing server and client logic
+- ❌ Never import server-only modules in client components
+
+Example:
+```tsx
+'use client';
+
+import { useState } from 'react';
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  );
+}
+```
+
+### 2. Performance Optimization
+- ✅ Always use `useCallback` for functions passed as props or used in dependency arrays
+- ✅ Always use `useMemo` for expensive calculations or derived values
+- ✅ Implement proper memoization with React.memo when appropriate
+- ✅ Use appropriate keys in list rendering
+- ❌ Avoid excessive re-renders by proper dependency management
+
+Example:
+```tsx
+'use client';
+
+import React, { useCallback, useMemo, useState } from 'react';
+
+interface UserListProps {
+  users: User[];
+  onUserSelect: (userId: string) => void;
+}
+
+export function UserList({ users, onUserSelect }: UserListProps) {
+  const [filter, setFilter] = useState('');
+  
+  // Memoize filtered users to prevent recalculation on every render
+  const filteredUsers = useMemo(() => {
+    return users.filter(user => 
+      user.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  }, [users, filter]);
+  
+  // Memoize handlers to prevent recreation on every render
+  const handleUserClick = useCallback((userId: string) => {
+    onUserSelect(userId);
+  }, [onUserSelect]);
+  
+  return (
+    <div>
+      <input 
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        placeholder="Filter users..."
+      />
+      <ul>
+        {filteredUsers.map(user => (
+          <li key={user.id} onClick={() => handleUserClick(user.id)}>
+            {user.name}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+## Hooks Usage
+
+### 1. `useCallback` & `useMemo`
+- ✅ Always use `useCallback` for event handlers or functions passed to child components
+- ✅ Always use `useMemo` for expensive computations or derived state
+- ✅ Be precise with dependency arrays to prevent unnecessary recalculations
+- ❌ Avoid memoizing simple values or when the cost of memoization exceeds the benefit
+
+Example:
+```tsx
+'use client';
+
+import { useCallback, useMemo, useState } from 'react';
+
+export function DataProcessor({ data, onProcess }) {
+  const [threshold, setThreshold] = useState(10);
+  
+  // Memoize expensive computation
+  const processedItems = useMemo(() => {
+    console.log('Processing data...');
+    return data.filter(item => item.value > threshold)
+               .map(item => ({ ...item, processed: true }));
+  }, [data, threshold]);
+  
+  // Memoize event handler
+  const handleItemClick = useCallback((itemId) => {
+    const item = processedItems.find(item => item.id === itemId);
+    onProcess(item);
+  }, [processedItems, onProcess]);
+  
+  return (
+    <div>
+      <div>Processed {processedItems.length} items</div>
+      <ul>
+        {processedItems.map(item => (
+          <li key={item.id} onClick={() => handleItemClick(item.id)}>
+            {item.name}: {item.value}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+### 2. `use` Hook for Async Operations
+- ✅ Use the `use` hook for handling async operations or promises in client components
+- ✅ Wrap async resources with `use` for suspense-enabled data fetching
+- ✅ Remember `use` is for handling promises, not for executing async functions
+- ❌ Don't use `use` hook within conditional statements or loops
+
+Example:
+```tsx
+'use client';
+
+import { use } from 'react';
+import { useState } from 'react';
+
+// The promise should be created outside the component
+const fetchUserData = fetch('/api/user').then(res => res.json());
+
+export function UserProfile() {
+  // Use the 'use' hook to handle the promise
+  const userData = use(fetchUserData);
+  
+  return (
+    <div>
+      <h1>{userData.name}</h1>
+      <p>{userData.email}</p>
+    </div>
+  );
+}
+```
+
+### 3. Custom Hooks
+- ✅ Create focused, reusable custom hooks for shared logic
+- ✅ Optimize custom hooks with `useCallback` and `useMemo`
+- ✅ Follow naming convention with "use" prefix
+- ✅ Document hooks with clear input/output definitions
+- ❌ Avoid having custom hooks fetch data directly, prefer passing promises
+
+Example:
+```tsx
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
+
+export function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+  
+  return debouncedValue;
+}
+
+// Usage example
+function SearchComponent() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  
+  // This effect only runs when the debounced value changes
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      // Execute search operation
+    }
+  }, [debouncedSearchTerm]);
+  
+  return (
+    <input
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      placeholder="Search..."
+    />
+  );
+}
+```
+
+## State Management
+
+### 1. Local State
+- ✅ Use `useState` for component-specific state
+- ✅ Use `useReducer` for complex state logic
+- ✅ Group related state variables into a single state object
+- ❌ Don't use state for derived values that can be calculated from existing state
+- ❌ Avoid redundant state that can be derived from props
+
+### 2. Application State
+- ✅ Use Context API for shared state across components
+- ✅ Optimize context updates by splitting contexts
+- ✅ Consider state management libraries for complex applications
+- ✅ Use selectors to prevent unnecessary renders
+- ❌ Don't put everything in global state
+
+Example:
+```tsx
+'use client';
+
+import React, { createContext, useCallback, useContext, useMemo, useReducer } from 'react';
+
+// Create a context with a default value
+const ThemeContext = createContext<{
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+}>({
+  theme: 'light',
+  toggleTheme: () => {},
+});
+
+// Reducer for state management
+function themeReducer(state: 'light' | 'dark', action: { type: 'TOGGLE' }) {
+  switch (action.type) {
+    case 'TOGGLE':
+      return state === 'light' ? 'dark' : 'light';
+    default:
+      return state;
+  }
+}
+
+// Provider component
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, dispatch] = useReducer(themeReducer, 'light');
+  
+  // Memoize the toggle function
+  const toggleTheme = useCallback(() => {
+    dispatch({ type: 'TOGGLE' });
+  }, []);
+  
+  // Memoize the context value
+  const value = useMemo(() => ({
+    theme,
+    toggleTheme,
+  }), [theme, toggleTheme]);
+  
+  return (
+    <ThemeContext.Provider value={value}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+// Custom hook for consuming the context
+export function useTheme() {
+  return useContext(ThemeContext);
+}
+```
+
+## Effect Management
+
+### 1. Side Effects
+- ✅ Use `useEffect` for side effects like subscriptions, timers, and manual DOM manipulations
+- ✅ Clean up side effects in the return function
+- ✅ Keep dependency arrays accurate and complete
+- ✅ Consider using `useLayoutEffect` for DOM measurements
+- ❌ Don't use effects for state updates that could be derived from props
+
+Example:
+```tsx
+'use client';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+export function ChatComponent({ roomId }: { roomId: string }) {
+  const [messages, setMessages] = useState([]);
+  const socketRef = useRef(null);
+  
+  // Connect to socket when component mounts or roomId changes
+  useEffect(() => {
+    // Connect to the chat room
+    socketRef.current = new WebSocket(`wss://chat.example.com/${roomId}`);
+    
+    // Handle incoming messages
+    socketRef.current.addEventListener('message', event => {
+      const message = JSON.parse(event.data);
+      setMessages(prev => [...prev, message]);
+    });
+    
+    // Clean up function
+    return () => {
+      socketRef.current.close();
+    };
+  }, [roomId]);
+  
+  // Memoize the send message function
+  const sendMessage = useCallback((text: string) => {
+    if (socketRef.current?.readyState === WebSocket.OPEN) {
+      socketRef.current.send(JSON.stringify({ text }));
+    }
+  }, []);
+  
+  return (
+    <div>
+      <div className="messages">
+        {messages.map((msg, index) => (
+          <div key={index}>{msg.text}</div>
+        ))}
+      </div>
+      <MessageInput onSend={sendMessage} />
+    </div>
+  );
+}
+```
+
+## Implementation Checklist
+
+### 1. New Components
+- [ ] Add 'use client' directive for client components
+- [ ] Optimize event handlers with `useCallback`
+- [ ] Optimize derived values with `useMemo`
+- [ ] Add proper dependency arrays to hooks
+- [ ] Break into smaller components if too complex
+- [ ] Implement proper cleanup in useEffect
+
+### 2. Code Review
+- [ ] Check for missing 'use client' directives
+- [ ] Verify memoization with `useCallback` and `useMemo`
+- [ ] Check dependency arrays for completeness
+- [ ] Verify that expensive calculations are memoized
+- [ ] Check for proper cleanup in useEffect
+- [ ] Verify that the `use` hook is used correctly
+
+Remember: Performance optimization should be applied judiciously. Don't over-optimize code that isn't causing performance issues, but always follow best practices from the beginning to avoid problems later.

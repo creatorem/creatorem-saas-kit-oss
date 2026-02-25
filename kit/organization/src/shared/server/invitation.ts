@@ -14,7 +14,6 @@ import {
 import { renderInviteUserEmail } from '@kit/email-templates';
 import { EmailProvider } from '@kit/emailer';
 import { logger } from '@kit/utils';
-import { dashboardRoutes } from '@kit/utils/config';
 import { UserInvitationWithOrganization } from '../invitation/hooks/use-invitation-responder';
 import {
     type AcceptInvitationParams,
@@ -121,7 +120,8 @@ export class InvitationEngine implements InvitationEngineInterface {
             email: params.email,
         });
 
-        const inviteLink = `${dashboardRoutes.url}${dashboardRoutes.paths.invitations}?${urlParams.toString()}`;
+        // const inviteLink = `${dashboardRoutes.url}${dashboardRoutes.paths.invitations}?${urlParams.toString()}`;
+        const inviteLink = `to implement`;
 
         // to implement (put that way to fix ts errors)
         const { html, subject } = await renderInviteUserEmail({

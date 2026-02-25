@@ -11,64 +11,20 @@ import {
 } from '@kit/drizzle';
 import { OrganizationDBClient } from '@kit/organization/shared/server';
 import { getDBClient } from '@kit/supabase-server';
-import { dashboardRoutes, replaceOrgSlug } from '@kit/utils/config';
+import { replaceSlugInUrl } from '@kit/utils';
 import { AsyncFilterCallback, enqueueServerFilter, FilterCallback } from '@kit/utils/filters/server';
 import { headers } from 'next/headers';
 import { OrganizationBilling } from '../../billing/organization-billing';
 import { organizationAttributesStorage, organizationSettingsStorage } from '../../shared/organization-setting-provider';
 import { settingsOrgSchema } from '../../shared/organization-settings-schema';
+import { OrgConfig, wwwConfig } from '../../config';
 
 const SERVER_REPLACE_ORG_IN_URL = 'serverReplaceOrgInUrl';
 const serverReplaceOrgInUrl = async (url: string): Promise<string> => {
     const db = await getDBClient();
     const organizationClient = new OrganizationDBClient(db);
     const organization = await organizationClient.require();
-    return replaceOrgSlug(url, organization.slug);
-};
-
-const SERVER_HANDLE_ROOT_DASHBOARD_REDIRECTION = 'serverHandleRootDashboardRedirection';
-const serverHandleRootDashboardRedirection: AsyncFilterCallback<'server_redirect_root_dashboard'> = async () => {
-    const db = await getDBClient();
-    const organizations = await db.rls.transaction(async (tx) => {
-        return await tx.select().from(organizationTable);
-    });
-
-    if (organizations.length === 1) {
-        const organization = organizations[0];
-        if (organization) {
-            return replaceOrgSlug(dashboardRoutes.paths.dashboard.slug.index, organization.slug);
-        }
-    }
-
-    return null;
-};
-
-const SERVER_HANDLE_ONBOARDING_REDIRECTION = 'serverHandleOnboardingRedirection';
-const serverHandleOnboardingRedirection: AsyncFilterCallback<'server_redirect_onboarding'> = async () => {
-    const db = await getDBClient();
-    const user = await db.user.require();
-    const organizationClient = new OrganizationDBClient(db);
-    // Check if the user has memberships or pending invitations
-    const memberships = await organizationClient.getUserMemberships();
-    if (
-        // has memberships
-        memberships.length > 0 ||
-        // pending invitation
-        (
-            await db.rls.transaction(async (tx) => {
-                const invitations = await tx
-                    .select({})
-                    .from(organizationInvitation)
-                    .where(and(eq(organizationInvitation.email, user.email ?? '')))
-                    .limit(1);
-                return invitations;
-            })
-        ).length > 0
-    ) {
-        return dashboardRoutes.paths.onboarding.user;
-    }
-
-    return null;
+    return replaceSlugInUrl(url, organization.slug);
 };
 
 const SERVER_ADD_ORGANIZATION_SETTINGS_SCHEMAS = 'serverAddOrganizationSettingsSchemas';
@@ -113,7 +69,8 @@ const addInviteTokenToAuthNextPathCallback: FilterCallback<'server_auth_on_sign_
             [PARAMS.INVITE_TOKEN]: inviteToken,
             [PARAMS.EMAIL]: emailParam ?? '',
         });
-        return `${dashboardRoutes.paths.invitations}?${urlParams.toString()}`;
+        // return `${dashboardRoutes.paths.invitations}?${urlParams.toString()}`;
+        return `to implement`;
     }
     return redirectUrl;
 };
@@ -183,7 +140,54 @@ const addOrganizationBillingEntities: FilterCallback<'server_get_billing_entitie
     };
 };
 
-export default function () {
+export default function ({ orgConfig }: { orgConfig: OrgConfig }) {
+
+    const SERVER_HANDLE_ROOT_DASHBOARD_REDIRECTION = 'serverHandleRootDashboardRedirection';
+    const serverHandleRootDashboardRedirection: AsyncFilterCallback<'server_redirect_root_dashboard'> = async () => {
+        const db = await getDBClient();
+        const organizations = await db.rls.transaction(async (tx) => {
+            return await tx.select().from(organizationTable);
+        });
+
+        if (organizations.length === 1) {
+            const organization = organizations[0];
+            if (organization) {
+                return replaceSlugInUrl(wwwConfig(orgConfig).urls.organizationRoot + '/[slug]', organization.slug);
+            }
+        }
+
+        return null;
+    };
+
+    const SERVER_HANDLE_ONBOARDING_REDIRECTION = 'serverHandleOnboardingRedirection';
+    const serverHandleOnboardingRedirection: AsyncFilterCallback<'server_redirect_onboarding'> = async () => {
+        const db = await getDBClient();
+        const user = await db.user.require();
+        const organizationClient = new OrganizationDBClient(db);
+        // Check if the user has memberships or pending invitations
+        const memberships = await organizationClient.getUserMemberships();
+        if (
+            // has memberships
+            memberships.length > 0 ||
+            // pending invitation
+            (
+                await db.rls.transaction(async (tx) => {
+                    const invitations = await tx
+                        .select({})
+                        .from(organizationInvitation)
+                        .where(and(eq(organizationInvitation.email, user.email ?? '')))
+                        .limit(1);
+                    return invitations;
+                })
+            ).length > 0
+        ) {
+            return wwwConfig(orgConfig).urls.onboarding.user;
+        }
+
+        return null;
+    };
+
+
     enqueueServerFilter('server_get_url', {
         name: SERVER_REPLACE_ORG_IN_URL,
         fn: serverReplaceOrgInUrl,

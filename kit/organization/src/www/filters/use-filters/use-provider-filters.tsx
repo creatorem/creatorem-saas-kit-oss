@@ -4,11 +4,12 @@ import { TrpcClientWithQuery } from '@creatorem/next-trpc/query-client';
 import { FilterCallback, useEnqueueFilter } from '@kit/utils/filters';
 import { organizationRouter } from '../../../router/router';
 import { WebOrganizationProvider } from '../../components';
+import { OrgConfig } from '../../../config';
 
 /**
  * Enqueue all app events that need useOrganization to work.
  */
-export function useProviderFilters() {
+export function useProviderFilters({orgConfig}: {orgConfig: OrgConfig}) {
     const RENDER_ORGANIZATION_PROVIDER = 'renderOrganizationProvider';
     const renderOrganizationProvider: FilterCallback<'display_trpc_provider_wrapper_in_dashboard'> = (
         children,
@@ -17,6 +18,7 @@ export function useProviderFilters() {
         return (
             <WebOrganizationProvider
                 loader={loader}
+                orgConfig={orgConfig}
                 slug={slug}
                 clientTrpc={clientTrpc as TrpcClientWithQuery<typeof organizationRouter>}
             >

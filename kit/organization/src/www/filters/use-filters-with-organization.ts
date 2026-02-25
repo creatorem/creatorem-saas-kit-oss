@@ -1,6 +1,6 @@
 'use client';
 
-import { replaceOrgSlug } from '@kit/utils/config';
+import { replaceSlugInUrl } from '@kit/utils';
 import { FilterCallback, useEnqueueFilter } from '@kit/utils/filters';
 import { useCallback } from 'react';
 import { useOrganization } from '../../shared';
@@ -16,7 +16,7 @@ export const useFiltersWithOrganization = () => {
 
     const REPLACE_ORG_IN_URL_NAME = 'replaceOrgInUrl';
     const replaceOrgInUrl: FilterCallback<'get_url_updater'> = useCallback(
-        () => (url) => replaceOrgSlug(url, organization.slug),
+        () => (url) => replaceSlugInUrl(url, organization.slug),
         [organization],
     );
 

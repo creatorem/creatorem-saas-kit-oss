@@ -206,6 +206,18 @@ export interface FilterList {
     };
 
     /**
+     * Used in an mobile ctx, where the user is retrieved and potential organization identified via the `slug` option.
+     * Used to add organization provider by the kit/organization package.
+     * 
+     * @mobile
+     */
+    display_trpc_provider_wrapper_in_mobile: {
+        slug?: string;
+        loader: React.ReactNode;
+        clientTrpc: TrpcClientWithQuery<Router<typeof appRouter>>;
+        return: React.ReactNode;
+    };
+    /**
      * Used in an dashboard ctx, where the user is retrieved and potential organization identified via the `slug` option.
      * Used to add organization provider by the kit/organization package.
      */
@@ -247,17 +259,6 @@ export interface FilterList {
             shortcut: string | null;
             formattedShortcut: string;
         };
-    };
-
-    /**
-     * Used in mobile app
-     */
-    get_dashboard_slug: {
-        clientTrpc: TrpcClientWithQuery<Router<unknown>>;
-        return: () => Promise<{
-            slug?: string,
-            component?: React.ReactNode
-        }>
     };
 
     /* SERVER SIDE FILTERS */

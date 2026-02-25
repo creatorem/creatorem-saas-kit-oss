@@ -10,11 +10,12 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@k
 import { Icon } from '@kit/ui/icon';
 import { SearchInput } from '@kit/ui/search-input';
 import { Skeleton } from '@kit/ui/skeleton';
-import { dashboardRoutes, replaceOrgSlug } from '@kit/utils/config';
+import { replaceSlugInUrl } from '@kit/utils';
 import Link from 'next/link';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { organizationRouter } from '../../router/router';
+import { OrgConfig, wwwConfig } from '../../config';
 
 export type OrganizationListProps = {
     memberships: (OrganizationMember & {
@@ -23,9 +24,10 @@ export type OrganizationListProps = {
         organization: Organization;
     })[];
     refetch: () => void;
+    orgConfig: OrgConfig
 };
 
-function OrganizationListInternal({ memberships, refetch }: OrganizationListProps): React.JSX.Element {
+function OrganizationListInternal({ memberships, refetch, orgConfig }: OrganizationListProps): React.JSX.Element {
     const { t } = useTranslation('p_org');
     const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -54,7 +56,7 @@ function OrganizationListInternal({ memberships, refetch }: OrganizationListProp
                         onChange={handleSearchQueryChange}
                     />
                     <Button asChild aria-label={t('organizationList.addOrganization')} className="h-10">
-                        <Link href={dashboardRoutes.paths.onboarding.organization}>
+                        <Link href={wwwConfig(orgConfig).urls.onboarding.index + '/organization'}>
                             <Icon name="Plus" className="size-4 shrink-0" />
                             <span className="hidden sm:inline">{t('organizationList.addOrganization')}</span>
                             <span className="inline sm:hidden">{t('organizationList.addOrganizationShort')}</span>
@@ -80,7 +82,7 @@ function OrganizationListInternal({ memberships, refetch }: OrganizationListProp
                         {filteredOrganizations.map(({ organization, ...me }) => (
                             <Link
                                 key={organization.id}
-                                href={replaceOrgSlug(dashboardRoutes.paths.dashboard.slug.index, organization.slug)}
+                                href={replaceSlugInUrl(wwwConfig(orgConfig).urls.organizationRoot + '/[slug]', organization.slug)}
                                 className="hover:bg-primary/5 active:bg-secondary/50 group hover:border-primary relative flex flex-col rounded-lg border transition-all"
                             >
                                 <div className="flex h-full flex-row items-center justify-between p-4">
@@ -97,7 +99,7 @@ function OrganizationListInternal({ memberships, refetch }: OrganizationListProp
                                         <div>
                                             <div className="text-sm font-medium">{organization.name}</div>
                                             <div className="text-muted-foreground text-xs">
-                                                {dashboardRoutes.paths.dashboard.index}/{organization.slug}
+                                                {wwwConfig(orgConfig).urls.organizationRoot}/{organization.slug}
                                             </div>
                                         </div>
                                     </div>
@@ -131,8 +133,10 @@ function OrganizationListInternal({ memberships, refetch }: OrganizationListProp
 
 export function OrganizationList({
     clientTrpc,
+    orgConfig
 }: {
     clientTrpc: TrpcClientWithQuery<typeof organizationRouter>;
+    orgConfig: OrgConfig
 }): React.JSX.Element {
     const membershipsRes = clientTrpc.organizationUserMemberships.useQuery();
 
@@ -140,5 +144,5 @@ export function OrganizationList({
         return <Skeleton className="h-84 w-full rounded-xl" />;
     }
 
-    return <OrganizationListInternal memberships={membershipsRes.data} refetch={membershipsRes.refetch} />;
+    return <OrganizationListInternal memberships={membershipsRes.data} refetch={membershipsRes.refetch} orgConfig={orgConfig} />;
 }

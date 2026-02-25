@@ -1,7 +1,7 @@
 'use client';
 
 import { isBrowser } from '@kit/utils';
-import { dashboardRoutes } from '@kit/utils/config';
+// import { dashboardRoutes } from '@kit/utils/config';
 import { FilterCallback, useEnqueueFilter } from '@kit/utils/filters';
 import { useSearchParams } from 'next/navigation';
 
@@ -15,7 +15,8 @@ export function useAuthFilters() {
     const addInviteTokenToAuthNextPathCallback: FilterCallback<'auth_on_sign_in_redirect_url'> = (redirectUrl) => {
         const inviteToken = searchParams.get('invite_token');
         if (inviteToken) {
-            return `${dashboardRoutes.paths.invitations}?${searchParams.toString()}`;
+            // return `${dashboardRoutes.paths.invitations}?${searchParams.toString()}`;
+            return `to implement`;
         }
 
         return redirectUrl;

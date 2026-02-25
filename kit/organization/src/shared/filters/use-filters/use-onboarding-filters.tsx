@@ -22,6 +22,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import z from 'zod';
 import type { organizationRouter } from '../../../router/router';
+import { OrgConfig } from '../../../config';
 
 /* ONBOARDING SCHEMA */
 
@@ -39,12 +40,12 @@ const getOnboardingOrgSchema = (t: TFunction<'p_org-onboarding'>) => ({
 const ADD_ORGANIZATION_ONBOARDING_SCHEMAS = 'addOrganizationOnboardingSchemas';
 const getAddOrganizationOnboardingSchemas =
     (t: TFunction<'p_org-onboarding'>): FilterCallback<'get_onboarding_schema'> =>
-    (onboardingSchema) => {
-        return {
-            ...onboardingSchema,
-            ...getOnboardingOrgSchema(t),
+        (onboardingSchema) => {
+            return {
+                ...onboardingSchema,
+                ...getOnboardingOrgSchema(t),
+            };
         };
-    };
 
 export const getUseOnboardingFilters = ({
     OrganizationSettingMedia,
@@ -64,7 +65,7 @@ export const getUseOnboardingFilters = ({
         imageClassName?: string;
         placeholder?: React.ReactNode;
     }>;
-    PathPreview: React.FC;
+    PathPreview: React.FC<{ orgConfig: OrgConfig }>;
     Icon: typeof WebIcon | typeof NativeIcon;
     getCreateOrgHeader: (t: TFunction<'p_org-onboarding'>) => React.JSX.Element;
     settingsPrefix?: QuickFormUIComponent[];
@@ -72,7 +73,7 @@ export const getUseOnboardingFilters = ({
     /**
      * Enqueue all app events that need useOrganization to work.
      */
-    return function useOnboardingFilters() {
+    return function useOnboardingFilters({ orgConfig }: { orgConfig: OrgConfig }) {
         const { t } = useTranslation('p_org-onboarding');
         const EXTRA_INPUTS = { organization_media: OrganizationSettingMedia, user_media: UserSettingMedia };
         const onboardingOrgCreationSchema = getOnboardingOrgCreationSchema(t);
@@ -86,28 +87,28 @@ export const getUseOnboardingFilters = ({
             | QuickFormWrapperConfig<typeof onboardingOrgCreationSchema, typeof EXTRA_INPUTS>
             | LogicInputConfig<typeof onboardingOrgCreationSchema, typeof EXTRA_INPUTS>
         )[] = [
-            {
-                type: 'user_media',
-                slug: 'orgLogoUrl',
-                triggerClassName: 'size-32 rounded-full mx-auto',
-                imageClassName: 'w-full h-full object-cover',
-                placeholder: <Icon name="Store" className="text-muted-foreground h-12 w-12" />,
-            },
-            {
-                type: 'text',
-                slug: 'orgName',
-                label: t('fields.name.label'),
-            },
-            {
-                type: 'text',
-                slug: 'orgSlug',
-                label: t('fields.slug.label'),
-            },
-            {
-                type: 'ui',
-                render: <PathPreview />,
-            },
-        ];
+                {
+                    type: 'user_media',
+                    slug: 'orgLogoUrl',
+                    triggerClassName: 'size-32 rounded-full mx-auto',
+                    imageClassName: 'w-full h-full object-cover',
+                    placeholder: <Icon name="Store" className="text-muted-foreground h-12 w-12" />,
+                },
+                {
+                    type: 'text',
+                    slug: 'orgName',
+                    label: t('fields.name.label'),
+                },
+                {
+                    type: 'text',
+                    slug: 'orgSlug',
+                    label: t('fields.slug.label'),
+                },
+                {
+                    type: 'ui',
+                    render: <PathPreview orgConfig={orgConfig} />,
+                },
+            ];
 
         const ADD_ORGANIZATION_ONBOARDING_STEPS_CONFIG = 'addOrganizationOnboardingStepsConfig';
         const addOrganizationOnboardingStepsConfig: FilterCallback<'get_onboarding_steps_config'> = (
@@ -118,64 +119,64 @@ export const getUseOnboardingFilters = ({
                 typeof onboardingOrgSchema,
                 typeof EXTRA_INPUTS
             >[] = [
-                {
-                    type: 'step',
-                    label: t('steps.organization.label'),
-                    header: getCreateOrgHeader(t),
-                    settings: [...(settingsPrefix ?? []), ...settingsForOrgCreation],
-                    async canGoNext(form) {
-                        const slug = form.getValues('orgSlug');
-                        if (!slug || slug.length <= 3) return true; // will be blocked by form schema
-                        const result = await (
-                            clientTrpc as TrpcClientWithQuery<typeof organizationRouter>
-                        ).checkIfSlugIsAvailable.fetch({ slug });
-                        if (!result?.serverError && !result.isAvailable) {
-                            form.setError('orgSlug', {
-                                type: 'validate',
-                                message: t('validation.slugTaken'),
-                            });
-                            return false;
-                        }
-                        return true;
-                    },
-                },
-                {
-                    type: 'step',
-                    label: t('steps.size.label'),
-                    settings: [
-                        ...(settingsPrefix ?? []),
-                        {
-                            type: 'question_select',
-                            slug: 'orgSize',
-                            question: t('steps.size.question'),
-                            answerClassName: 'items-center',
-                            questionDescription: t('steps.size.description'),
-                            answers: [
-                                {
-                                    value: '1',
-                                    label: t('steps.size.answers.justMe'),
-                                },
-                                {
-                                    value: '2-10',
-                                    label: t('steps.size.answers.2-10'),
-                                },
-                                {
-                                    value: '11-50',
-                                    label: t('steps.size.answers.11-50'),
-                                },
-                                {
-                                    value: '51-100',
-                                    label: t('steps.size.answers.51-100'),
-                                },
-                                {
-                                    value: '+100',
-                                    label: t('steps.size.answers.+100'),
-                                },
-                            ],
+                    {
+                        type: 'step',
+                        label: t('steps.organization.label'),
+                        header: getCreateOrgHeader(t),
+                        settings: [...(settingsPrefix ?? []), ...settingsForOrgCreation],
+                        async canGoNext(form) {
+                            const slug = form.getValues('orgSlug');
+                            if (!slug || slug.length <= 3) return true; // will be blocked by form schema
+                            const result = await (
+                                clientTrpc as TrpcClientWithQuery<typeof organizationRouter>
+                            ).checkIfSlugIsAvailable.fetch({ slug });
+                            if (!result?.serverError && !result.isAvailable) {
+                                form.setError('orgSlug', {
+                                    type: 'validate',
+                                    message: t('validation.slugTaken'),
+                                });
+                                return false;
+                            }
+                            return true;
                         },
-                    ],
-                },
-            ];
+                    },
+                    {
+                        type: 'step',
+                        label: t('steps.size.label'),
+                        settings: [
+                            ...(settingsPrefix ?? []),
+                            {
+                                type: 'question_select',
+                                slug: 'orgSize',
+                                question: t('steps.size.question'),
+                                answerClassName: 'items-center',
+                                questionDescription: t('steps.size.description'),
+                                answers: [
+                                    {
+                                        value: '1',
+                                        label: t('steps.size.answers.justMe'),
+                                    },
+                                    {
+                                        value: '2-10',
+                                        label: t('steps.size.answers.2-10'),
+                                    },
+                                    {
+                                        value: '11-50',
+                                        label: t('steps.size.answers.11-50'),
+                                    },
+                                    {
+                                        value: '51-100',
+                                        label: t('steps.size.answers.51-100'),
+                                    },
+                                    {
+                                        value: '+100',
+                                        label: t('steps.size.answers.+100'),
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ];
             return [
                 ...onboardingSchema,
                 ...(onboardingOrganizationStepsConfig as unknown as QuickFormStepConfig<

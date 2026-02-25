@@ -3,8 +3,9 @@
 import { OrganizationSwitcher } from '@kit/organization/www/ui';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@kit/ui/sidebar';
 import React, { useCallback } from 'react';
+import { OrgConfig } from '../../config';
 
-export function SidebarOrganizationSwitcher(): React.JSX.Element {
+export function SidebarOrganizationSwitcher({ orgConfig }: { orgConfig: OrgConfig }): React.JSX.Element {
     const { setOpenMobile } = useSidebar();
 
     const handleClose = useCallback((): void => {
@@ -25,7 +26,7 @@ export function SidebarOrganizationSwitcher(): React.JSX.Element {
     return (
         <SidebarMenu>
             <SidebarMenuItem>
-                <OrganizationSwitcher onClose={handleClose} triggerWrapper={wrapTrigger} />
+                <OrganizationSwitcher orgConfig={orgConfig} onClose={handleClose} triggerWrapper={wrapTrigger} />
             </SidebarMenuItem>
         </SidebarMenu>
     );
