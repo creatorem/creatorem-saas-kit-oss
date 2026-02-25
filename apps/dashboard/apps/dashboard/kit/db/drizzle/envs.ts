@@ -8,6 +8,8 @@ export const envs = () =>
             /**
              * 🗄️ DATABASE URL - Direct PostgreSQL connection for migrations & Drizzle
              * Get from: Supabase Dashboard > Settings > Database > Connection string > URI
+             * 
+             * @default "postgresql://postgres:postgres@127.0.0.1:54322/postgres" for local dev purpose only
              */
             SUPABASE_DATABASE_URL: z.string().url(),
         },

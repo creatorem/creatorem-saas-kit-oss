@@ -14,25 +14,3 @@ export const utilsEnvs = () => createEnv({
     },
     emptyStringAsUndefined: true,
 })
-
-export const utilsRouteEnvs = () => createEnv({
-    clientPrefix: 'NEXT_PUBLIC',
-    client: {
-        /**
-         * @default "http://localhost:3001"
-         */
-        NEXT_PUBLIC_MARKETING_URL: z.string().url(),
-        /**
-         * @default "http://localhost:3000"
-         */
-        NEXT_PUBLIC_DASHBOARD_URL: z.string().url(),
-    },
-    server: {},
-    runtimeEnv: {
-        NEXT_PUBLIC_MARKETING_URL: process.env.NEXT_PUBLIC_MARKETING_URL,
-        NEXT_PUBLIC_DASHBOARD_URL: process.env.NEXT_PUBLIC_DASHBOARD_URL,
-    },
-    emptyStringAsUndefined: true,
-})
-
-export const envs = utilsRouteEnvs

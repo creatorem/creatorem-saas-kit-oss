@@ -28,7 +28,11 @@ const wwwSchema = z.object({
             user: z.string({
                 description: "User onboarding route",
             }),
-        })
+        }),
+        settings: z.string({
+            description: "Settings route",
+        }),
+        
     }),
 })
 

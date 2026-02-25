@@ -4,6 +4,11 @@ import { z } from 'zod';
 export const nativeAuthEnvs = () => createEnv({
     clientPrefix: 'EXPO_PUBLIC_',
     client: {
+        /**
+         * Get your key in the google cloud console.
+         * 
+         * @default "your-google-client-id"
+         */
         EXPO_PUBLIC_SUPABASE_GOOGLE_CLIENT_ID: z.string().min(1),
     },
     runtimeEnv: {

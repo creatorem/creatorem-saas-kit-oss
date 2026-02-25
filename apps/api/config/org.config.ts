@@ -5,6 +5,7 @@ export const orgConfig = parseOrgConfig({
     environment: 'www',
     urls: {
         organizationRoot: dashboardRoutes.paths.dashboard.index,
-        onboarding: dashboardRoutes.paths.onboarding
+        onboarding: dashboardRoutes.paths.onboarding,
+        settings: dashboardRoutes.paths.dashboard.slug.settings.index
     },
 });

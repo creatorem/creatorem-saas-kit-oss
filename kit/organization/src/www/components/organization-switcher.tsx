@@ -145,7 +145,7 @@ export function OrganizationSwitcher({
                 {userMemberships.length > 1 && (
                     <DropdownMenuItem asChild className="cursor-pointer gap-2 p-2">
                         <Link
-                            href={wwwConfig(orgConfig).urls.organizationRoot}
+                            href={replaceSlugInUrl(wwwConfig(orgConfig).urls.organizationRoot, organization.slug)}
                             className="text-muted-foreground"
                             onClick={onClose}
                         >
@@ -156,31 +156,20 @@ export function OrganizationSwitcher({
                 )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="cursor-pointer gap-2 p-2">
-                    <Link
-                        // href={replaceSlugInUrl(dashboardRoutes.paths.dashboard.slug.settings.index, organization.slug)}
-                        href=""
-                        onClick={onClose}
-                        >
+                    <Link href={replaceSlugInUrl(wwwConfig(orgConfig).urls.settings, organization.slug)} onClick={onClose}>
                         <Icon name="User" className="text-muted-foreground size-4 shrink-0" />
                         {t('organizationSwitcher.accountSettings')}
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="cursor-pointer gap-2 p-2">
-                    <Link
-                        href=""
-                        // href={replaceSlugInUrl(
-                        //     dashboardRoutes.paths.dashboard.slug.settings.organization.index,
-                        //     organization.slug,
-                        // )}
-                        onClick={onClose}
-                    >
+                    <Link href={replaceSlugInUrl(wwwConfig(orgConfig).urls.settings + '/organization', organization.slug)} onClick={onClose}>
                         <Icon name="Settings" className="text-muted-foreground size-4 shrink-0" />
                         {t('organizationSwitcher.organizationSettings')}
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="cursor-pointer gap-2 p-2">
-                    <Link href={wwwConfig(orgConfig).urls.onboarding.index + '/organization'} onClick={onClose}>
+                    <Link href={replaceSlugInUrl(wwwConfig(orgConfig).urls.onboarding.index + '/organization', organization.slug)} onClick={onClose}>
                         <Icon name="Plus" className="text-muted-foreground size-4 shrink-0" />
                         {t('organizationSwitcher.addOrganization')}
                     </Link>
