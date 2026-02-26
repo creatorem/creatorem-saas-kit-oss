@@ -1,0 +1,83 @@
+/*
+ * ---------------------------------------------------------------------------------
+ * {{ properCase tableName }} Table Schema
+ * ---------------------------------------------------------------------------------
+ *
+ * Purpose: Store {{ lowerCase tableName }} data for users
+ *
+ * Table of contents:
+ * - {{ properCase tableName }} table
+ * - {{ properCase tableName }} Comments
+ * - {{ properCase tableName }} Permissions
+ * - {{ properCase tableName }} RLS Policies
+ * - {{ properCase tableName }} Triggers
+ *
+ * Dependencies: User table (021-user.sql)
+ */
+
+------------------------------------- {{ upperCase tableName }} TABLE -------------------------------------
+
+/*
+ * {{ upperCase tableName }} TABLE:
+ * This table contains the {{ lowerCase tableName }} data for users.
+ */
+CREATE TABLE IF NOT EXISTS "public"."{{ tableName }}" (
+    id uuid unique not null default extensions.uuid_generate_v4(),
+    user_id uuid references public.user (id) on delete cascade not null,
+    -- Add your columns here
+    -- Example:
+    -- name varchar(255) not null,
+    -- value text,
+    updated_at timestamptz DEFAULT "now"() NOT NULL,
+    created_at timestamptz DEFAULT "now"() NOT NULL,
+    primary key (id)
+);
+
+------------------------------------- TABLE COMMENTS -------------------------------------
+
+COMMENT ON TABLE "public"."{{ tableName }}" IS 'Allow to store {{ lowerCase tableName }} data for users';
+-- Add column comments here
+-- Example:
+-- COMMENT ON COLUMN "public"."{{ tableName }}"."name" IS 'The name of the {{ lowerCase tableName }}';
+
+------------------------------------- PERMISSIONS -------------------------------------
+
+-- Reset the RLS access to authenticated and service_role roles
+REVOKE all on public.{{ tableName }} from authenticated, service_role;
+GRANT select, insert, update, delete on table public.{{ tableName }} to authenticated, service_role;
+
+-- Enable RLS on the {{ tableName }} table
+ALTER TABLE public.{{ tableName }} ENABLE ROW LEVEL SECURITY;
+
+------------------------------------- RLS POLICIES -------------------------------------
+
+/*
+ * {{ properCase tableName }} policy
+ * Users can only access {{ lowerCase tableName }} data that belongs to them through user_id relationship
+ */
+CREATE POLICY {{ tableName }}_all ON public.{{ tableName }}
+FOR ALL TO authenticated
+USING (
+    EXISTS (
+        SELECT 1
+        FROM public.user
+        WHERE ((public.user.id = {{ tableName }}.user_id) AND (public.user.auth_user_id = auth.uid()))
+    )
+)
+WITH CHECK (
+    EXISTS (
+        SELECT 1
+        FROM public.user
+        WHERE ((public.user.id = {{ tableName }}.user_id) AND (public.user.auth_user_id = auth.uid()))
+    )
+);
+
+------------------------------------- TRIGGERS -------------------------------------
+
+/*
+ * Trigger: Update timestamp on {{ tableName }} changes
+ * Automatically updates updated_at field when {{ tableName }} is modified
+ */
+create trigger reset_updated_at_on_{{ tableName }}_on_update
+after update on public.{{ tableName }} for each row
+execute procedure kit.reset_updated_at ();

@@ -1,0 +1,126 @@
+---
+description: Translations
+alwaysApply: false
+---
+
+Explains how to translate application on web and mobile.
+
+# On web application
+
+The core functionnality per apps are located in ~/lib/i18n
+
+But the Trans component returns a React.ReactElement type, sometimes you may need string type.
+
+### 1.1 Using string translations in client side
+
+Use the `useTranslation` hook from react-i18next when I you have to translate a string client side.
+Avoid using as jsx, use `<Trans />` instead.
+
+```tsx
+'use client';
+
+import { useTranslation } from 'react-i18next';
+
+export function MyComponent() {
+  const { t, i18n: {language: locale} } = useTranslation('common');
+  // the locale var contains the active language code   
+  
+  return <Button aria-label={{t('homeTabLabel')}}>
+    <Trans i18nKey="auth.signUpTitle" ns="dashboard" >
+  </Button>;
+}
+```
+
+### 1.2 Using string translations in server side
+
+Use the `useTranslation` hook from react-i18next:
+
+```tsx
+'use client';
+
+import { getServerI18n } from '~/lib/i18n.server';
+
+export async function generateMetadata() {
+  const { t, language } = await getServerI18n();
+  // the language var contains the active language code   
+
+  return {
+    title: t('marketing:contact'),
+  };
+}
+
+export function ContactPage() {
+  const { t } = await getServerI18n();
+  
+  return <h1>{t('marketing:homeTabLabel')}</h1>;
+}
+
+export default ContactPage;
+```
+
+### 2 How use dynamic data in string
+
+```json
+{
+  "key": "{{what}} is {{how}}",
+  "keyWithDataModel": "I am {{author.name}}"
+}
+```
+
+````ts
+// ...
+t('key', { what: 'i18next', how: 'great' });
+
+const author = { 
+    name: 'Jan',
+    github: 'jamuhl'
+};
+t('keyWithDataModel', { author });
+// ...
+````
+
+### 2.1 How use custom tags
+
+```json
+{
+  "myKey": "This is a <CustomLink href=\"https://example.com/\">link to example.com</CustomLink>."
+}
+```
+
+````tsx
+// ...
+<Trans
+  i18nKey="myKey"
+  components={{ 
+    CustomLink: <MyCustomLinkComponent href="value-to-be-overridden"/> 
+  }}
+/>
+// ...
+````
+
+## 3 Call `await getServerI18n();` at the top of your app
+
+Calling `getServerI18n` will initialize the i18n instance, and allow you to pass the language to your html tree.
+
+```typescript
+import React from 'react';
+import { getServerI18n } from '~/lib/i18n.server';
+
+export default async function RootLayout({ children }: React.PropsWithChildren): Promise<React.JSX.Element> {
+    const { language } = await getServerI18n();
+    // ...
+
+    return (
+        <html lang={language} className={className} suppressHydrationWarning>
+        // ...
+        </html>
+    );
+}
+
+```
+
+## 4 Data object translations
+
+When you translate data const object, transform the object into a function that takes a typed t object and return the object.
+
+

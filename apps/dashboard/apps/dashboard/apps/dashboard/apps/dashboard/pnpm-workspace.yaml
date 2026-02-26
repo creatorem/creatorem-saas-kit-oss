@@ -1,8 +1,9 @@
 packages:
-  - sandbox/*
+  - examples/*
   - apps/*
-  - kit/**
   - packages/**
+  - kit/**
   - tooling/*
+  - sandbox/*
 
   - "cli"

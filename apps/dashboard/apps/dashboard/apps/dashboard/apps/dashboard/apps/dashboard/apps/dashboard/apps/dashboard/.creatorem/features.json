@@ -1,0 +1,8 @@
+{
+  "appType": "dashboard",
+  "selectedFeatures": [
+    "analytics",
+    "monitoring",
+    "ai"
+  ]
+}
