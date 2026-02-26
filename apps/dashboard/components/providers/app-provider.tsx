@@ -18,9 +18,9 @@ export function AppProvider({ children, lang }: React.PropsWithChildren<{ lang: 
     return (
         <ReactQueryProvider>
             <NiceModal.Provider>
-                <InitClientFilters>
-                    <FilterApplier name="display_app_provider" options={{ analytics }}>
-                        <I18nProvider config={i18nConfig} lang={lang}>
+                <I18nProvider config={i18nConfig} lang={lang}>
+                    <InitClientFilters>
+                        <FilterApplier name="display_app_provider" options={{ analytics }}>
                             <NuqsAdapter>
                                 <AuthProvider>
                                     <ThemeProvider
@@ -39,9 +39,9 @@ export function AppProvider({ children, lang }: React.PropsWithChildren<{ lang: 
                                     </ThemeProvider>
                                 </AuthProvider>
                             </NuqsAdapter>
-                        </I18nProvider>
-                    </FilterApplier>
-                </InitClientFilters>
+                        </FilterApplier>
+                    </InitClientFilters>
+                </I18nProvider>
             </NiceModal.Provider>
         </ReactQueryProvider>
     );
