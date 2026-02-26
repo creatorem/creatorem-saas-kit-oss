@@ -1,0 +1,72 @@
+{
+    "name": "@kit/i18n",
+    "private": true,
+    "version": "0.0.0",
+    "scripts": {
+        "clean": "git clean -xdf .turbo node_modules",
+        "lint": "pnpm exec biome check",
+        "lint:fix": "pnpm exec biome check --fix",
+        "typecheck": "tsc --noEmit"
+    },
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "react-native": "./src/index.ts",
+    "files": [
+        "src"
+    ],
+    "exports": {
+        "./shared/provider": "./src/shared/provider.tsx",
+        "./shared/constants": "./src/shared/constants.ts",
+        "./native/ui/*": "./src/native/components/*.tsx",
+        "./www/ui/*": "./src/www/components/*.tsx",
+        "./www/use-filters": "./src/www/filters/use-filters.ts",
+        "./www/server-filters": "./src/www/filters/server-filters.ts",
+        "./www/server": "./src/www/server.ts",
+        "./www/proxy": "./src/www/proxy.ts",
+        "./defined-languages": "./src/defined-languages.ts",
+        "./config": "./src/config.ts"
+    },
+    "devDependencies": {
+        "@kit/utils": "workspace:*",
+        "@kit/tsconfig": "workspace:*",
+        "@tanstack/react-query": "5.90.12",
+        "uniwind": "^1.2.4",
+        "react": "19.1.0",
+        "react-dom": "19.1.0"
+    },
+    "dependencies": {
+        "hoist-non-react-statics": "^3.3.2",
+        "i18next": "25.5.2",
+        "i18next-browser-languagedetector": "8.0.2",
+        "i18next-fs-backend": "^2.6.0",
+        "i18next-resources-to-backend": "^1.2.1",
+        "react-i18next": "^16.3.2"
+    },
+    "peerDependencies": {
+        "@kit/native-ui": "workspace:*",
+        "react-native-svg": "15.12.1",
+        "@kit/ui": "workspace:*",
+        "next": "16.0.8"
+    },
+    "peerDependenciesMeta": {
+        "@kit/native-ui": {
+            "optional": true
+        },
+        "react-native-svg": {
+            "optional": true
+        },
+        "@kit/ui": {
+            "optional": true
+        },
+        "next": {
+            "optional": true
+        }
+    },
+    "typesVersions": {
+        "*": {
+            "*": [
+                "src/*"
+            ]
+        }
+    }
+}

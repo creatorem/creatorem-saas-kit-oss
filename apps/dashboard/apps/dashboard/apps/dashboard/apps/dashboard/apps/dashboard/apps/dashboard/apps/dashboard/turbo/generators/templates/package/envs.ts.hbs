@@ -1,0 +1,17 @@
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
+
+export const envs = () =>
+  createEnv({
+    client: {
+      // NEXT_PUBLIC_EXAMPLE_VAR: z.string().optional(),
+    },
+    server: {
+      // EXAMPLE_VAR: z.string().optional()
+    },
+    runtimeEnv: {
+      // NEXT_PUBLIC_EXAMPLE_VAR: process.env.NEXT_PUBLIC_EXAMPLE_VAR,
+      //EXAMPLE_VAR: process.env.EXAMPLE_VAR,
+    },
+    emptyStringAsUndefined: true,
+  });

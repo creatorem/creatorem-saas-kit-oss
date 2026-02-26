@@ -4,16 +4,18 @@ import { TrpcClientWithQuery } from '@creatorem/next-trpc/query-client';
 import { Alert, AlertDescription } from '@kit/ui/alert';
 import { ConfirmButton } from '@kit/ui/confirm-button';
 import { toast } from '@kit/ui/sonner';
-import { dashboardRoutes } from '@kit/utils/config';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { authRouter } from '../../../../../router/router';
+import { AuthConfig } from '../../../../../config';
 
 export function DeleteUserButton({
     clientTrpc,
+    authConfig
 }: {
     clientTrpc: TrpcClientWithQuery<typeof authRouter>;
+    authConfig?: AuthConfig
 }): React.JSX.Element {
     const { t } = useTranslation('p_auth');
     const router = useRouter();
@@ -26,7 +28,12 @@ export function DeleteUserButton({
         try {
             await clientTrpc.deleteUser.fetch();
             toast.success(t('deleteAccountSuccess'));
-            router.push(dashboardRoutes.paths.auth.signIn);
+            if (!authConfig) return;
+
+            if (authConfig.environment !== 'www') {
+                throw new Error('www env required in this file.');
+            }
+            router.push(authConfig.urls.signIn);
         } catch (error) {
             toast.error(t('deleteAccountError'));
             setIsSubmitting(false);
