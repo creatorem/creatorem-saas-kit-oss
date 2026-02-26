@@ -8,7 +8,7 @@
 Open-source starter kit for building SaaS applications with Supabase, Next.js, Tailwind CSS, and Turborepo.
 
 > **Quick summary**
-> Start fast with a production-oriented SaaS foundation: dashboard app, analytics, monitoring, i18n, and AI in the OSS version.
+> Start fast with a production-oriented SaaS foundation: dashboard app, analytics, monitoring, i18n, and AI chat UI in the OSS version.
 > Upgrade to Premium for mobile + marketing apps, advanced business modules, and React Native support for almost all features.
 
 ## Apps
@@ -26,7 +26,7 @@ Open-source starter kit for building SaaS applications with Supabase, Next.js, T
 | Analytics | ✅ | ✅ |
 | Monitoring | ✅ | ✅ |
 | i18n (translations) | ✅ | ✅ |
-| AI | ✅ | ✅ |
+| AI chat UI | ✅ | ✅ |
 | Content-type (premade components to display your own app data) | ❌ | ✅ |
 | Billing | ❌ | ✅ |
 | Organization | ❌ | ✅ |
