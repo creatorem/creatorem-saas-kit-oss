@@ -1,0 +1,76 @@
+{
+    "name": "@kit/ai",
+    "private": true,
+    "type": "module",
+    "version": "0.0.0",
+    "license": "MIT",
+    "scripts": {
+        "clean": "git clean -xdf .turbo node_modules",
+        "lint": "pnpm exec biome check",
+        "lint:fix": "pnpm exec biome check --fix",
+        "typecheck": "tsc --noEmit"
+    },
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "react-native": "./src/index.ts",
+    "files": [
+        "src"
+    ],
+    "exports": {
+        "./native/use-filters": "./src/native/filters/use-filters.ts",
+        "./www/cross-env-filters": "./src/www/filters/cross-env-filters.ts",
+        "./www/use-filters": "./src/www/filters/use-filters.ts",
+        "./style.css": "./src/style.css",
+        "./envs": "./envs.ts",
+        "./router": "./src/router/router.ts",
+        "./ui/*": "./src/components/*.tsx",
+        "./server/*": "./src/server/*.ts",
+        "./hooks/*": "./src/hooks/*.ts",
+        "./config": "./src/config.ts"
+    },
+    "dependencies": {
+        "@ai-sdk/react": "^2.0.82",
+        "@assistant-ui/react": "^0.11.35",
+        "@kit/auth": "workspace:*",
+        "@kit/drizzle": "workspace:*",
+        "@kit/supabase-server": "workspace:*",
+        "@kit/utils": "workspace:*",
+        "@t3-oss/env-nextjs": "0.13.8",
+        "ai": "5.0.82",
+        "assistant-stream": "^0.2.38",
+        "motion": "^12.23.24",
+        "zod": "^3.25.64",
+        "zustand": "^5.0.11"
+    },
+    "devDependencies": {
+        "@kit/db": "workspace:*",
+        "@kit/tsconfig": "workspace:*"
+    },
+    "peerDependencies": {
+        "@kit/native-ui": "workspace:*",
+        "@kit/ui": "workspace:*",
+        "expo-router": "6.0.21",
+        "lucide-react": "^0.543.0"
+    },
+    "peerDependenciesMeta": {
+        "@kit/native-ui": {
+            "optional": true
+        },
+        "expo-router": {
+            "optional": true
+        },
+        "@kit/ui": {
+            "optional": true
+        },
+        "lucide-react": {
+            "optional": true
+        }
+    },
+    "typesVersions": {
+        "*": {
+            "*": [
+                "src/*"
+            ]
+        }
+    }
+}

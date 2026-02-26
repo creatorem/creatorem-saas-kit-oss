@@ -3,7 +3,7 @@ import { client, order, orderStatus, product } from '@kit/drizzle';
 import { count, desc, eq } from 'drizzle-orm';
 import z from 'zod';
 
-import { logger } from '../../../utils/src/logger';
+import { logger } from '@kit/utils';
 import { ctx } from './router.ctx';
 
 export const orderRouter = ctx.router({

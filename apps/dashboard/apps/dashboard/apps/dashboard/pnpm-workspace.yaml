@@ -5,4 +5,4 @@ packages:
   - packages/**
   - tooling/*
 
-  - 'cli'
+  - "cli"
