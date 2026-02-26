@@ -1,5 +1,20 @@
-import { createImageData } from 'canvas';
 import { MotionValue } from 'motion';
+
+function createImageDataSafe(width: number, height: number): ImageData {
+    const safeWidth = Math.max(1, Math.round(width));
+    const safeHeight = Math.max(1, Math.round(height));
+
+    if (typeof ImageData !== 'undefined') {
+        return new ImageData(safeWidth, safeHeight);
+    }
+
+    return {
+        width: safeWidth,
+        height: safeHeight,
+        data: new Uint8ClampedArray(safeWidth * safeHeight * 4),
+        colorSpace: 'srgb',
+    } as ImageData;
+}
 
 function calculateRefractionProfile(
     glassThickness: number = 200,
@@ -64,7 +79,7 @@ function generateDisplacementImageData(
     const bufferWidth = canvasWidth * devicePixelRatio;
     const bufferHeight = canvasHeight * devicePixelRatio;
     // console.log( {bufferWidth, bufferHeight} )
-    const imageData = createImageData(bufferWidth, bufferHeight);
+    const imageData = createImageDataSafe(bufferWidth, bufferHeight);
 
     // Fill neutral color using buffer
     const neutral = 0xff008080;
@@ -199,7 +214,7 @@ export function calculateRefractionSpecular(
     const devicePixelRatio = dpr ?? (typeof window !== 'undefined' ? (window.devicePixelRatio ?? 1) : 1);
     const bufferWidth = objectWidth * devicePixelRatio;
     const bufferHeight = objectHeight * devicePixelRatio;
-    const imageData = createImageData(bufferWidth, bufferHeight);
+    const imageData = createImageDataSafe(bufferWidth, bufferHeight);
 
     const radius_ = radius * devicePixelRatio;
     const bezel_ = bezelWidth * devicePixelRatio;

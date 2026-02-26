@@ -3,6 +3,8 @@
   "globalDependencies": ["**/.env"],
   "ui": "stream",
   "globalEnv": [
+    "CM_READ_WRITE_TOKEN",
+    "BLOB_READ_WRITE_TOKEN",
     "AUTH_WEBHOOK_SECRET",
     "GITHUB_MODIFIED_TIME_TOKEN",
     "GITHUB_APP_PRIVATE_KEY",
