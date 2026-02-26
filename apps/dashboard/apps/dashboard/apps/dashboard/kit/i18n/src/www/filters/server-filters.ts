@@ -7,7 +7,7 @@ import 'server-only';
 //     const db = await getDBClient();
 //     const organizationClient = new OrganizationDBClient(db);
 //     const organization = await organizationClient.require();
-//     return replaceOrgSlug(url, organization.slug);
+//     return replaceSlugInUrl(url, organization.slug);
 // };
 
 export default function () {

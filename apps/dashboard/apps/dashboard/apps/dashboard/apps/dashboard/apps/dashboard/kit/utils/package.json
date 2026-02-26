@@ -1,0 +1,51 @@
+{
+    "name": "@kit/utils",
+    "private": true,
+    "version": "0.0.0",
+    "scripts": {
+        "clean": "git clean -xdf .turbo node_modules",
+        "typecheck": "tsc --noEmit"
+    },
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "react-native": "./src/index.ts",
+    "files": [
+        "src"
+    ],
+    "exports": {
+        ".": "./src/index.ts",
+        "./native": "./src/native/index.ts",
+        "./www": "./src/www/index.ts",
+        "./config": "./src/config/index.ts",
+        "./quick-form": "./src/quick-form/index.ts",
+        "./stepper": "./src/stepper.tsx",
+        "./filters": "./src/filters/client/index.ts",
+        "./filters/server": "./src/filters/server.ts",
+        "./filters/cross-env": "./src/filters/cross-env.ts",
+        "./types/*": "./src/types/*.ts",
+        "./hooks/*": "./src/hooks/*.ts",
+        "./next": "./src/next-action-client.ts",
+        "./fetch-proxy": "./src/fetch-proxy.ts",
+        "./envs": "./envs.ts"
+    },
+    "devDependencies": {
+        "@kit/tsconfig": "workspace:*",
+        "@types/react": "~19.1.10"
+    },
+    "dependencies": {
+        "clsx": "^2.1.1",
+        "react-hook-form": "^7.62.0",
+        "next-safe-action": "7.10.4",
+        "pino": "^10.1.0",
+        "tailwind-merge": "^3.4.0",
+        "zod": "^3.25.76",
+        "zustand": "^5.0.11"
+    },
+    "typesVersions": {
+        "*": {
+            "*": [
+                "src/*"
+            ]
+        }
+    }
+}

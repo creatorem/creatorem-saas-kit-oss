@@ -12,8 +12,8 @@ import type { KeybindingActions } from '../../../keybindings/src/types';
 import type { SettingsSchema } from '../../../settings/src/config/parse-schema-config';
 import type { parseServerSettingConfig } from '../../../settings/src/config/parse-server-config';
 import type { parseUISettingConfig } from '../../../settings/src/config/parse-ui-config';
-import type { appRouter } from '../../../shared/src/server/router';
 import type { QuickFormConfig, QuickFormSchemaMap, QuickFormStepConfig, SettingsInputsBase } from '../quick-form/types';
+import type { appRouter } from '../../../../packages/shared/src/server/router';
 
 /**
  * Filter API.

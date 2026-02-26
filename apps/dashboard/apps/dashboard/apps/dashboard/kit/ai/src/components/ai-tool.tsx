@@ -461,7 +461,7 @@ export function IncompleteAlert({ label }: IncompleteAlertProps) {
 }
 
 interface AiToolErrorItemProps
-    extends Omit<AnimatedOverlayItemProps, 'overlay' | 'classNameDuringAnimation' | 'wrapperClassName'> {}
+    extends Omit<AnimatedOverlayItemProps, 'overlay' | 'classNameDuringAnimation' | 'wrapperClassName'> { }
 
 /**
  * Not filtered by status because this component may be used inside an AiToolIfCompleted component.
@@ -479,7 +479,7 @@ export const AiToolErrorItem = (props: AiToolErrorItemProps) => {
 
 interface AiToolIncompleteProps
     extends React.ComponentProps<typeof IncompleteAlert>,
-        Omit<AnimatedOverlayItemProps, 'children' | 'overlay' | 'classNameDuringAnimation'> {}
+    Omit<AnimatedOverlayItemProps, 'children' | 'overlay' | 'classNameDuringAnimation' | 'wrapperClassName'> { }
 
 export const AiToolIncomplete = ({ label, ...props }: AiToolIncompleteProps) => {
     const { status } = useAiTool();
@@ -504,7 +504,7 @@ export const AiToolIfCompleted = ({ children }: AiToolIfCompletedProps) => {
 };
 
 interface AiToolSuccessItemProps
-    extends Omit<AnimatedOverlayItemProps, 'overlay' | 'classNameDuringAnimation' | 'onceAnimatedAfterStatusChanged'> {
+    extends Omit<AnimatedOverlayItemProps, 'overlay' | 'classNameDuringAnimation' | 'onceAnimatedAfterStatusChanged' | 'wrapperClassName'> {
     /**
      * Display confetti when the tool is successfully completed.
      * @default false
@@ -522,24 +522,24 @@ export const AiToolSuccessItem: React.FC<AiToolSuccessItemProps> = ({ confetti: 
             onceAnimatedAfterStatusChanged={
                 hasConfetti
                     ? async () => {
-                          const defaults = { scalar: 1.05, ticks: 200 } as const;
+                        const defaults = { scalar: 1.05, ticks: 200 } as const;
 
-                          confetti({
-                              ...defaults,
-                              particleCount: 80,
-                              spread: 70,
-                              origin: { y: 0.7 },
-                              startVelocity: 42,
-                          });
+                        confetti({
+                            ...defaults,
+                            particleCount: 80,
+                            spread: 70,
+                            origin: { y: 0.7 },
+                            startVelocity: 42,
+                        });
 
-                          confetti({
-                              ...defaults,
-                              particleCount: 50,
-                              spread: 110,
-                              origin: { y: 0.6 },
-                              decay: 0.92,
-                          });
-                      }
+                        confetti({
+                            ...defaults,
+                            particleCount: 50,
+                            spread: 110,
+                            origin: { y: 0.6 },
+                            decay: 0.92,
+                        });
+                    }
                     : undefined
             }
         />
@@ -599,7 +599,7 @@ export const AiToolIfActionRequired = ({ children }: AiToolIfActionRequiredProps
     return status.type === 'requires-action' ? children : null;
 };
 
-interface AiToolActionRequiredItemProps extends Omit<AnimatedOverlayItemProps, 'overlay' | 'classNameDuringAnimation'> {
+interface AiToolActionRequiredItemProps extends Omit<AnimatedOverlayItemProps, 'overlay' | 'classNameDuringAnimation' | 'wrapperClassName'> {
     className?: string;
 }
 
@@ -693,7 +693,7 @@ const ActionRequiredOverlay = () => {
     );
 };
 
-interface AiToolAbortedItemProps extends Omit<AnimatedOverlayItemProps, 'overlay' | 'classNameDuringAnimation'> {}
+interface AiToolAbortedItemProps extends Omit<AnimatedOverlayItemProps, 'overlay' | 'classNameDuringAnimation' | 'wrapperClassName'> { }
 
 export const AiToolAbortedItem = (props: AiToolAbortedItemProps) => {
     const { status } = useAiTool();

@@ -8,13 +8,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { authRouter } from '../../../../../router/router';
 import { DeleteUserButton } from './delete-user-button';
+import { AuthConfig } from '../../../../../config';
 
 interface DangerZoneComponentProps {
+    authConfig: AuthConfig
     className?: string;
     clientTrpc: TrpcClientWithQuery<typeof authRouter>;
 }
 
-export function DangerZoneComponent({ className, clientTrpc }: DangerZoneComponentProps): React.JSX.Element {
+export function DangerZoneComponent({ className, authConfig, clientTrpc }: DangerZoneComponentProps): React.JSX.Element {
     const { t } = useTranslation('p_auth');
     return (
         <Card className={cn('border-destructive', className)}>
@@ -24,7 +26,7 @@ export function DangerZoneComponent({ className, clientTrpc }: DangerZoneCompone
             </CardContent>
             <Separator />
             <CardFooter className="flex w-full justify-end pt-6">
-                <DeleteUserButton clientTrpc={clientTrpc} />
+                <DeleteUserButton clientTrpc={clientTrpc} authConfig={authConfig} />
             </CardFooter>
         </Card>
     );
