@@ -1,0 +1,38 @@
+{
+    "name": "@kit/tailwind-config",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "main": "./index.js",
+    "files": [
+        "./theme.css",
+        "./base.css",
+        "./utilities.css",
+        "./postcss.config.js"
+    ],
+    "scripts": {
+        "clean": "git clean -xdf .turbo node_modules"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.4.21",
+        "postcss": "^8.5.6",
+        "tw-animate-css": "^1.3.8"
+    },
+    "peerDependencies": {
+        "react-native-reanimated": "~4.1.5",
+        "uniwind": "^1.2.4",
+        "@tailwindcss/postcss": "^4.1.17",
+        "tailwindcss": "^4.1.17"
+    },
+    "peerDependenciesMeta": {
+        "react-native-reanimated": {
+            "optional": true
+        },
+        "uniwind": {
+            "optional": true
+        },
+        "@tailwindcss/postcss": {
+            "optional": true
+        }
+    }
+}

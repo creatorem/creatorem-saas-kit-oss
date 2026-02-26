@@ -1,7 +1,6 @@
 import { Database } from '@kit/db';
 import { isMFARequired } from '@kit/supabase';
 import { getSupabaseServerClient } from '@kit/supabase-server';
-import { dashboardRoutes } from '@kit/utils/config';
 import { SupabaseClient } from '@supabase/supabase-js';
 import type { i18n } from 'i18next';
 import { redirect } from 'next/navigation';
@@ -29,8 +28,12 @@ export const VerifyMfaPage = async ({ getServerI18n, authConfig, ...props }: Pro
 
     const needsMfa = await isMFARequired(client as unknown as SupabaseClient<Database>);
 
+    // authConfig.
     if (!needsMfa) {
-        redirect(dashboardRoutes.paths.auth.signIn);
+        if (authConfig.environment !== 'www') {
+            throw new Error('Web env required in this file.')
+        }
+        redirect(authConfig.urls.signIn);
     }
 
     const nextPath = (await props.searchParams).next;

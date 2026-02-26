@@ -1,0 +1,14 @@
+{
+    "versionGroups": [
+        {
+            "label": "Use workspace protocol when developing local packages",
+            "dependencies": ["@kit/**"],
+            "dependencyTypes": ["dev", "peer", "prod"],
+            "pinVersion": "workspace:*"
+        },
+        {
+            "dependencies": ["tailwindcss"],
+            "isIgnored": true
+        }
+    ]
+}

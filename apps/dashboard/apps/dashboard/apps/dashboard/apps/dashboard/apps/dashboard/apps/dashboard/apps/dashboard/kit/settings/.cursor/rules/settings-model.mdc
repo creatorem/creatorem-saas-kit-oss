@@ -1,13 +1,15 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
+
 # Settings package
 
 ## Purpose
 
 The settings package aims to simplify :
+
 - database declaration entries
 - zod schema type-checking on each different data
 - handle different database storage method (e.g: user_setting table per row, user attribute per column, ...)
@@ -20,7 +22,8 @@ Note: if you provide pure jsx component in your model, take care to handle mobil
 
 The idea is to declare a typescript object, a `model`, instanced server side (not env specific to make it work on mobile and web).
 
-The `model` allows to define : 
+The `model` allows to define :
+
 - a database getter
 - database updater
 - communicate needed data to build a specific render api (specific for mobile or browser environment)
@@ -35,7 +38,8 @@ The createSettingModel add the default `user_settings` and `user_attributes` dat
 The following example show a real world example of usage of the createSettingModel function.
 It adds custom StorageProvider, define data zod schemas, show complex UI declaration.
 
-Use case example : 
+Use case example :
+
 ```typescript
 import { and, eq, inArray, organizationSetting, organization as organizationTable } from '@kit/drizzle';
 import { createSettingModel } from '@kit/settings';
@@ -408,7 +412,7 @@ export const settingsModel = createSettingModel(
                             settings: [
                                 {
                                     type: 'ui',
-                                    render: <DangerZoneComponent className="my-6" />,
+                                    render: <DangerZoneComponent className="max-w-4xl" clientTrpc={clientTrpc} authConfig={authConfig} />,
                                 },
                             ],
                         },
@@ -570,4 +574,3 @@ export const settingsModel = createSettingModel(
     }
 );
 ```
-

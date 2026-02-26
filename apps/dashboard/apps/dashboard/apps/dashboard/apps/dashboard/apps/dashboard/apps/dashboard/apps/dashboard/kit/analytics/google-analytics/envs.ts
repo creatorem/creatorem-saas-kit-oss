@@ -4,7 +4,13 @@ import { z } from 'zod';
 export const googleAnalyticsEnvs = () => createEnv({
     client: {
         NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional(),
+        /**
+         * @default false
+         */
         NEXT_PUBLIC_GA_DISABLE_LOCALHOST_TRACKING: z.string().optional(),
+        /**
+         * @default false
+         */
         NEXT_PUBLIC_GA_DISABLE_PAGE_VIEWS_TRACKING: z.string().optional(),
     },
     server: {},
