@@ -85,18 +85,9 @@ importers:
       '@kit/analytics':
         specifier: workspace:*
         version: link:../../kit/analytics/core
-      '@kit/billing':
-        specifier: workspace:*
-        version: link:../../kit/billing/core
-      '@kit/emailer':
-        specifier: workspace:*
-        version: link:../../kit/email/emailer
       '@kit/monitoring':
         specifier: workspace:*
         version: link:../../kit/monitoring
-      '@kit/organization':
-        specifier: workspace:*
-        version: link:../../kit/organization
       '@kit/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -173,9 +164,6 @@ importers:
       '@kit/auth':
         specifier: workspace:*
         version: link:../../kit/auth
-      '@kit/billing':
-        specifier: workspace:*
-        version: link:../../kit/billing/core
       '@kit/cms':
         specifier: workspace:*
         version: link:../../kit/cms/core
@@ -185,21 +173,12 @@ importers:
       '@kit/drizzle':
         specifier: workspace:*
         version: link:../../kit/db/drizzle
-      '@kit/email-templates':
-        specifier: workspace:*
-        version: link:../../kit/email/email-templates
-      '@kit/emailer':
-        specifier: workspace:*
-        version: link:../../kit/email/emailer
       '@kit/fumadocs':
         specifier: workspace:*
         version: link:../../kit/cms/fumadocs
       '@kit/i18n':
         specifier: workspace:*
         version: link:../../kit/i18n
-      '@kit/keybindings':
-        specifier: workspace:*
-        version: link:../../kit/keybindings
       '@kit/notion':
         specifier: workspace:*
         version: link:../../kit/cms/notion
@@ -280,7 +259,7 @@ importers:
         version: 13.0.8(fumadocs-core@16.6.5(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.1.17)(lucide-react@0.544.0(react@19.1.0))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@3.25.76))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       fumadocs-typescript:
         specifier: ^4.0.13
-        version: 4.0.14(ed2e4fa7f5f824d486d2eb2568b95ee7)
+        version: 4.0.14(tgvrpk55wqd4lgmnlweziec45i)
       fumadocs-ui:
         specifier: ^16.0.11
         version: 16.6.5(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(fumadocs-core@16.6.5(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.1.17)(lucide-react@0.544.0(react@19.1.0))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@3.25.76))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
@@ -428,7 +407,7 @@ importers:
         version: 0.1.2
       mdx-bundler:
         specifier: 10.1.0
-        version: 10.1.0(esbuild@0.27.3)
+        version: 10.1.0(esbuild@0.25.12)
       pino-pretty:
         specifier: ^13.1.1
         version: 13.1.3
@@ -513,39 +492,18 @@ importers:
       '@kit/auth':
         specifier: workspace:*
         version: link:../../kit/auth
-      '@kit/billing':
-        specifier: workspace:*
-        version: link:../../kit/billing/core
-      '@kit/content-type':
-        specifier: workspace:*
-        version: link:../../kit/content-type
       '@kit/db':
         specifier: workspace:*
         version: link:../../kit/db/core
       '@kit/drizzle':
         specifier: workspace:*
         version: link:../../kit/db/drizzle
-      '@kit/email-templates':
-        specifier: workspace:*
-        version: link:../../kit/email/email-templates
-      '@kit/emailer':
-        specifier: workspace:*
-        version: link:../../kit/email/emailer
       '@kit/i18n':
         specifier: workspace:*
         version: link:../../kit/i18n
-      '@kit/keybindings':
-        specifier: workspace:*
-        version: link:../../kit/keybindings
       '@kit/monitoring':
         specifier: workspace:*
         version: link:../../kit/monitoring
-      '@kit/notification':
-        specifier: workspace:*
-        version: link:../../kit/notification
-      '@kit/organization':
-        specifier: workspace:*
-        version: link:../../kit/organization
       '@kit/settings':
         specifier: workspace:*
         version: link:../../kit/settings
@@ -811,18 +769,9 @@ importers:
       '@kit/analytics':
         specifier: workspace:*
         version: link:../../kit/analytics/core
-      '@kit/billing':
-        specifier: workspace:*
-        version: link:../../kit/billing/core
       '@kit/cms':
         specifier: workspace:*
         version: link:../../kit/cms/core
-      '@kit/email-templates':
-        specifier: workspace:*
-        version: link:../../kit/email/email-templates
-      '@kit/emailer':
-        specifier: workspace:*
-        version: link:../../kit/email/emailer
       '@kit/fumadocs':
         specifier: workspace:*
         version: link:../../kit/cms/fumadocs
@@ -876,7 +825,7 @@ importers:
         version: 13.0.8(fumadocs-core@16.6.5(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.1.17)(lucide-react@0.543.0(react@19.1.0))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@3.25.76))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       fumadocs-typescript:
         specifier: ^4.0.13
-        version: 4.0.14(d93c70ab0eeef7945e228470ba7e0764)
+        version: 4.0.14(su42hlgq6izgpsudtnmdtsmhau)
       fumadocs-ui:
         specifier: ^16.0.11
         version: 16.6.5(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(fumadocs-core@16.6.5(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.1.17)(lucide-react@0.543.0(react@19.1.0))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@3.25.76))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
@@ -1046,21 +995,12 @@ importers:
       '@kit/auth':
         specifier: workspace:*
         version: link:../../kit/auth
-      '@kit/content-type':
-        specifier: workspace:*
-        version: link:../../kit/content-type
       '@kit/i18n':
         specifier: workspace:*
         version: link:../../kit/i18n
       '@kit/native-ui':
         specifier: workspace:*
         version: link:../../kit/ui/native
-      '@kit/notification':
-        specifier: workspace:*
-        version: link:../../kit/notification
-      '@kit/organization':
-        specifier: workspace:*
-        version: link:../../kit/organization
       '@kit/settings':
         specifier: workspace:*
         version: link:../../kit/settings
@@ -1174,7 +1114,7 @@ importers:
         version: 0.32.16(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       expo-router:
         specifier: 6.0.21
-        version: 6.0.21(7cdf44cf3e2dc9fcd2adabbb7b80d100)
+        version: 6.0.21(yr4ke4cynddtdbj46nrk2g35cy)
       expo-secure-store:
         specifier: ^15.0.7
         version: 15.0.8(expo@54.0.33)
@@ -1340,7 +1280,7 @@ importers:
         version: 14.1.0
       pastel:
         specifier: ^4.0.0
-        version: 4.0.0(ink@6.8.0(@types/react@19.2.14)(react-devtools-core@6.1.5)(react@19.1.0))(react@19.1.0)(zod@3.25.76)
+        version: 4.0.0(ink@6.8.0(@types/react@19.2.14)(react-devtools-core@6.1.5)(react@19.1.0))(react@19.1.0)(zod@4.3.6)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -1423,39 +1363,18 @@ importers:
       '@kit/auth':
         specifier: workspace:*
         version: link:../../kit/auth
-      '@kit/billing':
-        specifier: workspace:*
-        version: link:../../kit/billing/core
-      '@kit/content-type':
-        specifier: workspace:*
-        version: link:../../kit/content-type
       '@kit/db':
         specifier: workspace:*
         version: link:../../kit/db/core
       '@kit/drizzle':
         specifier: workspace:*
         version: link:../../kit/db/drizzle
-      '@kit/email-templates':
-        specifier: workspace:*
-        version: link:../../kit/email/email-templates
-      '@kit/emailer':
-        specifier: workspace:*
-        version: link:../../kit/email/emailer
       '@kit/i18n':
         specifier: workspace:*
         version: link:../../kit/i18n
-      '@kit/keybindings':
-        specifier: workspace:*
-        version: link:../../kit/keybindings
       '@kit/monitoring':
         specifier: workspace:*
         version: link:../../kit/monitoring
-      '@kit/notification':
-        specifier: workspace:*
-        version: link:../../kit/notification
-      '@kit/organization':
-        specifier: workspace:*
-        version: link:../../kit/organization
       '@kit/settings':
         specifier: workspace:*
         version: link:../../kit/settings
@@ -1733,21 +1652,12 @@ importers:
       '@kit/auth':
         specifier: workspace:*
         version: link:../../kit/auth
-      '@kit/content-type':
-        specifier: workspace:*
-        version: link:../../kit/content-type
       '@kit/i18n':
         specifier: workspace:*
         version: link:../../kit/i18n
       '@kit/native-ui':
         specifier: workspace:*
         version: link:../../kit/ui/native
-      '@kit/notification':
-        specifier: workspace:*
-        version: link:../../kit/notification
-      '@kit/organization':
-        specifier: workspace:*
-        version: link:../../kit/organization
       '@kit/settings':
         specifier: workspace:*
         version: link:../../kit/settings
@@ -1861,7 +1771,7 @@ importers:
         version: 0.32.16(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       expo-router:
         specifier: 6.0.21
-        version: 6.0.21(7cdf44cf3e2dc9fcd2adabbb7b80d100)
+        version: 6.0.21(yr4ke4cynddtdbj46nrk2g35cy)
       expo-secure-store:
         specifier: ^15.0.7
         version: 15.0.8(expo@54.0.33)
@@ -2013,9 +1923,6 @@ importers:
       '@kit/auth':
         specifier: workspace:*
         version: link:../auth
-      '@kit/billing':
-        specifier: workspace:*
-        version: link:../billing/core
       '@kit/drizzle':
         specifier: workspace:*
         version: link:../db/drizzle
@@ -2119,12 +2026,6 @@ importers:
       '@creatorem/next-trpc':
         specifier: ^1.0.16
         version: 1.0.17(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@3.25.76)
-      '@kit/email-templates':
-        specifier: workspace:*
-        version: link:../email/email-templates
-      '@kit/emailer':
-        specifier: workspace:*
-        version: link:../email/emailer
       '@kit/i18n':
         specifier: workspace:*
         version: link:../i18n
@@ -2154,7 +2055,7 @@ importers:
         version: 19.0.21(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))
       expo-router:
         specifier: 6.0.21
-        version: 6.0.21(7cdf44cf3e2dc9fcd2adabbb7b80d100)
+        version: 6.0.21(yr4ke4cynddtdbj46nrk2g35cy)
       i18next:
         specifier: 25.5.2
         version: 25.5.2(typescript@5.9.3)
@@ -2256,9 +2157,6 @@ importers:
       '@kit/lemon-squeezy':
         specifier: workspace:*
         version: link:../lemon-squeezy
-      '@kit/organization':
-        specifier: workspace:*
-        version: link:../../organization
       '@kit/stripe':
         specifier: workspace:*
         version: link:../stripe
@@ -2395,7 +2293,7 @@ importers:
         version: 13.0.8(fumadocs-core@16.6.5(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.1.17)(lucide-react@0.543.0(react@19.1.0))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.3.6))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       fumadocs-typescript:
         specifier: ^4.0.13
-        version: 4.0.14(9b156813f2a541afacf0fba398eb68d4)
+        version: 4.0.14(rl4f343vsbom5ogz66ps3yijve)
       fumadocs-ui:
         specifier: ^16.0.11
         version: 16.6.5(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(fumadocs-core@16.6.5(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.1.17)(lucide-react@0.543.0(react@19.1.0))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.3.6))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
@@ -2477,7 +2375,7 @@ importers:
         version: 13.0.8(fumadocs-core@16.6.5(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.1.17)(lucide-react@0.543.0(react@19.1.0))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.3.6))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       fumadocs-typescript:
         specifier: ^4.0.13
-        version: 4.0.14(9b156813f2a541afacf0fba398eb68d4)
+        version: 4.0.14(rl4f343vsbom5ogz66ps3yijve)
       fumadocs-ui:
         specifier: ^16.0.11
         version: 16.6.5(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(fumadocs-core@16.6.5(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.1.17)(lucide-react@0.543.0(react@19.1.0))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.3.6))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
@@ -2628,12 +2526,6 @@ importers:
       '@kit/drizzle':
         specifier: workspace:*
         version: link:../db/drizzle
-      '@kit/keybindings':
-        specifier: workspace:*
-        version: link:../keybindings
-      '@kit/organization':
-        specifier: workspace:*
-        version: link:../organization
       '@kit/tailwind-config':
         specifier: workspace:*
         version: link:../../tooling/tailwind-config
@@ -2890,12 +2782,6 @@ importers:
 
   kit/db/supabase/server:
     dependencies:
-      '@kit/email-templates':
-        specifier: workspace:*
-        version: link:../../../email/email-templates
-      '@kit/emailer':
-        specifier: workspace:*
-        version: link:../../../email/emailer
       '@t3-oss/env-nextjs':
         specifier: 0.13.8
         version: 0.13.8(typescript@5.9.3)(zod@3.25.76)
@@ -3194,12 +3080,6 @@ importers:
       '@kit/drizzle':
         specifier: workspace:*
         version: link:../db/drizzle
-      '@kit/email-templates':
-        specifier: workspace:*
-        version: link:../email/email-templates
-      '@kit/emailer':
-        specifier: workspace:*
-        version: link:../email/emailer
       '@kit/native-ui':
         specifier: workspace:*
         version: link:../ui/native
@@ -3223,7 +3103,7 @@ importers:
         version: 19.0.21(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))
       expo-router:
         specifier: 6.0.21
-        version: 6.0.21(7cdf44cf3e2dc9fcd2adabbb7b80d100)
+        version: 6.0.21(yr4ke4cynddtdbj46nrk2g35cy)
       next:
         specifier: 16.0.8
         version: 16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -3462,7 +3342,7 @@ importers:
         version: 17.0.10(expo@54.0.33)
       expo-router:
         specifier: 6.0.21
-        version: 6.0.21(7cdf44cf3e2dc9fcd2adabbb7b80d100)
+        version: 6.0.21(yr4ke4cynddtdbj46nrk2g35cy)
       lucide-react-native:
         specifier: ^0.555.0
         version: 0.555.0(react-native-svg@15.12.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -3742,33 +3622,12 @@ importers:
       '@kit/auth':
         specifier: workspace:*
         version: link:../../kit/auth
-      '@kit/billing':
-        specifier: workspace:*
-        version: link:../../kit/billing/core
-      '@kit/content-type':
-        specifier: workspace:*
-        version: link:../../kit/content-type
       '@kit/db':
         specifier: workspace:*
         version: link:../../kit/db/core
       '@kit/drizzle':
         specifier: workspace:*
         version: link:../../kit/db/drizzle
-      '@kit/email-templates':
-        specifier: workspace:*
-        version: link:../../kit/email/email-templates
-      '@kit/emailer':
-        specifier: workspace:*
-        version: link:../../kit/email/emailer
-      '@kit/keybindings':
-        specifier: workspace:*
-        version: link:../../kit/keybindings
-      '@kit/notification':
-        specifier: workspace:*
-        version: link:../../kit/notification
-      '@kit/organization':
-        specifier: workspace:*
-        version: link:../../kit/organization
       '@kit/settings':
         specifier: workspace:*
         version: link:../../kit/settings
@@ -3806,33 +3665,12 @@ importers:
       '@kit/auth':
         specifier: workspace:*
         version: link:../../kit/auth
-      '@kit/billing':
-        specifier: workspace:*
-        version: link:../../kit/billing/core
-      '@kit/content-type':
-        specifier: workspace:*
-        version: link:../../kit/content-type
       '@kit/db':
         specifier: workspace:*
         version: link:../../kit/db/core
       '@kit/drizzle':
         specifier: workspace:*
         version: link:../../kit/db/drizzle
-      '@kit/email-templates':
-        specifier: workspace:*
-        version: link:../../kit/email/email-templates
-      '@kit/emailer':
-        specifier: workspace:*
-        version: link:../../kit/email/emailer
-      '@kit/keybindings':
-        specifier: workspace:*
-        version: link:../../kit/keybindings
-      '@kit/notification':
-        specifier: workspace:*
-        version: link:../../kit/notification
-      '@kit/organization':
-        specifier: workspace:*
-        version: link:../../kit/organization
       '@kit/settings':
         specifier: workspace:*
         version: link:../../kit/settings
@@ -20725,7 +20563,7 @@ snapshots:
       wrap-ansi: 7.0.0
       ws: 8.19.0
     optionalDependencies:
-      expo-router: 6.0.21(7cdf44cf3e2dc9fcd2adabbb7b80d100)
+      expo-router: 6.0.21(yr4ke4cynddtdbj46nrk2g35cy)
       react-native: 0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0)
     transitivePeerDependencies:
       - bufferutil
@@ -20800,7 +20638,7 @@ snapshots:
       wrap-ansi: 7.0.0
       ws: 8.19.0
     optionalDependencies:
-      expo-router: 6.0.21(71fd46220928a7769d085b45a0939758)
+      expo-router: 6.0.21(cdk55xqbuldj7hzoyuu5nxnzsy)
       react-native: 0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0)
     transitivePeerDependencies:
       - bufferutil
@@ -29312,7 +29150,52 @@ snapshots:
       - '@types/react-dom'
       - supports-color
 
-  expo-router@6.0.21(7cdf44cf3e2dc9fcd2adabbb7b80d100):
+  expo-router@6.0.21(cdk55xqbuldj7hzoyuu5nxnzsy):
+    dependencies:
+      '@expo/metro-runtime': 6.1.2(expo@54.0.33)(react-dom@19.1.0(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      '@expo/schema-utils': 0.1.8
+      '@radix-ui/react-slot': 1.2.0(@types/react@19.2.14)(react@19.1.0)
+      '@radix-ui/react-tabs': 1.1.13(@types/react-dom@19.1.11(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@react-navigation/bottom-tabs': 7.15.2(@react-navigation/native@7.1.31(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.2(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-screens@4.16.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      '@react-navigation/native': 7.1.31(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      '@react-navigation/native-stack': 7.14.2(@react-navigation/native@7.1.31(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.2(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-screens@4.16.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      client-only: 0.0.1
+      debug: 4.4.3
+      escape-string-regexp: 4.0.0
+      expo: 54.0.33(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.21)(react-native-webview@13.15.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      expo-constants: 18.0.13(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))
+      expo-linking: 8.0.11(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      expo-server: 1.0.5
+      fast-deep-equal: 3.1.3
+      invariant: 2.2.4
+      nanoid: 3.3.11
+      query-string: 7.1.3
+      react: 19.1.0
+      react-fast-compare: 3.2.2
+      react-native: 0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0)
+      react-native-is-edge-to-edge: 1.2.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      react-native-safe-area-context: 5.6.2(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      react-native-screens: 4.16.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      semver: 7.6.3
+      server-only: 0.0.1
+      sf-symbols-typescript: 2.2.0
+      shallowequal: 1.1.0
+      use-latest-callback: 0.2.6(react@19.1.0)
+      vaul: 1.1.2(@types/react-dom@19.1.11(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+    optionalDependencies:
+      '@react-navigation/drawer': 7.9.2(@react-navigation/native@7.1.31(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-gesture-handler@2.28.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.6(@babel/core@7.29.0)(react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.2(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-screens@4.16.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      react-dom: 19.1.0(react@19.1.0)
+      react-native-gesture-handler: 2.28.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      react-native-reanimated: 4.1.6(@babel/core@7.29.0)(react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      react-native-web: 0.21.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+    transitivePeerDependencies:
+      - '@react-native-masked-view/masked-view'
+      - '@types/react'
+      - '@types/react-dom'
+      - supports-color
+    optional: true
+
+  expo-router@6.0.21(yr4ke4cynddtdbj46nrk2g35cy):
     dependencies:
       '@expo/metro-runtime': 6.1.2(expo@54.0.33)(react-dom@19.1.0(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       '@expo/schema-utils': 0.1.8
@@ -30059,7 +29942,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  fumadocs-typescript@4.0.14(9b156813f2a541afacf0fba398eb68d4):
+  fumadocs-typescript@4.0.14(rl4f343vsbom5ogz66ps3yijve):
     dependencies:
       estree-util-value-to-estree: 3.5.0
       fumadocs-core: 16.6.5(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.1.17)(lucide-react@0.543.0(react@19.1.0))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.3.6)
@@ -30077,7 +29960,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  fumadocs-typescript@4.0.14(d93c70ab0eeef7945e228470ba7e0764):
+  fumadocs-typescript@4.0.14(su42hlgq6izgpsudtnmdtsmhau):
     dependencies:
       estree-util-value-to-estree: 3.5.0
       fumadocs-core: 16.6.5(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.1.17)(lucide-react@0.543.0(react@19.1.0))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@3.25.76)
@@ -30095,7 +29978,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  fumadocs-typescript@4.0.14(ed2e4fa7f5f824d486d2eb2568b95ee7):
+  fumadocs-typescript@4.0.14(tgvrpk55wqd4lgmnlweziec45i):
     dependencies:
       estree-util-value-to-estree: 3.5.0
       fumadocs-core: 16.6.5(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.1.17)(lucide-react@0.544.0(react@19.1.0))(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@3.25.76)
@@ -33764,7 +33647,7 @@ snapshots:
       no-case: 3.0.4
       tslib: 2.8.1
 
-  pastel@4.0.0(ink@6.8.0(@types/react@19.2.14)(react-devtools-core@6.1.5)(react@19.1.0))(react@19.1.0)(zod@3.25.76):
+  pastel@4.0.0(ink@6.8.0(@types/react@19.2.14)(react-devtools-core@6.1.5)(react@19.1.0))(react@19.1.0)(zod@4.3.6):
     dependencies:
       '@inkjs/ui': 2.0.0(ink@6.8.0(@types/react@19.2.14)(react-devtools-core@6.1.5)(react@19.1.0))
       commander: 14.0.3
@@ -33773,8 +33656,8 @@ snapshots:
       plur: 5.1.0
       react: 19.1.0
       read-package-up: 11.0.0
-      zod: 3.25.76
-      zod-validation-error: 4.0.2(zod@3.25.76)
+      zod: 4.3.6
+      zod-validation-error: 4.0.2(zod@4.3.6)
 
   patch-console@2.0.0: {}
 
@@ -37363,9 +37246,9 @@ snapshots:
       compress-commons: 4.1.2
       readable-stream: 3.6.2
 
-  zod-validation-error@4.0.2(zod@3.25.76):
+  zod-validation-error@4.0.2(zod@4.3.6):
     dependencies:
-      zod: 3.25.76
+      zod: 4.3.6
 
   zod@3.25.76: {}
 
