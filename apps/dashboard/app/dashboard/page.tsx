@@ -14,7 +14,7 @@ import { ClientDashboardPage } from './page-client';
 export const metadata: Metadata = {
     title: getMetaTitle('Dashboard'),
 };
-console.log('test')
+
 export default async function DashboardPage({
     searchParams,
 }: {
