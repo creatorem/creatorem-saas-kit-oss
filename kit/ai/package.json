@@ -29,11 +29,11 @@
         "./config": "./src/config.ts"
     },
     "dependencies": {
-        "@kit/supabase-server": "workspace:*",
         "@ai-sdk/react": "^2.0.82",
         "@assistant-ui/react": "^0.11.35",
         "@kit/auth": "workspace:*",
         "@kit/drizzle": "workspace:*",
+        "@kit/supabase-server": "workspace:*",
         "@kit/utils": "workspace:*",
         "@t3-oss/env-nextjs": "0.13.8",
         "ai": "5.0.82",
@@ -43,13 +43,13 @@
         "zustand": "^5.0.11"
     },
     "devDependencies": {
-        "@kit/tsconfig": "workspace:*",
-        "@kit/db": "workspace:*"
+        "@kit/db": "workspace:*",
+        "@kit/tsconfig": "workspace:*"
     },
     "peerDependencies": {
         "@kit/native-ui": "workspace:*",
-        "expo-router": "6.0.21",
         "@kit/ui": "workspace:*",
+        "expo-router": "6.0.21",
         "lucide-react": "^0.543.0"
     },
     "peerDependenciesMeta": {
