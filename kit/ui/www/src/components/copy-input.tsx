@@ -8,8 +8,9 @@ import { CopyButton } from './copy-button';
 export function CopyInput({
     className,
     buttonClassName,
+    inputClassName,
     ...props
-}: Omit<React.ComponentProps<typeof CopyButton>, 'aria-label'> & { buttonClassName?: string }) {
+}: Omit<React.ComponentProps<typeof CopyButton>, 'aria-label'> & { buttonClassName?: string, inputClassName?:string }) {
     const { copyToClipboard, isCopied } = useCopyToClipboard();
 
     return (
@@ -20,6 +21,7 @@ export function CopyInput({
                 className={cn(
                     'hover:bg-accent! pointer-events-auto h-10 w-full cursor-pointer! pr-10',
                     isCopied ? 'cursor-default' : '',
+                    inputClassName
                 )}
                 disabled={isCopied}
             />

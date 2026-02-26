@@ -27,7 +27,6 @@ Open-source starter kit for building SaaS applications with Supabase, Next.js, T
 | Analytics | ✅ | ✅ |
 | Monitoring | ✅ | ✅ |
 | i18n (translations) | ✅ | ✅ |
-| AI | ✅ | ✅ |
 | AI chat UI | ✅ | ✅ |
 | Content-type (premade components to display your own app data) | ❌ | ✅ |
 | Billing | ❌ | ✅ |
