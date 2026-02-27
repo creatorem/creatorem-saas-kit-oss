@@ -1,0 +1,7 @@
+{
+  "name": "dashboard-tables",
+  "tables": [],
+  "extends": [
+    "../../../examples/pco-dashboard/.creatorem/setup.json"
+  ]
+}
