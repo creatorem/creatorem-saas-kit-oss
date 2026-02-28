@@ -22,7 +22,7 @@ Open-source starter kit for building SaaS applications with Supabase, Next.js, T
 
 ## Features
 
-| F (this repository) | Premium |
+| Feature | OSS (this repository) | Premium |
 | --- | --- | --- |
 | Analytics | ✅ | ✅ |
 | Monitoring | ✅ | ✅ |

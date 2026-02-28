@@ -54,6 +54,7 @@ const sheetVariants = cva(
                 bottom: 'inset-x-0 bottom-0 border-t',
                 left: 'inset-y-0 left-0 h-full w-[400px] max-w-[75vw] border-r',
                 right: 'inset-y-0 right-0 h-full w-[400px] max-w-[75vw] border-l',
+                'floating-right': 'right-2 top-2 bottom-2 min-w-[600px] w-[80vw] rounded-2xl border',
             },
         },
         defaultVariants: {
@@ -71,6 +72,7 @@ const sheetAnimateVariants = cva(
                 bottom: 'data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
                 left: 'data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left',
                 right: 'data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
+                'floating-right': 'data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
             },
         },
         defaultVariants: {

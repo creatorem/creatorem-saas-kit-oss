@@ -106,6 +106,7 @@
         "./portal": "./src/shadcn/portal.tsx",
         "./slider": "./src/shadcn/slider.tsx",
         "./drawer": "./src/shadcn/drawer.tsx",
+        "./toggle": "./src/shadcn/toggle.tsx",
         "./toggle-group": "./src/shadcn/toggle-group.tsx",
         "./visually-hidden": "./src/shadcn/visually-hidden.tsx",
         "./sonner": "./src/shadcn/sonner.tsx",
