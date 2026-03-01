@@ -3,6 +3,9 @@ import { z } from 'zod';
 
 export const googleAnalyticsEnvs = () => createEnv({
     client: {
+        /**
+         * @default "G-XXXXXXXXXX"
+         */
         NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional(),
         /**
          * @default false
