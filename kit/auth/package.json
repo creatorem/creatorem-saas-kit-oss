@@ -82,9 +82,6 @@
     "standardwebhooks": "^1.0.0"
   },
   "peerDependenciesMeta": {
-    "@kit/native-ui": {
-      "optional": true
-    },
     "expo-router": {
       "optional": true
     },

@@ -53,9 +53,6 @@
     "@kit/ui": "workspace:*"
   },
   "peerDependenciesMeta": {
-    "@kit/native-ui": {
-      "optional": true
-    },
     "@kit/ui": {
       "optional": true
     },
