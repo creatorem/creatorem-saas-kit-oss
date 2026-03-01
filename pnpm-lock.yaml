@@ -24,7 +24,7 @@ importers:
     devDependencies:
       '@creatorem/cli':
         specifier: latest
-        version: 1.0.6(@types/react@19.1.17)(react-devtools-core@6.1.5)(zod@3.25.76)
+        version: 1.0.7(@types/react@19.1.17)(react-devtools-core@6.1.5)(zod@3.25.76)
       '@kit/tsconfig':
         specifier: workspace:*
         version: link:tooling/tsconfig
@@ -4791,8 +4791,8 @@ packages:
   '@corex/deepmerge@4.0.43':
     resolution: {integrity: sha512-N8uEMrMPL0cu/bdboEWpQYb/0i2K5Qn8eCsxzOmxSggJbbQte7ljMRoXm917AbntqTGOzdTu+vP3KOOzoC70HQ==}
 
-  '@creatorem/cli@1.0.6':
-    resolution: {integrity: sha512-KwlkKLlt2yEKb/zz9fy6t/9mJ22YzUSjiglL+hIkLrBMsarSQ0b3neh6DbrG1FVLnhNr2UFzUyOigzLlSp1I3w==}
+  '@creatorem/cli@1.0.7':
+    resolution: {integrity: sha512-MvQEV/g4sxSny+7pciYTBPg/hntIfE+sA5t9rY8vi8TbtQsE4TM2o/iKGXcqDomBZ4kDHH7c504o4/D6q8E38w==}
     hasBin: true
 
   '@creatorem/next-trpc@1.0.17':
@@ -20121,7 +20121,7 @@ snapshots:
 
   '@corex/deepmerge@4.0.43': {}
 
-  '@creatorem/cli@1.0.6(@types/react@19.1.17)(react-devtools-core@6.1.5)(zod@3.25.76)':
+  '@creatorem/cli@1.0.7(@types/react@19.1.17)(react-devtools-core@6.1.5)(zod@3.25.76)':
     dependencies:
       execa: 9.6.1
       fs-extra: 11.3.3
