@@ -62,14 +62,22 @@ export const userSettingsStorage: StorageProvider = {
         }
 
         await db.rls.transaction(async (tx) => {
-            const settingValues = Object.entries(values).map(([name, value]) => ({
-                name,
-                value,
-                userId: user.id,
-            }));
+            // `user_setting.value` is NOT NULL. Treat nullish values as "clear setting"
+            // by deleting the row so the schema default can be used on reads.
+            for (const [name, value] of Object.entries(values)) {
+                if (value === null || value === undefined) {
+                    await tx
+                        .delete(userSetting)
+                        .where(and(eq(userSetting.name, name), eq(userSetting.userId, user.id)));
+                    continue;
+                }
 
-            // Check if setting exists first, then insert or update
-            for (const setting of settingValues) {
+                const setting = {
+                    name,
+                    value,
+                    userId: user.id,
+                };
+
                 // First try to find if the setting already exists
                 const existingSetting = await tx
                     .select()
