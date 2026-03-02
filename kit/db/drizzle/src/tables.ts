@@ -17,6 +17,9 @@ export type OrganizationMember = InferSelectModel<typeof schema.organizationMemb
 export type OrganizationInvitation = InferSelectModel<typeof schema.organizationInvitation>;
 export type OrganizationSetting = InferSelectModel<typeof schema.organizationSetting>;
 export type Notification = InferSelectModel<typeof schema.notification>;
+export type Service = InferSelectModel<typeof schema.service>;
+export type Checkout = InferSelectModel<typeof schema.checkout>;
+export type Booking = InferSelectModel<typeof schema.booking>;
 export type Product = InferSelectModel<typeof schema.product>;
 export type Client = InferSelectModel<typeof schema.client>;
 export type Order = InferSelectModel<typeof schema.order>;
@@ -25,6 +28,8 @@ export type Order = InferSelectModel<typeof schema.order>;
 export type AiThreadStatusEnum = (typeof schema.aiThreadStatus.enumValues)[number];
 export type NotificationTypeEnum = (typeof schema.notificationType.enumValues)[number];
 export type OrderStatusEnum = (typeof schema.orderStatus.enumValues)[number];
+export type ContentStateEnum = (typeof schema.contentState.enumValues)[number];
+export type BookingStateEnum = (typeof schema.bookingState.enumValues)[number];
 export type OrgPermissionEnum = (typeof schema.orgPermission.enumValues)[number];
 
 // Table Schema Map for Dynamic Access
@@ -45,6 +50,9 @@ export const tableSchemaMap = {
     organization_invitation: schema.organizationInvitation,
     organization_setting: schema.organizationSetting,
     notification: schema.notification,
+    service: schema.service,
+    checkout: schema.checkout,
+    booking: schema.booking,
     product: schema.product,
     client: schema.client,
     order: schema.order,

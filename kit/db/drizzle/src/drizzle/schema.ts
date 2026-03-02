@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm';
 import {
     boolean,
     check,
+    date,
     foreignKey,
     index,
     integer,
@@ -24,6 +25,16 @@ export const usersInAuth = users;
 export const aiThreadStatus = pgEnum('ai_thread_status', ['regular', 'archived']);
 export const notificationType = pgEnum('notification_type', ['info', 'warning', 'error', 'success']);
 export const orderStatus = pgEnum('order_status', ['pending', 'confirmed', 'completed', 'cancelled']);
+export const contentState = pgEnum('content_state', ['draft', 'published', 'archived']);
+export const bookingState = pgEnum('booking_state', [
+    'requires_payment_method',
+    'requires_slot_confirmation',
+    'canceled',
+    'confirmed',
+    'charged',
+    'confirmation_failed',
+]);
+export const slotState = pgEnum('slot_state', ['confirmed', 'requested']);
 export const orgPermission = pgEnum('org_permission', [
     'role.manage',
     'organization.manage',
@@ -599,6 +610,139 @@ export const notification = pgTable(
    FROM "user"
   WHERE (("user".id = notification.user_id) AND ("user".auth_user_id = auth.uid()))))`,
         }),
+    ],
+);
+
+export const service = pgTable(
+    'service',
+    {
+        id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+        organizationId: uuid('organization_id').notNull(),
+        documentId: varchar('document_id', { length: 255 }).notNull(),
+        name: varchar({ length: 255 }).notNull(),
+        description: text(),
+        images: jsonb(),
+        location: varchar({ length: 255 }),
+        minParticipant: integer('min_participant').notNull(),
+        maxParticipant: integer('max_participant'),
+        prices: jsonb().notNull(),
+        state: contentState().default('draft').notNull(),
+        relativeId: integer('relative_id').notNull(),
+        duration: varchar({ length: 50 }),
+        calendarColor: varchar('calendar_color', { length: 50 }).notNull(),
+        featuredImage: jsonb('featured_image'),
+        emailContent: text('email_content'),
+        smsContent: text('sms_content'),
+        confirmationPageMessage: text('confirmation_page_message'),
+        publishedAt: timestamp('published_at', { withTimezone: true, mode: 'string' }),
+        updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+        createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    },
+    (table) => [
+        foreignKey({
+            columns: [table.organizationId],
+            foreignColumns: [organization.id],
+            name: 'service_organization_id_fkey',
+        }).onDelete('cascade'),
+        unique('service_document_id_key').on(table.documentId),
+        pgPolicy('service_all', {
+            as: 'permissive',
+            for: 'all',
+            to: ['authenticated'],
+            using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`,
+            withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`,
+        }),
+        check('service_min_participant_check', sql`min_participant >= 0`),
+        check('service_max_participant_check', sql`max_participant IS NULL OR max_participant >= 0`),
+    ],
+);
+
+export const checkout = pgTable(
+    'checkout',
+    {
+        id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+        organizationId: uuid('organization_id').notNull(),
+        documentId: varchar('document_id', { length: 255 }).notNull(),
+        appearance: jsonb().notNull(),
+        content: jsonb().notNull(),
+        state: contentState().default('draft').notNull(),
+        relativeId: integer('relative_id').notNull(),
+        name: varchar({ length: 255 }).notNull(),
+        slug: varchar({ length: 255 }).notNull(),
+        publishedAt: timestamp('published_at', { withTimezone: true, mode: 'string' }),
+        updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+        createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    },
+    (table) => [
+        foreignKey({
+            columns: [table.organizationId],
+            foreignColumns: [organization.id],
+            name: 'checkout_organization_id_fkey',
+        }).onDelete('cascade'),
+        unique('checkout_document_id_key').on(table.documentId),
+        unique('checkout_slug_key').on(table.slug),
+        pgPolicy('checkout_all', {
+            as: 'permissive',
+            for: 'all',
+            to: ['authenticated'],
+            using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`,
+            withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`,
+        }),
+    ],
+);
+
+export const booking = pgTable(
+    'booking',
+    {
+        id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+        organizationId: uuid('organization_id').notNull(),
+        documentId: varchar('document_id', { length: 255 }).notNull(),
+        relativeId: integer('relative_id').notNull(),
+        firstname: varchar({ length: 255 }).notNull(),
+        lastname: varchar({ length: 255 }),
+        email: varchar({ length: 320 }),
+        phone: varchar({ length: 50 }),
+        participants: jsonb(),
+        day: date(),
+        slotId: uuid('slot_id'),
+        slotOccurrenceId: uuid('slot_occurrence_id'),
+        serviceId: uuid('service_id'),
+        companyMemberId: uuid('company_member_id'),
+        startAt: timestamp('start_at', { withTimezone: true, mode: 'string' }),
+        endAt: timestamp('end_at', { withTimezone: true, mode: 'string' }),
+        stripeKey: varchar('stripe_key', { length: 255 }),
+        state: bookingState().notNull(),
+        note: text(),
+        customerNote: text('customer_note'),
+        publishedAt: timestamp('published_at', { withTimezone: true, mode: 'string' }),
+        updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+        createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    },
+    (table) => [
+        foreignKey({
+            columns: [table.organizationId],
+            foreignColumns: [organization.id],
+            name: 'booking_organization_id_fkey',
+        }).onDelete('cascade'),
+        foreignKey({
+            columns: [table.serviceId],
+            foreignColumns: [service.id],
+            name: 'booking_service_id_fkey',
+        }).onDelete('set null'),
+        foreignKey({
+            columns: [table.companyMemberId],
+            foreignColumns: [user.id],
+            name: 'booking_company_member_id_fkey',
+        }).onDelete('set null'),
+        unique('booking_document_id_key').on(table.documentId),
+        pgPolicy('booking_all', {
+            as: 'permissive',
+            for: 'all',
+            to: ['authenticated'],
+            using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`,
+            withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`,
+        }),
+        pgPolicy('booking_create', { as: 'permissive', for: 'insert', to: ['public'], withCheck: sql`true` }),
     ],
 );
 

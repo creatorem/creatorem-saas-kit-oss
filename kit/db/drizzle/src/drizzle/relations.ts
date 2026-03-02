@@ -5,6 +5,8 @@ import {
     aiUsage,
     aiWallet,
     aiWalletTransaction,
+    booking,
+    checkout,
     client,
     notification,
     order,
@@ -15,6 +17,7 @@ import {
     organizationRolePermission,
     organizationSetting,
     product,
+    service,
     subscription,
     usageRecord,
     user,
@@ -132,6 +135,9 @@ export const organizationRelations = relations(organization, ({ many }) => ({
     organizationInvitations: many(organizationInvitation),
     organizationSettings: many(organizationSetting),
     notifications: many(notification),
+    services: many(service),
+    checkouts: many(checkout),
+    bookings: many(booking),
     products: many(product),
     clients: many(client),
     orders: many(order),
@@ -193,6 +199,36 @@ export const notificationRelations = relations(notification, ({ one }) => ({
     organization: one(organization, {
         fields: [notification.organizationId],
         references: [organization.id],
+    }),
+}));
+
+export const serviceRelations = relations(service, ({ one, many }) => ({
+    organization: one(organization, {
+        fields: [service.organizationId],
+        references: [organization.id],
+    }),
+    bookings: many(booking),
+}));
+
+export const checkoutRelations = relations(checkout, ({ one }) => ({
+    organization: one(organization, {
+        fields: [checkout.organizationId],
+        references: [organization.id],
+    }),
+}));
+
+export const bookingRelations = relations(booking, ({ one }) => ({
+    organization: one(organization, {
+        fields: [booking.organizationId],
+        references: [organization.id],
+    }),
+    service: one(service, {
+        fields: [booking.serviceId],
+        references: [service.id],
+    }),
+    companyMember: one(user, {
+        fields: [booking.companyMemberId],
+        references: [user.id],
     }),
 }));
 
