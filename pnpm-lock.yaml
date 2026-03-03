@@ -154,7 +154,7 @@ importers:
     dependencies:
       '@content-collections/mdx':
         specifier: ^0.2.2
-        version: 0.2.2(@content-collections/core@0.14.1(typescript@5.9.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 0.2.2(@content-collections/core@0.14.2(typescript@5.9.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@creatorem/next-trpc':
         specifier: ^1.0.16
         version: 1.0.17(next@16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@3.25.76)
@@ -280,7 +280,7 @@ importers:
         version: 7.1.0
       motion:
         specifier: ^12.23.24
-        version: 12.34.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.34.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next:
         specifier: 16.0.8
         version: 16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -319,7 +319,7 @@ importers:
         version: 3.3.0(@types/react@19.1.17)(react-dom@19.1.0(react@19.1.0))(react-is@19.1.0)(react@19.1.0)(redux@5.0.1)
       rehype-pretty-code:
         specifier: ^0.14.1
-        version: 0.14.1(shiki@1.29.2)
+        version: 0.14.3(shiki@1.29.2)
       rehype-slug:
         specifier: ^6.0.0
         version: 6.0.0
@@ -404,7 +404,7 @@ importers:
         version: 3.0.3
       autoprefixer:
         specifier: ^10.4.21
-        version: 10.4.27(postcss@8.5.6)
+        version: 10.4.27(postcss@8.5.8)
       ignore-loader:
         specifier: ^0.1.2
         version: 0.1.2
@@ -416,7 +416,7 @@ importers:
         version: 13.1.3
       postcss:
         specifier: ^8.5.6
-        version: 8.5.6
+        version: 8.5.8
       rehype-autolink-headings:
         specifier: 7.1.0
         version: 7.1.0
@@ -452,7 +452,7 @@ importers:
         version: 2.0.95(zod@3.25.76)
       '@ai-sdk/react':
         specifier: ^2.0.82
-        version: 2.0.143(react@19.1.0)(zod@3.25.76)
+        version: 2.0.144(react@19.1.0)(zod@3.25.76)
       '@assistant-ui/react':
         specifier: ^0.11.35
         version: 0.11.58(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(immer@11.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(use-sync-external-store@1.6.0(react@19.1.0))
@@ -584,7 +584,7 @@ importers:
         version: 14.1.0
       motion:
         specifier: ^12.23.24
-        version: 12.34.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.34.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next:
         specifier: 16.0.8
         version: 16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -732,7 +732,7 @@ importers:
         version: 10.0.0
       autoprefixer:
         specifier: ^10.4.21
-        version: 10.4.27(postcss@8.5.6)
+        version: 10.4.27(postcss@8.5.8)
       dotenv-cli:
         specifier: ^8.0.0
         version: 8.0.0
@@ -747,7 +747,7 @@ importers:
         version: 13.1.3
       postcss:
         specifier: ^8.5.6
-        version: 8.5.6
+        version: 8.5.8
       supabase:
         specifier: ^2.51.0
         version: 2.76.15
@@ -768,7 +768,7 @@ importers:
     dependencies:
       '@content-collections/mdx':
         specifier: ^0.2.2
-        version: 0.2.2(@content-collections/core@0.14.1(typescript@5.9.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 0.2.2(@content-collections/core@0.14.2(typescript@5.9.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@hookform/resolvers':
         specifier: ^4.1.3
         version: 4.1.3(react-hook-form@7.71.2(react@19.1.0))
@@ -846,7 +846,7 @@ importers:
         version: 7.1.0
       motion:
         specifier: ^12.23.24
-        version: 12.34.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.34.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next:
         specifier: 16.0.8
         version: 16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -879,7 +879,7 @@ importers:
         version: 3.3.0(@types/react@19.1.17)(react-dom@19.1.0(react@19.1.0))(react-is@19.1.0)(react@19.1.0)(redux@5.0.1)
       rehype-pretty-code:
         specifier: ^0.14.1
-        version: 0.14.1(shiki@1.29.2)
+        version: 0.14.3(shiki@1.29.2)
       rehype-slug:
         specifier: ^6.0.0
         version: 6.0.0
@@ -952,7 +952,7 @@ importers:
         version: 3.0.3
       autoprefixer:
         specifier: ^10.4.21
-        version: 10.4.27(postcss@8.5.6)
+        version: 10.4.27(postcss@8.5.8)
       mdx-bundler:
         specifier: 10.1.0
         version: 10.1.0(esbuild@0.27.3)
@@ -961,7 +961,7 @@ importers:
         version: 13.1.3
       postcss:
         specifier: ^8.5.6
-        version: 8.5.6
+        version: 8.5.8
       rehype-autolink-headings:
         specifier: 7.1.0
         version: 7.1.0
@@ -1228,7 +1228,7 @@ importers:
         version: 0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       uniwind:
         specifier: ^1.2.4
-        version: 1.4.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
+        version: 1.4.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
       victory-native:
         specifier: 41.20.2
         version: 41.20.2(@shopify/react-native-skia@2.2.12(react-native-reanimated@4.1.6(@babel/core@7.29.0)(react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(@types/react@19.1.17)(react-native-gesture-handler@2.28.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.6(@babel/core@7.29.0)(react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -1256,7 +1256,7 @@ importers:
         version: 19.1.17
       postcss:
         specifier: ^8.5.6
-        version: 8.5.6
+        version: 8.5.8
       tailwindcss:
         specifier: ^4.1.17
         version: 4.2.1
@@ -1274,7 +1274,7 @@ importers:
         version: 2.0.95(zod@3.25.76)
       '@ai-sdk/react':
         specifier: ^2.0.82
-        version: 2.0.143(react@19.1.0)(zod@3.25.76)
+        version: 2.0.144(react@19.1.0)(zod@3.25.76)
       '@assistant-ui/react':
         specifier: ^0.11.35
         version: 0.11.58(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(immer@11.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(use-sync-external-store@1.6.0(react@19.1.0))
@@ -1415,7 +1415,7 @@ importers:
         version: 14.1.0
       motion:
         specifier: ^12.23.24
-        version: 12.34.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.34.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next:
         specifier: 16.0.8
         version: 16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1563,7 +1563,7 @@ importers:
         version: 10.0.0
       autoprefixer:
         specifier: ^10.4.21
-        version: 10.4.27(postcss@8.5.6)
+        version: 10.4.27(postcss@8.5.8)
       dotenv-cli:
         specifier: ^8.0.0
         version: 8.0.0
@@ -1578,7 +1578,7 @@ importers:
         version: 13.1.3
       postcss:
         specifier: ^8.5.6
-        version: 8.5.6
+        version: 8.5.8
       supabase:
         specifier: ^2.51.0
         version: 2.76.15
@@ -1639,7 +1639,7 @@ importers:
         version: 19.2.14
       tsup:
         specifier: ^8.5.1
-        version: 8.5.1(@swc/core@1.15.18)(jiti@2.6.1)(postcss@8.5.6)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
+        version: 8.5.1(@swc/core@1.15.18)(jiti@2.6.1)(postcss@8.5.8)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -1657,7 +1657,7 @@ importers:
         version: 2.0.95(zod@3.25.76)
       '@ai-sdk/react':
         specifier: ^2.0.82
-        version: 2.0.143(react@19.1.0)(zod@3.25.76)
+        version: 2.0.144(react@19.1.0)(zod@3.25.76)
       '@assistant-ui/react':
         specifier: ^0.11.35
         version: 0.11.58(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(immer@11.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(use-sync-external-store@1.6.0(react@19.1.0))
@@ -1789,7 +1789,7 @@ importers:
         version: 14.1.0
       motion:
         specifier: ^12.23.24
-        version: 12.34.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.34.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next:
         specifier: 16.0.8
         version: 16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1937,7 +1937,7 @@ importers:
         version: 10.0.0
       autoprefixer:
         specifier: ^10.4.21
-        version: 10.4.27(postcss@8.5.6)
+        version: 10.4.27(postcss@8.5.8)
       dotenv-cli:
         specifier: ^8.0.0
         version: 8.0.0
@@ -1952,7 +1952,7 @@ importers:
         version: 13.1.3
       postcss:
         specifier: ^8.5.6
-        version: 8.5.6
+        version: 8.5.8
       supabase:
         specifier: ^2.51.0
         version: 2.76.15
@@ -2216,7 +2216,7 @@ importers:
         version: 0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       uniwind:
         specifier: ^1.2.4
-        version: 1.4.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
+        version: 1.4.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
       victory-native:
         specifier: 41.20.2
         version: 41.20.2(@shopify/react-native-skia@2.2.12(react-native-reanimated@4.1.6(@babel/core@7.29.0)(react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(@types/react@19.1.17)(react-native-gesture-handler@2.28.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.6(@babel/core@7.29.0)(react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -2244,7 +2244,7 @@ importers:
         version: 19.1.17
       postcss:
         specifier: ^8.5.6
-        version: 8.5.6
+        version: 8.5.8
       tailwindcss:
         specifier: ^4.1.17
         version: 4.2.1
@@ -2256,7 +2256,7 @@ importers:
     dependencies:
       '@ai-sdk/react':
         specifier: ^2.0.82
-        version: 2.0.143(react@19.1.0)(zod@3.25.76)
+        version: 2.0.144(react@19.1.0)(zod@3.25.76)
       '@assistant-ui/react':
         specifier: ^0.11.35
         version: 0.11.58(@types/react-dom@19.1.11(@types/react@19.2.14))(@types/react@19.2.14)(immer@11.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(use-sync-external-store@1.6.0(react@19.1.0))
@@ -2295,7 +2295,7 @@ importers:
         version: 0.543.0(react@19.1.0)
       motion:
         specifier: ^12.23.24
-        version: 12.34.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.34.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zod:
         specifier: ^3.25.64
         version: 3.25.76
@@ -2468,7 +2468,7 @@ importers:
         version: 29.4.6(@babel/core@7.29.0)(@jest/transform@29.7.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.29.0))(jest-util@29.7.0)(jest@29.7.0(@types/node@25.3.3))(typescript@5.9.3)
       uniwind:
         specifier: ^1.2.4
-        version: 1.4.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
+        version: 1.4.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
       zod:
         specifier: ^3.25.76
         version: 3.25.76
@@ -2645,7 +2645,7 @@ importers:
         version: 7.1.0
       rehype-pretty-code:
         specifier: ^0.14.1
-        version: 0.14.1(shiki@1.29.2)
+        version: 0.14.3(shiki@1.29.2)
       rehype-slug:
         specifier: ^6.0.0
         version: 6.0.0
@@ -2727,7 +2727,7 @@ importers:
         version: 7.1.0
       rehype-pretty-code:
         specifier: ^0.14.1
-        version: 0.14.1(shiki@1.29.2)
+        version: 0.14.3(shiki@1.29.2)
       rehype-slug:
         specifier: ^6.0.0
         version: 6.0.0
@@ -2785,7 +2785,7 @@ importers:
         version: link:../../utils
       '@notionhq/client':
         specifier: ^5.1.0
-        version: 5.11.0
+        version: 5.11.1
       next-mdx-remote:
         specifier: ^5.0.0
         version: 5.0.0(@types/react@19.1.17)(react@19.1.0)
@@ -2816,7 +2816,7 @@ importers:
         version: 19.1.0
       rehype-pretty-code:
         specifier: ^0.14.0
-        version: 0.14.1(shiki@3.23.0)
+        version: 0.14.3(shiki@3.23.0)
       rehype-slug:
         specifier: ^6.0.0
         version: 6.0.0
@@ -2910,7 +2910,7 @@ importers:
         version: 19.1.17
       autoprefixer:
         specifier: ^10.4.21
-        version: 10.4.27(postcss@8.5.6)
+        version: 10.4.27(postcss@8.5.8)
       lucide-react:
         specifier: ^0.543.0
         version: 0.543.0(react@19.1.0)
@@ -2919,10 +2919,10 @@ importers:
         version: 16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       postcss:
         specifier: ^8.5.6
-        version: 8.5.6
+        version: 8.5.8
       postcss-loader:
         specifier: ^8.1.1
-        version: 8.2.1(postcss@8.5.6)(typescript@5.9.3)(webpack@5.105.3(@swc/core@1.15.18)(esbuild@0.25.12))
+        version: 8.2.1(postcss@8.5.8)(typescript@5.9.3)(webpack@5.105.3(@swc/core@1.15.18)(esbuild@0.25.12))
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -2946,7 +2946,7 @@ importers:
         version: 1.4.0
       uniwind:
         specifier: ^1.2.4
-        version: 1.4.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
+        version: 1.4.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
       zod:
         specifier: ^3.25.76
         version: 3.25.76
@@ -3287,7 +3287,7 @@ importers:
         version: 19.1.0(react@19.1.0)
       uniwind:
         specifier: ^1.2.4
-        version: 1.4.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
+        version: 1.4.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
 
   kit/keybindings:
     dependencies:
@@ -3391,7 +3391,7 @@ importers:
         version: link:../utils
       motion:
         specifier: ^12.23.24
-        version: 12.34.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.34.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -3507,7 +3507,7 @@ importers:
         version: 29.4.6(@babel/core@7.29.0)(@jest/transform@29.7.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.29.0))(jest-util@29.7.0)(jest@29.7.0(@types/node@25.3.3))(typescript@5.9.3)
       uniwind:
         specifier: ^1.2.4
-        version: 1.4.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
+        version: 1.4.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
       zod:
         specifier: ^3.25.76
         version: 3.25.76
@@ -3580,7 +3580,7 @@ importers:
         version: 16.5.4(i18next@25.5.2(typescript@5.9.3))(react-dom@19.1.0(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)
       uniwind:
         specifier: ^1.2.4
-        version: 1.4.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
+        version: 1.4.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
       zod:
         specifier: ^3.25.76
         version: 3.25.76
@@ -3725,7 +3725,7 @@ importers:
         version: 5.9.3
       uniwind:
         specifier: ^1.2.4
-        version: 1.4.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
+        version: 1.4.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
 
   kit/ui/www:
     dependencies:
@@ -3833,7 +3833,7 @@ importers:
         version: 8.6.0(react@19.1.0)
       framer-motion:
         specifier: ^12.23.12
-        version: 12.34.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.34.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       input-otp:
         specifier: 1.4.2
         version: 1.4.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -4354,14 +4354,14 @@ importers:
         version: 4.2.1
       uniwind:
         specifier: ^1.2.4
-        version: 1.4.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
+        version: 1.4.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1)
     devDependencies:
       autoprefixer:
         specifier: ^10.4.21
-        version: 10.4.27(postcss@8.5.6)
+        version: 10.4.27(postcss@8.5.8)
       postcss:
         specifier: ^8.5.6
-        version: 8.5.6
+        version: 8.5.8
       tw-animate-css:
         specifier: ^1.3.8
         version: 1.4.0
@@ -4387,8 +4387,8 @@ packages:
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/gateway@2.0.47':
-    resolution: {integrity: sha512-QzpiMq7dVXsIv/thXJEyDeP8+irqF3LSJX+ZbVKOqbX8WdrcHSig2nhHQLK6cwe9s+0tyNKYQQ89h2X62OVdsg==}
+  '@ai-sdk/gateway@2.0.48':
+    resolution: {integrity: sha512-cvBOSfyd2MM5SyOygMX3MK96ZHdYDptYZ7WVum3VGyFKDm1Eb2YJI1KfS/XL7ccxta/GFZrWO4Ll3QD0jEodtw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -4429,8 +4429,8 @@ packages:
     resolution: {integrity: sha512-KCUwswvsC5VsW2PWFqF8eJgSCu5Ysj7m1TxiHTVA6g7k360bk0RNQENT8KTMAYEs+8fWPD3Uu4dEmzGHc+jGng==}
     engines: {node: '>=18'}
 
-  '@ai-sdk/react@2.0.143':
-    resolution: {integrity: sha512-Jj2SH6FjCXQF7UUiA1zTn7DnGQZgjdQWZ8i5yvh8ciBa2lh3Rxrot2E2zM053Ah3prSBbp0fDQogDS6SZyNrnQ==}
+  '@ai-sdk/react@2.0.144':
+    resolution: {integrity: sha512-YRw6Fp7qFGTdtp6C/j8Dpwa4XFbT1z1aFE7EqNX6f2j2vleakw+I6dL5etjgVkTbFo3pomYSYfSsCNm8E8PUzw==}
     engines: {node: '>=18'}
     peerDependencies:
       react: 19.1.0
@@ -5399,8 +5399,8 @@ packages:
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
 
-  '@content-collections/core@0.14.1':
-    resolution: {integrity: sha512-mfviKnONzVcr1D3uasZFEk0E9N4a7liCra06imQrmKF07nGDuvrRKUFoUwUc2IGrW3EYqKF/KV06zfJRzNe3sg==}
+  '@content-collections/core@0.14.2':
+    resolution: {integrity: sha512-YVoExn4qs21b6BYJ4TyHEYHu+q8CN4lemPSs8qMSvRMBuSiUtxmTKt6FO1Pi6p5uyNchwvPpkn/FZXcCMINzrQ==}
     peerDependencies:
       typescript: ^5.0.2
 
@@ -6237,20 +6237,20 @@ packages:
   '@fast-csv/parse@4.3.6':
     resolution: {integrity: sha512-uRsLYksqpbDmWaSmzvJcuApSEe38+6NQZBUsuAyMZKqHxH0g1wcJgsKUvN3WC8tewaqFjBMMGrkHmC+T7k8LvA==}
 
-  '@floating-ui/core@1.7.4':
-    resolution: {integrity: sha512-C3HlIdsBxszvm5McXlB8PeOEWfBhcGBTZGkGlWc2U0KFY5IwG5OQEuQ8rq52DZmcHDlPLd+YFBK+cZcytwIFWg==}
+  '@floating-ui/core@1.7.5':
+    resolution: {integrity: sha512-1Ih4WTWyw0+lKyFMcBHGbb5U5FtuHJuujoyyr5zTaWS5EYMeT6Jb2AuDeftsCsEuchO+mM2ij5+q9crhydzLhQ==}
 
-  '@floating-ui/dom@1.7.5':
-    resolution: {integrity: sha512-N0bD2kIPInNHUHehXhMke1rBGs1dwqvC9O9KYMyyjK7iXt7GAhnro7UlcuYcGdS/yYOlq0MAVgrow8IbWJwyqg==}
+  '@floating-ui/dom@1.7.6':
+    resolution: {integrity: sha512-9gZSAI5XM36880PPMm//9dfiEngYoC6Am2izES1FF406YFsjvyBMmeJ2g4SAju3xWwtuynNRFL2s9hgxpLI5SQ==}
 
-  '@floating-ui/react-dom@2.1.7':
-    resolution: {integrity: sha512-0tLRojf/1Go2JgEVm+3Frg9A3IW8bJgKgdO0BN5RkF//ufuz2joZM63Npau2ff3J6lUVYgDSNzNkR+aH3IVfjg==}
+  '@floating-ui/react-dom@2.1.8':
+    resolution: {integrity: sha512-cC52bHwM/n/CxS87FH0yWdngEZrjdtLW/qVruo68qg+prK7ZQ4YGdut2GyDVpoGeAYe/h899rVeOVm6Oi40k2A==}
     peerDependencies:
       react: 19.1.0
       react-dom: 19.1.0
 
-  '@floating-ui/utils@0.2.10':
-    resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+  '@floating-ui/utils@0.2.11':
+    resolution: {integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==}
 
   '@formatjs/ecma402-abstract@2.3.6':
     resolution: {integrity: sha512-HJnTFeRM2kVFVr5gr5kH1XP6K0JcJtE7Lzvtr3FS/so5f1kpsqqqxy5JF+FRaO6H2qmcMfAUIox7AJteieRtVw==}
@@ -7119,8 +7119,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@notionhq/client@5.11.0':
-    resolution: {integrity: sha512-bBP3gZvf2yUzwWJ/oEPf/4DWR4wSrZln0ZtVx3mc3RQaQHjl1/cbqECcsUS6RjKc51PY9598s7WRItxd8X1MAw==}
+  '@notionhq/client@5.11.1':
+    resolution: {integrity: sha512-393XUAb4706eWKQx1xxg/tdn/rTY6+qj3PxTGyTr03D7ydO6e7B7tYyidxJCbKzNSSCVTUAth/bLoKNhm0VoUQ==}
     engines: {node: '>=18'}
 
   '@npmcli/agent@4.0.0':
@@ -11423,8 +11423,8 @@ packages:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
     engines: {node: '>=8'}
 
-  ai@5.0.141:
-    resolution: {integrity: sha512-Lo0amDzMsaFDSXCop++Bnu99sivngL+u03SHzFfkNKdB6/lIehL7EvKMlb/Epkn2W85aUjjJunaNo9YJM/USWw==}
+  ai@5.0.142:
+    resolution: {integrity: sha512-Esx0GhEavWffxwWL9gHAgfM7LaPMQ1vo+qf+sZDTiQaJCj3x52hnV9WsYW/j+rWuf//+p6dAIrF/t7YSa+HNVQ==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -11998,8 +11998,8 @@ packages:
     resolution: {integrity: sha512-8WB3Jcas3swSvjIeA2yvCJ+Miyz5l1ZmB6HFb9R1317dt9LCQoswg/BGrmAmkWVEszSrrg4RwmO46qIm2OEnSA==}
     engines: {node: '>=16'}
 
-  caniuse-lite@1.0.30001775:
-    resolution: {integrity: sha512-s3Qv7Lht9zbVKE9XoTyRG6wVDCKdtOFIjBGg3+Yhn6JaytuNKPIjBMTMIY1AnOH3seL5mvF+x33oGAyK3hVt3A==}
+  caniuse-lite@1.0.30001776:
+    resolution: {integrity: sha512-sg01JDPzZ9jGshqKSckOQthXnYwOEP50jeVFhaSFbZcOy05TiuuaffDOfcwtCisJ9kNQuLBFibYywv2Bgm9osw==}
 
   canvas-confetti@1.9.4:
     resolution: {integrity: sha512-yxQbJkAVrFXWNbTUjPqjF7G+g6pDotOUHGbkZq2NELZUMDpiJ85rIEazVb8GTaAptNW2miJAXbs1BtioA251Pw==}
@@ -12387,8 +12387,8 @@ packages:
       typescript:
         optional: true
 
-  cosmiconfig@9.0.0:
-    resolution: {integrity: sha512-itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==}
+  cosmiconfig@9.0.1:
+    resolution: {integrity: sha512-hr4ihw+DBqcvrsEDioRO31Z17x71pUYoNe/4h6Z0wB72p7MU7/9gH8Q3s12NFhHPfYBBOV3qyfUxmr/Yn3shnQ==}
     engines: {node: '>=14'}
     peerDependencies:
       typescript: '>=4.9.5'
@@ -13822,8 +13822,8 @@ packages:
   fraction.js@5.3.4:
     resolution: {integrity: sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==}
 
-  framer-motion@12.34.3:
-    resolution: {integrity: sha512-v81ecyZKYO/DfpTwHivqkxSUBzvceOpoI+wLfgCgoUIKxlFKEXdg0oR9imxwXumT4SFy8vRk9xzJ5l3/Du/55Q==}
+  framer-motion@12.34.4:
+    resolution: {integrity: sha512-q1PwNhc1XJ3qYG7nc9+pEU5P3tnjB6Eh9vv5gGzy61nedDLB4+xk5peMCWhKM0Zn6sfhgunf/q9n0UgCoyKOBA==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: 19.1.0
@@ -15935,8 +15935,8 @@ packages:
   motion-utils@12.29.2:
     resolution: {integrity: sha512-G3kc34H2cX2gI63RqU+cZq+zWRRPSsNIOjpdl9TN4AQwC4sgwYPl/Q/Obf/d53nOm569T0fYK+tcoSV50BWx8A==}
 
-  motion@12.34.3:
-    resolution: {integrity: sha512-xZIkBGO7v/Uvm+EyaqYd+9IpXu0sZqLywVlGdCFrrMiaO9JI4Kx51mO9KlHSWwll+gZUVY5OJsWgYI5FywJ/tw==}
+  motion@12.34.4:
+    resolution: {integrity: sha512-J0cuDNRymNzE0M2WY8CFcbQuprHBZwY+iqADKGLLe6kQUVP4kBQ2l7Z6gWK7Zfrt5Wgxs+kCojj4qu7I4wxBIw==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: 19.1.0
@@ -16851,8 +16851,8 @@ packages:
     resolution: {integrity: sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==}
     engines: {node: ^10 || ^12 || >=14}
 
-  postcss@8.5.6:
-    resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
+  postcss@8.5.8:
+    resolution: {integrity: sha512-OW/rX8O/jXnm82Ey1k44pObPtdblfiuWnrd8X7GJ7emImCOstunGbXUpp7HdBrFQX6rJzn3sPT397Wp5aCwCHg==}
     engines: {node: ^10 || ^12 || >=14}
 
   postgres-array@2.0.0:
@@ -17523,11 +17523,11 @@ packages:
   rehype-parse@9.0.1:
     resolution: {integrity: sha512-ksCzCD0Fgfh7trPDxr2rSylbwq9iYDkSn8TCDmEJ49ljEUBxDVCzCHv7QNzZOfODanX4+bWQ4WZqLCRWYLfhag==}
 
-  rehype-pretty-code@0.14.1:
-    resolution: {integrity: sha512-IpG4OL0iYlbx78muVldsK86hdfNoht0z63AP7sekQNW2QOTmjxB7RbTO+rhIYNGRljgHxgVZoPwUl6bIC9SbjA==}
+  rehype-pretty-code@0.14.3:
+    resolution: {integrity: sha512-Cz692FeYusTjT5cfFWLc4r7JhgC3/JlJptgUh4iffBxWxUnWW1oqbWFi7jGCeq00DYUm8yzoTnvpocaYa5x82g==}
     engines: {node: '>=18'}
     peerDependencies:
-      shiki: ^1.0.0 || ^2.0.0 || ^3.0.0
+      shiki: ^1.0.0 || ^2.0.0 || ^3.0.0 || ^4.0.0
 
   rehype-recma@1.0.0:
     resolution: {integrity: sha512-lqA4rGUf1JmacCNWWZx0Wv1dHqMwxzsDWYMTowuplHF3xH0N/MmrZ/G3BDZnzAkRmxDadujCjaKM2hqYdCBOGw==}
@@ -17838,6 +17838,10 @@ packages:
 
   serialize-javascript@6.0.2:
     resolution: {integrity: sha512-Saa1xPByTTq2gdeFZYLLo+RFE35NHZkAbqZeWNd3BpzppeVisAqpDjcp8dyf6uIvEqJRd46jemmyA4iFIeVk8g==}
+
+  serialize-javascript@7.0.4:
+    resolution: {integrity: sha512-DuGdB+Po43Q5Jxwpzt1lhyFSYKryqoNjQSA9M92tyw0lyHIOur+XCalOUe0KTJpyqzT8+fQ5A0Jf7vCx/NKmIg==}
+    engines: {node: '>=20.0.0'}
 
   serve-static@1.16.3:
     resolution: {integrity: sha512-x0RTqQel6g5SY7Lg6ZreMmsOzncHFU7nhnRWkKgWuMTu5NN0DR5oruckMqRvacAN9d5w6ARnRBXl9xhDCgfMeA==}
@@ -18868,8 +18872,8 @@ packages:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
 
-  uniwind@1.4.0:
-    resolution: {integrity: sha512-t0bAbWWVVTCGVn+vU3Nqrn7RmAA9JhEZiMMwXUk2+Rp8eacm3OdmFY3SqJ5mLDSuFwXLmBydISumR6uR5MbSJA==}
+  uniwind@1.4.1:
+    resolution: {integrity: sha512-F/GmNP2630Dl5fLfFP32NSBUS3guAQAXI6/krk0AbJspM/RW5bBpW/Y4yhkJhdwr+ppvF+YDBtjZ0D4TqGg28A==}
     peerDependencies:
       react: 19.1.0
       react-native: '>=0.81.0'
@@ -19469,14 +19473,14 @@ snapshots:
       '@vercel/oidc': 3.0.3
       zod: 4.3.6
 
-  '@ai-sdk/gateway@2.0.47(zod@3.25.76)':
+  '@ai-sdk/gateway@2.0.48(zod@3.25.76)':
     dependencies:
       '@ai-sdk/provider': 2.0.1
       '@ai-sdk/provider-utils': 3.0.21(zod@3.25.76)
       '@vercel/oidc': 3.1.0
       zod: 3.25.76
 
-  '@ai-sdk/gateway@2.0.47(zod@4.3.6)':
+  '@ai-sdk/gateway@2.0.48(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 2.0.1
       '@ai-sdk/provider-utils': 3.0.21(zod@4.3.6)
@@ -19535,20 +19539,20 @@ snapshots:
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/react@2.0.143(react@19.1.0)(zod@3.25.76)':
+  '@ai-sdk/react@2.0.144(react@19.1.0)(zod@3.25.76)':
     dependencies:
       '@ai-sdk/provider-utils': 3.0.21(zod@3.25.76)
-      ai: 5.0.141(zod@3.25.76)
+      ai: 5.0.142(zod@3.25.76)
       react: 19.1.0
       swr: 2.4.1(react@19.1.0)
       throttleit: 2.1.0
     optionalDependencies:
       zod: 3.25.76
 
-  '@ai-sdk/react@2.0.143(react@19.1.0)(zod@4.3.6)':
+  '@ai-sdk/react@2.0.144(react@19.1.0)(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider-utils': 3.0.21(zod@4.3.6)
-      ai: 5.0.141(zod@4.3.6)
+      ai: 5.0.142(zod@4.3.6)
       react: 19.1.0
       swr: 2.4.1(react@19.1.0)
       throttleit: 2.1.0
@@ -19565,7 +19569,7 @@ snapshots:
   '@assistant-ui/react-ai-sdk@1.1.8(@assistant-ui/react@0.11.58(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(immer@11.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(use-sync-external-store@1.6.0(react@19.1.0)))(@types/react@19.1.17)(assistant-cloud@0.1.20)(immer@11.1.4)(react@19.1.0)(use-sync-external-store@1.6.0(react@19.1.0))':
     dependencies:
       '@ai-sdk/provider': 2.0.1
-      '@ai-sdk/react': 2.0.143(react@19.1.0)(zod@4.3.6)
+      '@ai-sdk/react': 2.0.144(react@19.1.0)(zod@4.3.6)
       '@assistant-ui/react': 0.11.58(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(immer@11.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(use-sync-external-store@1.6.0(react@19.1.0))
       '@radix-ui/react-use-callback-ref': 1.1.1(@types/react@19.1.17)(react@19.1.0)
       '@types/json-schema': 7.0.15
@@ -21039,7 +21043,7 @@ snapshots:
   '@colors/colors@1.5.0':
     optional: true
 
-  '@content-collections/core@0.14.1(typescript@5.9.3)':
+  '@content-collections/core@0.14.2(typescript@5.9.3)':
     dependencies:
       '@standard-schema/spec': 1.1.0
       camelcase: 8.0.0
@@ -21049,14 +21053,14 @@ snapshots:
       p-limit: 6.2.0
       picomatch: 4.0.3
       pluralize: 8.0.0
-      serialize-javascript: 6.0.2
+      serialize-javascript: 7.0.4
       tinyglobby: 0.2.15
       typescript: 5.9.3
       yaml: 2.8.2
 
-  '@content-collections/mdx@0.2.2(@content-collections/core@0.14.1(typescript@5.9.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@content-collections/mdx@0.2.2(@content-collections/core@0.14.2(typescript@5.9.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@content-collections/core': 0.14.1(typescript@5.9.3)
+      '@content-collections/core': 0.14.2(typescript@5.9.3)
       esbuild: 0.25.12
       mdx-bundler: 10.1.0(esbuild@0.25.12)
       react: 19.1.0
@@ -21961,22 +21965,22 @@ snapshots:
       lodash.isundefined: 3.0.1
       lodash.uniq: 4.5.0
 
-  '@floating-ui/core@1.7.4':
+  '@floating-ui/core@1.7.5':
     dependencies:
-      '@floating-ui/utils': 0.2.10
+      '@floating-ui/utils': 0.2.11
 
-  '@floating-ui/dom@1.7.5':
+  '@floating-ui/dom@1.7.6':
     dependencies:
-      '@floating-ui/core': 1.7.4
-      '@floating-ui/utils': 0.2.10
+      '@floating-ui/core': 1.7.5
+      '@floating-ui/utils': 0.2.11
 
-  '@floating-ui/react-dom@2.1.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@floating-ui/react-dom@2.1.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@floating-ui/dom': 1.7.5
+      '@floating-ui/dom': 1.7.6
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@floating-ui/utils@0.2.10': {}
+  '@floating-ui/utils@0.2.11': {}
 
   '@formatjs/ecma402-abstract@2.3.6':
     dependencies:
@@ -22877,7 +22881,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
 
-  '@notionhq/client@5.11.0': {}
+  '@notionhq/client@5.11.1': {}
 
   '@npmcli/agent@4.0.0':
     dependencies:
@@ -24557,7 +24561,7 @@ snapshots:
 
   '@radix-ui/react-popper@1.2.1(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@floating-ui/react-dom': 2.1.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@floating-ui/react-dom': 2.1.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-arrow': 1.1.1(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-compose-refs': 1.1.1(@types/react@18.3.28)(react@19.1.0)
       '@radix-ui/react-context': 1.1.1(@types/react@18.3.28)(react@19.1.0)
@@ -24575,7 +24579,7 @@ snapshots:
 
   '@radix-ui/react-popper@1.2.1(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@floating-ui/react-dom': 2.1.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@floating-ui/react-dom': 2.1.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-arrow': 1.1.1(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-compose-refs': 1.1.1(@types/react@19.1.17)(react@19.1.0)
       '@radix-ui/react-context': 1.1.1(@types/react@19.1.17)(react@19.1.0)
@@ -24593,7 +24597,7 @@ snapshots:
 
   '@radix-ui/react-popper@1.2.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@floating-ui/react-dom': 2.1.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@floating-ui/react-dom': 2.1.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-arrow': 1.1.7(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-compose-refs': 1.1.2(@types/react@18.3.28)(react@19.1.0)
       '@radix-ui/react-context': 1.1.2(@types/react@18.3.28)(react@19.1.0)
@@ -24611,7 +24615,7 @@ snapshots:
 
   '@radix-ui/react-popper@1.2.8(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@floating-ui/react-dom': 2.1.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@floating-ui/react-dom': 2.1.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-arrow': 1.1.7(@types/react-dom@19.1.11(@types/react@19.1.17))(@types/react@19.1.17)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-compose-refs': 1.1.2(@types/react@19.1.17)(react@19.1.0)
       '@radix-ui/react-context': 1.1.2(@types/react@19.1.17)(react@19.1.0)
@@ -24629,7 +24633,7 @@ snapshots:
 
   '@radix-ui/react-popper@1.2.8(@types/react-dom@19.1.11(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@floating-ui/react-dom': 2.1.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@floating-ui/react-dom': 2.1.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-arrow': 1.1.7(@types/react-dom@19.1.11(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-compose-refs': 1.1.2(@types/react@19.2.14)(react@19.1.0)
       '@radix-ui/react-context': 1.1.2(@types/react@19.2.14)(react@19.1.0)
@@ -27586,8 +27590,8 @@ snapshots:
       next: 16.0.8(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       node-polyfill-webpack-plugin: 2.0.1(webpack@5.105.3(@swc/core@1.15.18)(esbuild@0.25.12))
       pnp-webpack-plugin: 1.7.0(typescript@5.9.3)
-      postcss: 8.5.6
-      postcss-loader: 8.2.1(postcss@8.5.6)(typescript@5.9.3)(webpack@5.105.3(@swc/core@1.15.18)(esbuild@0.25.12))
+      postcss: 8.5.8
+      postcss-loader: 8.2.1(postcss@8.5.8)(typescript@5.9.3)(webpack@5.105.3(@swc/core@1.15.18)(esbuild@0.25.12))
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
       react-refresh: 0.14.2
@@ -28161,7 +28165,7 @@ snapshots:
       '@alloc/quick-lru': 5.2.0
       '@tailwindcss/node': 4.2.1
       '@tailwindcss/oxide': 4.2.1
-      postcss: 8.5.6
+      postcss: 8.5.8
       tailwindcss: 4.2.1
 
   '@tanstack/query-core@5.90.12': {}
@@ -28901,17 +28905,17 @@ snapshots:
       clean-stack: 2.2.0
       indent-string: 4.0.0
 
-  ai@5.0.141(zod@3.25.76):
+  ai@5.0.142(zod@3.25.76):
     dependencies:
-      '@ai-sdk/gateway': 2.0.47(zod@3.25.76)
+      '@ai-sdk/gateway': 2.0.48(zod@3.25.76)
       '@ai-sdk/provider': 2.0.1
       '@ai-sdk/provider-utils': 3.0.21(zod@3.25.76)
       '@opentelemetry/api': 1.9.0
       zod: 3.25.76
 
-  ai@5.0.141(zod@4.3.6):
+  ai@5.0.142(zod@4.3.6):
     dependencies:
-      '@ai-sdk/gateway': 2.0.47(zod@4.3.6)
+      '@ai-sdk/gateway': 2.0.48(zod@4.3.6)
       '@ai-sdk/provider': 2.0.1
       '@ai-sdk/provider-utils': 3.0.21(zod@4.3.6)
       '@opentelemetry/api': 1.9.0
@@ -29132,13 +29136,13 @@ snapshots:
 
   auto-bind@5.0.1: {}
 
-  autoprefixer@10.4.27(postcss@8.5.6):
+  autoprefixer@10.4.27(postcss@8.5.8):
     dependencies:
       browserslist: 4.28.1
-      caniuse-lite: 1.0.30001775
+      caniuse-lite: 1.0.30001776
       fraction.js: 5.3.4
       picocolors: 1.1.1
-      postcss: 8.5.6
+      postcss: 8.5.8
       postcss-value-parser: 4.2.0
 
   available-typed-arrays@1.0.7:
@@ -29473,7 +29477,7 @@ snapshots:
   browserslist@4.28.1:
     dependencies:
       baseline-browser-mapping: 2.10.0
-      caniuse-lite: 1.0.30001775
+      caniuse-lite: 1.0.30001776
       electron-to-chromium: 1.5.302
       node-releases: 2.0.27
       update-browserslist-db: 1.2.3(browserslist@4.28.1)
@@ -29577,7 +29581,7 @@ snapshots:
 
   camelcase@8.0.0: {}
 
-  caniuse-lite@1.0.30001775: {}
+  caniuse-lite@1.0.30001776: {}
 
   canvas-confetti@1.9.4: {}
 
@@ -29972,7 +29976,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
 
-  cosmiconfig@9.0.0(typescript@5.9.3):
+  cosmiconfig@9.0.1(typescript@5.9.3):
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
@@ -30079,12 +30083,12 @@ snapshots:
 
   css-loader@6.11.0(webpack@5.105.3(@swc/core@1.15.18)(esbuild@0.25.12)):
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.6)
-      postcss: 8.5.6
-      postcss-modules-extract-imports: 3.1.0(postcss@8.5.6)
-      postcss-modules-local-by-default: 4.2.0(postcss@8.5.6)
-      postcss-modules-scope: 3.2.1(postcss@8.5.6)
-      postcss-modules-values: 4.0.0(postcss@8.5.6)
+      icss-utils: 5.1.0(postcss@8.5.8)
+      postcss: 8.5.8
+      postcss-modules-extract-imports: 3.1.0(postcss@8.5.8)
+      postcss-modules-local-by-default: 4.2.0(postcss@8.5.8)
+      postcss-modules-scope: 3.2.1(postcss@8.5.8)
+      postcss-modules-values: 4.0.0(postcss@8.5.8)
       postcss-value-parser: 4.2.0
       semver: 7.7.4
     optionalDependencies:
@@ -31759,7 +31763,7 @@ snapshots:
 
   fraction.js@5.3.4: {}
 
-  framer-motion@12.34.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  framer-motion@12.34.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       motion-dom: 12.34.3
       motion-utils: 12.29.2
@@ -32688,9 +32692,9 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
-  icss-utils@5.1.0(postcss@8.5.6):
+  icss-utils@5.1.0(postcss@8.5.8):
     dependencies:
-      postcss: 8.5.6
+      postcss: 8.5.8
 
   ieee754@1.2.1: {}
 
@@ -35028,9 +35032,9 @@ snapshots:
 
   motion-utils@12.29.2: {}
 
-  motion@12.34.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  motion@12.34.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
-      framer-motion: 12.34.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      framer-motion: 12.34.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       tslib: 2.8.1
     optionalDependencies:
       react: 19.1.0
@@ -35127,7 +35131,7 @@ snapshots:
       '@next/env': 14.1.0
       '@swc/helpers': 0.5.2
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001775
+      caniuse-lite: 1.0.30001776
       graceful-fs: 4.2.11
       postcss: 8.4.31
       react: 19.1.0
@@ -35154,7 +35158,7 @@ snapshots:
       '@swc/counter': 0.1.3
       '@swc/helpers': 0.5.15
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001775
+      caniuse-lite: 1.0.30001776
       postcss: 8.4.31
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
@@ -35179,7 +35183,7 @@ snapshots:
     dependencies:
       '@next/env': 16.0.3
       '@swc/helpers': 0.5.15
-      caniuse-lite: 1.0.30001775
+      caniuse-lite: 1.0.30001776
       postcss: 8.4.31
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
@@ -35204,7 +35208,7 @@ snapshots:
     dependencies:
       '@next/env': 16.0.8
       '@swc/helpers': 0.5.15
-      caniuse-lite: 1.0.30001775
+      caniuse-lite: 1.0.30001776
       postcss: 8.4.31
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
@@ -36004,46 +36008,46 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  postcss-load-config@6.0.1(jiti@2.6.1)(postcss@8.5.6)(tsx@4.21.0)(yaml@2.8.2):
+  postcss-load-config@6.0.1(jiti@2.6.1)(postcss@8.5.8)(tsx@4.21.0)(yaml@2.8.2):
     dependencies:
       lilconfig: 3.1.3
     optionalDependencies:
       jiti: 2.6.1
-      postcss: 8.5.6
+      postcss: 8.5.8
       tsx: 4.21.0
       yaml: 2.8.2
 
-  postcss-loader@8.2.1(postcss@8.5.6)(typescript@5.9.3)(webpack@5.105.3(@swc/core@1.15.18)(esbuild@0.25.12)):
+  postcss-loader@8.2.1(postcss@8.5.8)(typescript@5.9.3)(webpack@5.105.3(@swc/core@1.15.18)(esbuild@0.25.12)):
     dependencies:
-      cosmiconfig: 9.0.0(typescript@5.9.3)
+      cosmiconfig: 9.0.1(typescript@5.9.3)
       jiti: 2.6.1
-      postcss: 8.5.6
+      postcss: 8.5.8
       semver: 7.7.4
     optionalDependencies:
       webpack: 5.105.3(@swc/core@1.15.18)(esbuild@0.25.12)
     transitivePeerDependencies:
       - typescript
 
-  postcss-modules-extract-imports@3.1.0(postcss@8.5.6):
+  postcss-modules-extract-imports@3.1.0(postcss@8.5.8):
     dependencies:
-      postcss: 8.5.6
+      postcss: 8.5.8
 
-  postcss-modules-local-by-default@4.2.0(postcss@8.5.6):
+  postcss-modules-local-by-default@4.2.0(postcss@8.5.8):
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.6)
-      postcss: 8.5.6
+      icss-utils: 5.1.0(postcss@8.5.8)
+      postcss: 8.5.8
       postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
 
-  postcss-modules-scope@3.2.1(postcss@8.5.6):
+  postcss-modules-scope@3.2.1(postcss@8.5.8):
     dependencies:
-      postcss: 8.5.6
+      postcss: 8.5.8
       postcss-selector-parser: 7.1.1
 
-  postcss-modules-values@4.0.0(postcss@8.5.6):
+  postcss-modules-values@4.0.0(postcss@8.5.8):
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.6)
-      postcss: 8.5.6
+      icss-utils: 5.1.0(postcss@8.5.8)
+      postcss: 8.5.8
 
   postcss-selector-parser@7.1.1:
     dependencies:
@@ -36064,7 +36068,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  postcss@8.5.6:
+  postcss@8.5.8:
     dependencies:
       nanoid: 3.3.11
       picocolors: 1.1.1
@@ -36231,7 +36235,7 @@ snapshots:
     dependencies:
       '@puppeteer/browsers': 2.13.0
       chromium-bidi: 14.0.0(devtools-protocol@0.0.1566079)
-      cosmiconfig: 9.0.0(typescript@5.9.3)
+      cosmiconfig: 9.0.1(typescript@5.9.3)
       devtools-protocol: 0.0.1566079
       puppeteer-core: 24.37.5
       typed-query-selector: 2.12.1
@@ -37219,7 +37223,7 @@ snapshots:
       hast-util-from-html: 2.0.3
       unified: 11.0.5
 
-  rehype-pretty-code@0.14.1(shiki@1.29.2):
+  rehype-pretty-code@0.14.3(shiki@1.29.2):
     dependencies:
       '@types/hast': 3.0.4
       hast-util-to-string: 3.0.1
@@ -37229,7 +37233,7 @@ snapshots:
       unified: 11.0.5
       unist-util-visit: 5.0.0
 
-  rehype-pretty-code@0.14.1(shiki@3.23.0):
+  rehype-pretty-code@0.14.3(shiki@3.23.0):
     dependencies:
       '@types/hast': 3.0.4
       hast-util-to-string: 3.0.1
@@ -37403,7 +37407,7 @@ snapshots:
       adjust-sourcemap-loader: 4.0.0
       convert-source-map: 1.9.0
       loader-utils: 2.0.4
-      postcss: 8.5.6
+      postcss: 8.5.8
       source-map: 0.6.1
 
   resolve-workspace-root@2.0.1: {}
@@ -37552,7 +37556,7 @@ snapshots:
       htmlparser2: 8.0.2
       is-plain-object: 5.0.0
       parse-srcset: 1.0.2
-      postcss: 8.5.6
+      postcss: 8.5.8
 
   sass-loader@14.2.1(webpack@5.105.3(@swc/core@1.15.18)(esbuild@0.25.12)):
     dependencies:
@@ -37644,6 +37648,8 @@ snapshots:
   serialize-javascript@6.0.2:
     dependencies:
       randombytes: 2.1.0
+
+  serialize-javascript@7.0.4: {}
 
   serve-static@1.16.3:
     dependencies:
@@ -38591,7 +38597,7 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  tsup@8.5.1(@swc/core@1.15.18)(jiti@2.6.1)(postcss@8.5.6)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2):
+  tsup@8.5.1(@swc/core@1.15.18)(jiti@2.6.1)(postcss@8.5.8)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.27.3)
       cac: 6.7.14
@@ -38602,7 +38608,7 @@ snapshots:
       fix-dts-default-cjs-exports: 1.0.1
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@2.6.1)(postcss@8.5.6)(tsx@4.21.0)(yaml@2.8.2)
+      postcss-load-config: 6.0.1(jiti@2.6.1)(postcss@8.5.8)(tsx@4.21.0)(yaml@2.8.2)
       resolve-from: 5.0.0
       rollup: 4.59.0
       source-map: 0.7.6
@@ -38612,7 +38618,7 @@ snapshots:
       tree-kill: 1.2.2
     optionalDependencies:
       '@swc/core': 1.15.18
-      postcss: 8.5.6
+      postcss: 8.5.8
       typescript: 5.9.3
     transitivePeerDependencies:
       - jiti
@@ -38838,7 +38844,7 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  uniwind@1.4.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1):
+  uniwind@1.4.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1):
     dependencies:
       '@tailwindcss/node': 4.1.17
       '@tailwindcss/oxide': 4.1.17
@@ -38848,7 +38854,7 @@ snapshots:
       react-native: 0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0)
       tailwindcss: 4.2.1
 
-  uniwind@1.4.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1):
+  uniwind@1.4.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)(tailwindcss@4.2.1):
     dependencies:
       '@tailwindcss/node': 4.1.17
       '@tailwindcss/oxide': 4.1.17

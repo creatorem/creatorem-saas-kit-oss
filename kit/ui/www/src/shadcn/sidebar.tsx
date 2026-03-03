@@ -12,6 +12,7 @@ import { cn } from '@kit/utils';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, VariantProps } from 'class-variance-authority';
 import * as React from 'react';
+import { useLocalStorage } from '../hooks/use-local-storage';
 import { useIsMobile } from '../hooks/use-mobile';
 import { Icon } from '../icon';
 import { Button } from './button';
@@ -20,8 +21,8 @@ import { Input } from './input';
 import { Separator } from './separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip';
 
-const SIDEBAR_COOKIE_NAME = 'sidebar_state';
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+const SIDEBAR_STORAGE_KEY = 'sidebar_state';
+const SIDEBAR_POSITION_STORAGE_KEY = 'sidebar_position';
 const SIDEBAR_WIDTH = '16rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
@@ -65,21 +66,25 @@ function SidebarProvider({
 
     // This is the internal state of the sidebar.
     // We use openProp and setOpenProp for control from outside the component.
-    const [_open, _setOpen] = React.useState(defaultOpen);
-    const open = openProp ?? _open;
+    const [storedOpen, setStoredOpen] = useLocalStorage<boolean>(SIDEBAR_STORAGE_KEY, defaultOpen);
+    const open = openProp ?? storedOpen;
+
+    React.useEffect(() => {
+        if (openProp !== undefined && openProp !== storedOpen) {
+            setStoredOpen(openProp);
+        }
+    }, [openProp, storedOpen, setStoredOpen]);
+
     const setOpen = React.useCallback(
         (value: boolean | ((value: boolean) => boolean)) => {
             const openState = typeof value === 'function' ? value(open) : value;
+            setStoredOpen(openState);
+
             if (setOpenProp) {
                 setOpenProp(openState);
-            } else {
-                _setOpen(openState);
             }
-
-            // This sets the cookie to keep the sidebar state.
-            document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
         },
-        [setOpenProp, open],
+        [setOpenProp, open, setStoredOpen],
     );
 
     // Helper to toggle the sidebar.
@@ -144,7 +149,7 @@ function SidebarProvider({
 }
 
 function Sidebar({
-    side = 'left',
+    side: sideProp,
     variant = 'sidebar',
     collapsible = 'offcanvas',
     className,
@@ -158,6 +163,14 @@ function Sidebar({
     wrapperClassName?: string;
 }) {
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+    const [storedSide, setStoredSide] = useLocalStorage<'left' | 'right'>(SIDEBAR_POSITION_STORAGE_KEY, 'left');
+    const side = sideProp ?? storedSide;
+
+    React.useEffect(() => {
+        if (side !== storedSide) {
+            setStoredSide(side);
+        }
+    }, [side, storedSide, setStoredSide]);
 
     if (collapsible === 'none') {
         return (
