@@ -1,11 +1,16 @@
-import { envs } from '@kit/monitoring/envs';
 import { init, replayIntegration } from '@sentry/nextjs';
+import { getValidSentryDsn } from '../get-valid-sentry-dsn';
 
 type Parameters<T extends (args: never) => unknown> = T extends (...args: infer P) => unknown ? P : never;
 
 export function initSentryClientConfig(props: Parameters<typeof init>[0] = {}) {
+    const dsn = getValidSentryDsn();
+    if (!dsn) {
+        return;
+    }
+
     return init({
-        dsn: envs().NEXT_PUBLIC_SENTRY_DSN,
+        dsn,
         integrations: [
             // https://docs.sentry.io/platforms/javascript/configuration/integrations/
             replayIntegration(),

@@ -1,11 +1,16 @@
-import { envs } from '@kit/monitoring/envs';
 import { init } from '@sentry/nextjs';
+import { getValidSentryDsn } from './get-valid-sentry-dsn';
 
 type Parameters<T extends (args: never) => unknown> = T extends (...args: infer P) => unknown ? P : never;
 
 export function initSentryEdgeConfig(props: Parameters<typeof init>[0] = {}) {
+    const dsn = getValidSentryDsn();
+    if (!dsn) {
+        return;
+    }
+
     return init({
-        dsn: envs().NEXT_PUBLIC_SENTRY_DSN,
+        dsn,
 
         // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
         tracesSampleRate: props?.tracesSampleRate ?? 1.0,
