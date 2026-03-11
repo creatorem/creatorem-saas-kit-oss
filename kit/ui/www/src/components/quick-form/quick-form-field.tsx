@@ -1,6 +1,7 @@
 'use client';
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@kit/ui/form';
+import { cn } from '@kit/utils';
 import { QuickFormFieldComponent, QuickFormInputRenderer, quickFormFieldVariants } from '@kit/utils/quick-form';
 import React from 'react';
 import { ControllerFieldState, ControllerRenderProps, UseFormStateReturn } from 'react-hook-form';
@@ -33,7 +34,7 @@ export const QuickFormField: QuickFormFieldComponent = ({
             }) => {
                 const isOptional = schema.shape[field.name]?.isOptional();
                 return (
-                    <FormItem className={quickFormFieldVariants({ variant })}>
+                    <FormItem className={cn(quickFormFieldVariants({ variant }), type === 'boolean' ? 'gap-y-0' : '')}>
                         <div className="flex flex-row items-center justify-between gap-4">
                             {label && <FormLabel required={!isOptional}>{label}</FormLabel>}
                             {type === 'boolean' && (
@@ -54,7 +55,7 @@ export const QuickFormField: QuickFormFieldComponent = ({
                             )}
                         </div>
 
-                        {type !== 'boolean' && (
+                        {type !== 'boolean' ? (
                             <div className="flex w-full flex-col gap-0.5">
                                 {description && descriptionPosition === 'above' && (
                                     <FormDescription>{description}</FormDescription>
@@ -77,6 +78,12 @@ export const QuickFormField: QuickFormFieldComponent = ({
                                     <FormDescription>{description}</FormDescription>
                                 )}
                             </div>
+                        ) : (
+                            <>
+                                {description && (
+                                    <FormDescription>{description}</FormDescription>
+                                )}
+                            </>
                         )}
 
                         <FormMessage />
