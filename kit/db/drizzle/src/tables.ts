@@ -24,6 +24,7 @@ export type SlotOccurrence = InferSelectModel<typeof schema.slotOccurrence>;
 export type Booking = InferSelectModel<typeof schema.booking>;
 export type Checkout = InferSelectModel<typeof schema.checkout>;
 export type DateMemo = InferSelectModel<typeof schema.dateMemo>;
+export type BookingSmsReminder = InferSelectModel<typeof schema.bookingSmsReminder>;
 
 // Enum Types
 export type AiThreadStatusEnum = typeof schema.aiThreadStatus.enumValues[number];
@@ -57,5 +58,6 @@ export const tableSchemaMap = {
     'slot_occurrence': schema.slotOccurrence,
     'booking': schema.booking,
     'checkout': schema.checkout,
-    'date_memo': schema.dateMemo
+    'date_memo': schema.dateMemo,
+    'booking_sms_reminder': schema.bookingSmsReminder,
 } as const;

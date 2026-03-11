@@ -30,9 +30,9 @@ export const user = pgTable("user", {
 			name: "user_auth_user_id_fkey"
 		}).onDelete("cascade"),
 	pgPolicy("user_create", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(( SELECT auth.uid() AS uid) = auth_user_id)`  }),
+	pgPolicy("user_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("user_read", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("user_update", { as: "permissive", for: "update", to: ["authenticated"] }),
-	pgPolicy("user_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
 
 export const userSetting = pgTable("user_setting", {
@@ -250,9 +250,9 @@ export const organization = pgTable("organization", {
 	unique("organization_slug_key").on(table.slug),
 	unique("organization_email_key").on(table.email),
 	pgPolicy("organization_create", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`true`  }),
+	pgPolicy("organization_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("organization_read", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("organization_update", { as: "permissive", for: "update", to: ["authenticated"] }),
-	pgPolicy("organization_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
 
 export const organizationRole = pgTable("organization_role", {
@@ -269,10 +269,10 @@ export const organizationRole = pgTable("organization_role", {
 			name: "organization_role_organization_id_fkey"
 		}).onDelete("cascade"),
 	unique("organization_role_name_organization_id_key").on(table.name, table.organizationId),
-	pgPolicy("organization_role_read", { as: "permissive", for: "select", to: ["authenticated"], using: sql`kit.user_is_member_of_org(organization_id)` }),
+	pgPolicy("organization_role_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'role.manage'::org_permission))` }),
 	pgPolicy("organization_role_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("organization_role_read", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("organization_role_update", { as: "permissive", for: "update", to: ["authenticated"] }),
-	pgPolicy("organization_role_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
 
 export const organizationRolePermission = pgTable("organization_role_permission", {
@@ -294,10 +294,13 @@ export const organizationRolePermission = pgTable("organization_role_permission"
 			name: "organization_role_permission_organization_id_fkey"
 		}).onDelete("cascade"),
 	unique("organization_role_permission_role_id_permission_key").on(table.roleId, table.permission),
-	pgPolicy("organization_role_permission_read", { as: "permissive", for: "select", to: ["authenticated"], using: sql`kit.user_is_member_of_org(organization_id)` }),
+	pgPolicy("organization_role_permission_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'role.manage'::org_permission) AND ((permission <> 'role.manage'::org_permission) OR (kit.has_multiple_role_manage_permissions(organization_id) AND (EXISTS ( SELECT 1
+   FROM (organization_member om
+     JOIN organization_role_permission orp ON ((orp.role_id = om.role_id)))
+  WHERE ((om.organization_id = organization_role_permission.organization_id) AND (orp.permission = 'role.manage'::org_permission) AND (om.role_id <> organization_role_permission.role_id)))))))` }),
 	pgPolicy("organization_role_permission_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("organization_role_permission_read", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("organization_role_permission_update", { as: "permissive", for: "update", to: ["authenticated"] }),
-	pgPolicy("organization_role_permission_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
 
 export const organizationMember = pgTable("organization_member", {
@@ -326,9 +329,9 @@ export const organizationMember = pgTable("organization_member", {
 		}).onDelete("cascade"),
 	unique("organization_member_user_id_organization_id_key").on(table.userId, table.organizationId),
 	pgPolicy("organization_member_create", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`kit.user_is_invited_to_org(organization_id)`  }),
+	pgPolicy("organization_member_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("organization_member_read", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("organization_member_update", { as: "permissive", for: "update", to: ["authenticated"] }),
-	pgPolicy("organization_member_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
 
 export const organizationInvitation = pgTable("organization_invitation", {
@@ -360,9 +363,9 @@ export const organizationInvitation = pgTable("organization_invitation", {
 	unique("organization_invitation_email_organization_id_key").on(table.email, table.organizationId),
 	unique("organization_invitation_invite_token_key").on(table.inviteToken),
 	pgPolicy("organization_invitation_create", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'invitation.manage'::org_permission))`  }),
+	pgPolicy("organization_invitation_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("organization_invitation_read", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("organization_invitation_update", { as: "permissive", for: "update", to: ["authenticated"] }),
-	pgPolicy("organization_invitation_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
 
 export const organizationSetting = pgTable("organization_setting", {
@@ -687,9 +690,31 @@ export const dateMemo = pgTable("date_memo", {
 		}).onDelete("set null"),
 	pgPolicy("date_memo_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
 ]);
+
+export const bookingSmsReminder = pgTable("booking_sms_reminder", {
+	bookingId: uuid("booking_id").primaryKey().notNull(),
+	organizationId: uuid("organization_id").notNull(),
+	scheduledFor: timestamp("scheduled_for", { withTimezone: true, mode: 'string' }).notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_booking_sms_reminder_org_schedule").using("btree", table.organizationId.asc().nullsLast().op("timestamptz_ops"), table.scheduledFor.asc().nullsLast().op("timestamptz_ops")),
+	index("idx_booking_sms_reminder_schedule").using("btree", table.scheduledFor.asc().nullsLast().op("timestamptz_ops")),
+	foreignKey({
+			columns: [table.bookingId],
+			foreignColumns: [booking.id],
+			name: "booking_sms_reminder_booking_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "booking_sms_reminder_organization_id_fkey"
+		}).onDelete("cascade"),
+]);
+
 export const agendaSlotDay = pgView("agenda_slot_day", {	slotOccurrenceId: uuid("slot_occurrence_id"),
 	organizationId: uuid("organization_id"),
-	companyMemberId: uuid("company_member_id"),
+	organizationMemberId: uuid("organization_member_id"),
 	date: date(),
 	startAt: timestamp("start_at", { withTimezone: true, mode: 'string' }),
 	endAt: timestamp("end_at", { withTimezone: true, mode: 'string' }),
@@ -701,4 +726,4 @@ export const agendaSlotDay = pgView("agenda_slot_day", {	slotOccurrenceId: uuid(
 	serviceCalendarColor: varchar("service_calendar_color", { length: 50 }),
 	serviceDuration: varchar("service_duration", { length: 50 }),
 	bookings: jsonb(),
-}).as(sql`SELECT so.id AS slot_occurrence_id, so.organization_id, so.company_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name AS service_name, s.calendar_color AS service_calendar_color, s.duration AS service_duration, COALESCE(jsonb_agg(jsonb_build_object('id', b.id, 'state', b.state, 'firstname', b.firstname, 'lastname', b.lastname, 'email', b.email, 'phone', b.phone, 'participants', b.participants, 'day', b.day, 'start_at', b.start_at, 'end_at', b.end_at) ORDER BY b.start_at, b.created_at) FILTER (WHERE b.id IS NOT NULL), '[]'::jsonb) AS bookings FROM slot_occurrence so LEFT JOIN service s ON s.id = so.service_id LEFT JOIN booking b ON b.slot_occurrence_id = so.id GROUP BY so.id, so.organization_id, so.company_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name, s.calendar_color, s.duration`);
+}).as(sql`SELECT so.id AS slot_occurrence_id, so.organization_id, so.company_member_id AS organization_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name AS service_name, s.calendar_color AS service_calendar_color, s.duration AS service_duration, COALESCE(jsonb_agg(jsonb_build_object('id', b.id, 'state', b.state, 'firstname', b.firstname, 'lastname', b.lastname, 'email', b.email, 'phone', b.phone, 'participants', b.participants, 'day', b.day, 'start_at', b.start_at, 'end_at', b.end_at) ORDER BY b.start_at, b.created_at) FILTER (WHERE b.id IS NOT NULL), '[]'::jsonb) AS bookings FROM slot_occurrence so LEFT JOIN service s ON s.id = so.service_id LEFT JOIN booking b ON b.slot_occurrence_id = so.id GROUP BY so.id, so.organization_id, so.company_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name, s.calendar_color, s.duration`);

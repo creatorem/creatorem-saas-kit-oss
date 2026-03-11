@@ -55,21 +55,6 @@ const urls = {
                 index: `/dashboard`,
                 slug: {
                     index: `/dashboard/[slug]`,
-                    orders: {
-                        index: `/dashboard/[slug]/orders`,
-                        id: `/dashboard/[slug]/orders/[id]`,
-                        new: `/dashboard/[slug]/orders/new`,
-                    },
-                    products: {
-                        index: `/dashboard/[slug]/products`,
-                        id: `/dashboard/[slug]/products/[id]`,
-                        new: `/dashboard/[slug]/products/new`,
-                    },
-                    clients: {
-                        index: `/dashboard/[slug]/clients`,
-                        id: `/dashboard/[slug]/clients/[id]`,
-                        new: `/dashboard/[slug]/clients/new`,
-                    },
                     billing: {
                         index: `/dashboard/[slug]/billing`,
                     },

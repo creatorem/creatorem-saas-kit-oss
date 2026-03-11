@@ -18,9 +18,9 @@ export type Database = {
       graphql: {
         Args: {
           operationName?: string
-          query?: string
           extensions?: Json
           variables?: Json
+          query?: string
         }
         Returns: Json
       }
@@ -47,10 +47,10 @@ export type Database = {
       debug_jwt_info: {
         Args: Record<PropertyKey, never>
         Returns: {
-          jwt_sid: string
+          jwt_full: Json
           auth_user_id: string
           jwt_session_id: string
-          jwt_full: Json
+          jwt_sid: string
           detected_current_session: string
           total_user_sessions: number
         }[]
@@ -66,9 +66,9 @@ export type Database = {
       get_user_sessions: {
         Args: Record<PropertyKey, never>
         Returns: {
+          id: string
           user_id: string
           created_at: string
-          id: string
           updated_at: string
           factor_id: string
           aal: string
@@ -97,7 +97,7 @@ export type Database = {
         Returns: boolean
       }
       update_session_details: {
-        Args: { session_id: string; new_user_agent?: string; new_ip?: unknown }
+        Args: { new_ip?: unknown; new_user_agent?: string; session_id: string }
         Returns: boolean
       }
       user_is_invited_to_org: {
@@ -474,6 +474,45 @@ export type Database = {
             columns: ["slot_occurrence_id"]
             isOneToOne: false
             referencedRelation: "slot_occurrence"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_sms_reminder: {
+        Row: {
+          booking_id: string
+          created_at: string
+          organization_id: string
+          scheduled_for: string
+          updated_at: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          organization_id: string
+          scheduled_for: string
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          organization_id?: string
+          scheduled_for?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_sms_reminder_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_sms_reminder_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
             referencedColumns: ["id"]
           },
         ]
@@ -1365,10 +1404,10 @@ export type Database = {
       agenda_slot_day: {
         Row: {
           bookings: Json | null
-          company_member_id: string | null
           date: string | null
           end_at: string | null
           organization_id: string | null
+          organization_member_id: string | null
           service_calendar_color: string | null
           service_duration: string | null
           service_id: string | null
@@ -1382,7 +1421,7 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "slot_occurrence_company_member_id_fkey"
-            columns: ["company_member_id"]
+            columns: ["organization_member_id"]
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
@@ -1412,8 +1451,32 @@ export type Database = {
       }
     }
     Functions: {
+      planoby_align_date_to_weekly_days: {
+        Args: { p_days: Json; p_date: string; p_direction?: number }
+        Returns: string
+      }
+      planoby_cron_worker_base_url: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      planoby_cron_worker_secret: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      planoby_org_setting_json: {
+        Args: { p_organization_id: string; p_name: string }
+        Returns: Json
+      }
+      planoby_org_setting_text: {
+        Args: { p_name: string; p_organization_id: string; p_default?: string }
+        Returns: string
+      }
+      planoby_refresh_slot_occurrence_booking_count: {
+        Args: { p_slot_occurrence_id: string }
+        Returns: undefined
+      }
       user_org_role_is_higher_than: {
-        Args: { target_user_id: string; org_id: string }
+        Args: { org_id: string; target_user_id: string }
         Returns: boolean
       }
     }
@@ -1695,15 +1758,15 @@ export type Database = {
     }
     Functions: {
       add_prefixes: {
-        Args: { _bucket_id: string; _name: string }
+        Args: { _name: string; _bucket_id: string }
         Returns: undefined
       }
       can_insert_object: {
-        Args: { owner: string; name: string; bucketid: string; metadata: Json }
+        Args: { owner: string; bucketid: string; name: string; metadata: Json }
         Returns: undefined
       }
       delete_prefix: {
-        Args: { _name: string; _bucket_id: string }
+        Args: { _bucket_id: string; _name: string }
         Returns: boolean
       }
       extension: {
@@ -1733,22 +1796,22 @@ export type Database = {
       get_size_by_bucket: {
         Args: Record<PropertyKey, never>
         Returns: {
-          size: number
           bucket_id: string
+          size: number
         }[]
       }
       list_multipart_uploads_with_delimiter: {
         Args: {
           bucket_id: string
-          prefix_param: string
-          delimiter_param: string
-          max_keys?: number
-          next_key_token?: string
           next_upload_token?: string
+          max_keys?: number
+          delimiter_param: string
+          prefix_param: string
+          next_key_token?: string
         }
         Returns: {
-          id: string
           key: string
+          id: string
           created_at: string
         }[]
       }
@@ -1758,14 +1821,14 @@ export type Database = {
           start_after?: string
           max_keys?: number
           delimiter_param: string
-          bucket_id: string
           prefix_param: string
+          bucket_id: string
         }
         Returns: {
-          name: string
           updated_at: string
           metadata: Json
           id: string
+          name: string
         }[]
       }
       operation: {
@@ -1774,38 +1837,38 @@ export type Database = {
       }
       search: {
         Args: {
-          sortorder?: string
-          sortcolumn?: string
-          search?: string
-          offsets?: number
-          levels?: number
-          limits?: number
-          bucketname: string
           prefix: string
+          bucketname: string
+          limits?: number
+          levels?: number
+          offsets?: number
+          search?: string
+          sortcolumn?: string
+          sortorder?: string
         }
         Returns: {
-          last_accessed_at: string
-          created_at: string
-          updated_at: string
-          id: string
           name: string
+          updated_at: string
+          created_at: string
+          last_accessed_at: string
           metadata: Json
+          id: string
         }[]
       }
       search_legacy_v1: {
         Args: {
+          offsets?: number
           levels?: number
-          bucketname: string
+          limits?: number
           prefix: string
           sortorder?: string
+          bucketname: string
           sortcolumn?: string
           search?: string
-          offsets?: number
-          limits?: number
         }
         Returns: {
-          metadata: Json
           last_accessed_at: string
+          metadata: Json
           created_at: string
           updated_at: string
           id: string
@@ -1815,29 +1878,29 @@ export type Database = {
       search_v1_optimised: {
         Args: {
           prefix: string
-          sortorder?: string
-          sortcolumn?: string
-          search?: string
-          offsets?: number
-          levels?: number
-          limits?: number
           bucketname: string
+          limits?: number
+          levels?: number
+          offsets?: number
+          search?: string
+          sortcolumn?: string
+          sortorder?: string
         }
         Returns: {
           id: string
+          updated_at: string
           created_at: string
           last_accessed_at: string
           metadata: Json
           name: string
-          updated_at: string
         }[]
       }
       search_v2: {
         Args: {
-          levels?: number
           prefix: string
           bucket_name: string
           limits?: number
+          levels?: number
           start_after?: string
         }
         Returns: {

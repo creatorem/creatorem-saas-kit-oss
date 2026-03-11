@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, service, participantDataSchema, slot, slotOccurrence, booking, checkout, dateMemo } from "./schema";
+import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, service, participantDataSchema, slot, slotOccurrence, booking, checkout, dateMemo, bookingSmsReminder } from "./schema";
 
 export const userRelations = relations(user, ({one, many}) => ({
 	usersInAuth: one(usersInAuth, {
@@ -122,6 +122,7 @@ export const organizationRelations = relations(organization, ({many}) => ({
 	bookings: many(booking),
 	checkouts: many(checkout),
 	dateMemos: many(dateMemo),
+	bookingSmsReminders: many(bookingSmsReminder),
 }));
 
 export const organizationRolePermissionRelations = relations(organizationRolePermission, ({one}) => ({
@@ -250,7 +251,7 @@ export const slotOccurrenceRelations = relations(slotOccurrence, ({one, many}) =
 	bookings: many(booking),
 }));
 
-export const bookingRelations = relations(booking, ({one}) => ({
+export const bookingRelations = relations(booking, ({one, many}) => ({
 	organization: one(organization, {
 		fields: [booking.organizationId],
 		references: [organization.id]
@@ -271,6 +272,7 @@ export const bookingRelations = relations(booking, ({one}) => ({
 		fields: [booking.companyMemberId],
 		references: [user.id]
 	}),
+	bookingSmsReminders: many(bookingSmsReminder),
 }));
 
 export const checkoutRelations = relations(checkout, ({one}) => ({
@@ -288,5 +290,16 @@ export const dateMemoRelations = relations(dateMemo, ({one}) => ({
 	organizationRole: one(organizationRole, {
 		fields: [dateMemo.organizationRoleId],
 		references: [organizationRole.id]
+	}),
+}));
+
+export const bookingSmsReminderRelations = relations(bookingSmsReminder, ({one}) => ({
+	booking: one(booking, {
+		fields: [bookingSmsReminder.bookingId],
+		references: [booking.id]
+	}),
+	organization: one(organization, {
+		fields: [bookingSmsReminder.organizationId],
+		references: [organization.id]
 	}),
 }));

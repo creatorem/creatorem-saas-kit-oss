@@ -153,7 +153,7 @@ const wwwAuthSchema = z.object({
             }),
             z.object({
                 type: z.literal('two-column'),
-                rightImageUrl: z.string().url(),
+                rightImageUrl: z.string(),
             }),
         ])
         .optional(),
