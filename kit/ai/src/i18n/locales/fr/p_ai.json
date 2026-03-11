@@ -99,7 +99,7 @@
     "copyMessageAction": "Copier le message",
     "edit": "Modifier",
     "usage": {
-        "title": "Utilisation",
+        "title": "AI Utilisation",
         "description": "Gestion de l'utilisation de l'IA et du portefeuille",
         "aiUsage": {
             "title": "Utilisation de l'IA",

@@ -4089,6 +4089,9 @@ importers:
       '@kit/drizzle':
         specifier: workspace:*
         version: link:../../../kit/db/drizzle
+      '@kit/ui':
+        specifier: workspace:*
+        version: link:../../../kit/ui/www
       '@kit/utils':
         specifier: workspace:*
         version: link:../../../kit/utils
