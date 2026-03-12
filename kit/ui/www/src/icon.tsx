@@ -8,6 +8,7 @@ import {
     ArrowLeftIcon,
     ArrowRightIcon,
     ArrowUpDownIcon,
+    BikeIcon,
     ArrowUpFromLineIcon,
     ArrowUpIcon,
     ArrowUpRightIcon,
@@ -496,6 +497,7 @@ const lucideIcons = {
     // UI icons
     Info: InfoIcon,
     Minus: Minus,
+    Bike: BikeIcon,
     Eye: EyeIcon,
     EyeOff: EyeOffIcon,
     PlusCircle: PlusCircleIcon,

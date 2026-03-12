@@ -2,12 +2,12 @@
 
 import NiceModal from '@ebay/nice-modal-react';
 import { TrpcClientProvider, useCtxTrpc } from '@kit/shared/trpc-client-provider';
-import { SidebarInset } from '@kit/ui/sidebar';
 import { FilterApplier } from '@kit/utils/filters';
 import { motion } from 'motion/react';
 import { useParams } from 'next/navigation';
 import React from 'react';
 import { DashboardSidebarProvider } from '~/components/dashboard/dashboard';
+import { SidebarInset } from '@kit/ui/sidebar';
 import { SidebarRenderer } from '~/components/dashboard/sidebar-renderer';
 import { LogoLoader } from '~/components/logo-loader';
 import { AIAssistantProvider } from '~/components/providers/ai-assistant-provider';
