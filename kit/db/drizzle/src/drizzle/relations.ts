@@ -189,7 +189,6 @@ export const serviceRelations = relations(service, ({one, many}) => ({
 		fields: [service.organizationId],
 		references: [organization.id]
 	}),
-	participantDataSchemas: many(participantDataSchema),
 	slots: many(slot),
 	slotOccurrences: many(slotOccurrence),
 	bookings: many(booking),
@@ -199,10 +198,6 @@ export const participantDataSchemaRelations = relations(participantDataSchema, (
 	organization: one(organization, {
 		fields: [participantDataSchema.organizationId],
 		references: [organization.id]
-	}),
-	service: one(service, {
-		fields: [participantDataSchema.serviceId],
-		references: [service.id]
 	}),
 	participantDataSchema: one(participantDataSchema, {
 		fields: [participantDataSchema.displayAccordingToId],

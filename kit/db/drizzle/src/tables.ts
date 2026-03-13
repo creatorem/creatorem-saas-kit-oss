@@ -59,5 +59,5 @@ export const tableSchemaMap = {
     'booking': schema.booking,
     'checkout': schema.checkout,
     'date_memo': schema.dateMemo,
-    'booking_sms_reminder': schema.bookingSmsReminder,
+    'booking_sms_reminder': schema.bookingSmsReminder
 } as const;

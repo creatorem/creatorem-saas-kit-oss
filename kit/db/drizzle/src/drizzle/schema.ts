@@ -433,7 +433,7 @@ export const service = pgTable("service", {
 	relativeId: integer("relative_id").notNull(),
 	duration: varchar({ length: 50 }),
 	calendarColor: varchar("calendar_color", { length: 50 }).notNull(),
-	featuredImage: jsonb("featured_image"),
+	featuredImage: text("featured_image"),
 	emailContent: text("email_content"),
 	smsContent: text("sms_content"),
 	confirmationPageMessage: text("confirmation_page_message"),
@@ -459,7 +459,6 @@ export const participantDataSchema = pgTable("participant_data_schema", {
 	name: varchar({ length: 255 }).notNull(),
 	schema: jsonb().notNull(),
 	slug: varchar({ length: 255 }).notNull(),
-	serviceId: uuid("service_id"),
 	displayAccordingToId: uuid("display_according_to_id"),
 	publishedAt: timestamp("published_at", { withTimezone: true, mode: 'string' }),
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
@@ -467,17 +466,11 @@ export const participantDataSchema = pgTable("participant_data_schema", {
 }, (table) => [
 	index("idx_participant_data_schema_display_according_to_id").using("btree", table.displayAccordingToId.asc().nullsLast().op("uuid_ops")),
 	index("idx_participant_data_schema_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
-	index("idx_participant_data_schema_service_id").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops")),
 	foreignKey({
 			columns: [table.organizationId],
 			foreignColumns: [organization.id],
 			name: "participant_data_schema_organization_id_fkey"
 		}).onDelete("cascade"),
-	foreignKey({
-			columns: [table.serviceId],
-			foreignColumns: [service.id],
-			name: "participant_data_schema_service_id_fkey"
-		}).onDelete("set null"),
 	foreignKey({
 			columns: [table.displayAccordingToId],
 			foreignColumns: [table.id],
@@ -554,8 +547,8 @@ export const slotOccurrence = pgTable("slot_occurrence", {
 	index("idx_slot_occurrence_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
 	index("idx_slot_occurrence_service_id").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops")),
 	index("idx_slot_occurrence_slot_id").using("btree", table.slotId.asc().nullsLast().op("uuid_ops")),
-	uniqueIndex("uq_slot_occurrence_slot_date").using("btree", table.slotId.asc().nullsLast().op("uuid_ops"), table.date.asc().nullsLast().op("date_ops")),
-	uniqueIndex("uq_slot_occurrence_slot_start").using("btree", table.slotId.asc().nullsLast().op("timestamptz_ops"), table.startAt.asc().nullsLast().op("timestamptz_ops")),
+	uniqueIndex("uq_slot_occurrence_slot_date").using("btree", table.slotId.asc().nullsLast().op("date_ops"), table.date.asc().nullsLast().op("uuid_ops")),
+	uniqueIndex("uq_slot_occurrence_slot_start").using("btree", table.slotId.asc().nullsLast().op("uuid_ops"), table.startAt.asc().nullsLast().op("timestamptz_ops")),
 	foreignKey({
 			columns: [table.organizationId],
 			foreignColumns: [organization.id],
@@ -712,7 +705,6 @@ export const bookingSmsReminder = pgTable("booking_sms_reminder", {
 			name: "booking_sms_reminder_organization_id_fkey"
 		}).onDelete("cascade"),
 ]);
-
 export const agendaSlotDay = pgView("agenda_slot_day", {	slotOccurrenceId: uuid("slot_occurrence_id"),
 	organizationId: uuid("organization_id"),
 	organizationMemberId: uuid("organization_member_id"),
