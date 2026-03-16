@@ -17,9 +17,9 @@ export type Database = {
     Functions: {
       graphql: {
         Args: {
-          query?: string
           extensions?: Json
           variables?: Json
+          query?: string
           operationName?: string
         }
         Returns: Json
@@ -48,11 +48,11 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: {
           auth_user_id: string
+          jwt_session_id: string
           jwt_sid: string
           jwt_full: Json
           detected_current_session: string
           total_user_sessions: number
-          jwt_session_id: string
         }[]
       }
       get_user_email: {
@@ -66,15 +66,15 @@ export type Database = {
       get_user_sessions: {
         Args: Record<PropertyKey, never>
         Returns: {
-          user_agent: string
-          factor_id: string
+          updated_at: string
           aal: string
           not_after: string
+          user_agent: string
           ip: unknown
-          id: string
           user_id: string
+          id: string
           created_at: string
-          updated_at: string
+          factor_id: string
         }[]
       }
       has_multiple_role_manage_permissions: {
@@ -97,7 +97,7 @@ export type Database = {
         Returns: boolean
       }
       update_session_details: {
-        Args: { new_user_agent?: string; new_ip?: unknown; session_id: string }
+        Args: { session_id: string; new_ip?: unknown; new_user_agent?: string }
         Returns: boolean
       }
       user_is_invited_to_org: {
@@ -113,7 +113,7 @@ export type Database = {
         Returns: boolean
       }
       user_org_role_is_higher_than: {
-        Args: { target_user_id: string; org_id: string }
+        Args: { org_id: string; target_user_id: string }
         Returns: boolean
       }
     }
@@ -1130,9 +1130,10 @@ export type Database = {
           custom_label: string | null
           date: string
           end: string
-          frequency: Json
+          frequency: Database["public"]["Enums"]["frequency_type"]
           id: string
           max_participant: number | null
+          meta_frequency: string | null
           organization_id: string
           private_comment: string | null
           published_at: string | null
@@ -1149,9 +1150,10 @@ export type Database = {
           custom_label?: string | null
           date: string
           end: string
-          frequency: Json
+          frequency: Database["public"]["Enums"]["frequency_type"]
           id?: string
           max_participant?: number | null
+          meta_frequency?: string | null
           organization_id: string
           private_comment?: string | null
           published_at?: string | null
@@ -1168,9 +1170,10 @@ export type Database = {
           custom_label?: string | null
           date?: string
           end?: string
-          frequency?: Json
+          frequency?: Database["public"]["Enums"]["frequency_type"]
           id?: string
           max_participant?: number | null
+          meta_frequency?: string | null
           organization_id?: string
           private_comment?: string | null
           published_at?: string | null
@@ -1488,16 +1491,16 @@ export type Database = {
     }
     Functions: {
       planoby_align_date_to_weekly_days: {
-        Args: { p_direction?: number; p_date: string; p_days: Json }
+        Args: { p_date: string; p_direction?: number; p_days: Json }
         Returns: string
       }
       planoby_bootstrap_dev_reset_account: {
         Args: {
-          p_user_name?: string
           p_auth_user_id: string
-          p_org_name?: string
           p_org_slug?: string
           p_user_email?: string
+          p_user_name?: string
+          p_org_name?: string
         }
         Returns: string
       }
@@ -1530,7 +1533,7 @@ export type Database = {
         Returns: undefined
       }
       planoby_resolve_slot_occurrence_id: {
-        Args: { p_slot_id: string; p_day: string }
+        Args: { p_day: string; p_slot_id: string }
         Returns: string
       }
       planoby_should_emit_webhooks: {
@@ -1538,7 +1541,12 @@ export type Database = {
         Returns: boolean
       }
       planoby_slot_matches_day_core: {
-        Args: { p_slot_date: string; p_frequency: Json; p_day: string }
+        Args: {
+          p_slot_date: string
+          p_frequency: string
+          p_meta_frequency: string
+          p_day: string
+        }
         Returns: boolean
       }
       planoby_sync_all_slot_occurrences: {
@@ -1566,7 +1574,7 @@ export type Database = {
         Returns: string
       }
       user_org_role_is_higher_than: {
-        Args: { target_user_id: string; org_id: string }
+        Args: { org_id: string; target_user_id: string }
         Returns: boolean
       }
     }
@@ -1580,6 +1588,7 @@ export type Database = {
         | "charged"
         | "confirmation_failed"
       content_state: "draft" | "published" | "archived"
+      frequency_type: "once" | "day" | "week" | "month" | "year"
       notification_type: "info" | "warning" | "error" | "success"
       org_permission:
         | "role.manage"
@@ -1848,15 +1857,15 @@ export type Database = {
     }
     Functions: {
       add_prefixes: {
-        Args: { _name: string; _bucket_id: string }
+        Args: { _bucket_id: string; _name: string }
         Returns: undefined
       }
       can_insert_object: {
-        Args: { owner: string; name: string; bucketid: string; metadata: Json }
+        Args: { metadata: Json; owner: string; bucketid: string; name: string }
         Returns: undefined
       }
       delete_prefix: {
-        Args: { _bucket_id: string; _name: string }
+        Args: { _name: string; _bucket_id: string }
         Returns: boolean
       }
       extension: {
@@ -1886,23 +1895,23 @@ export type Database = {
       get_size_by_bucket: {
         Args: Record<PropertyKey, never>
         Returns: {
-          size: number
           bucket_id: string
+          size: number
         }[]
       }
       list_multipart_uploads_with_delimiter: {
         Args: {
-          delimiter_param: string
-          max_keys?: number
-          next_key_token?: string
-          next_upload_token?: string
           bucket_id: string
+          next_upload_token?: string
+          next_key_token?: string
+          max_keys?: number
+          delimiter_param: string
           prefix_param: string
         }
         Returns: {
-          key: string
-          id: string
           created_at: string
+          id: string
+          key: string
         }[]
       }
       list_objects_with_delimiter: {
@@ -1915,10 +1924,10 @@ export type Database = {
           next_token?: string
         }
         Returns: {
-          metadata: Json
           name: string
-          id: string
           updated_at: string
+          metadata: Json
+          id: string
         }[]
       }
       operation: {
@@ -1928,78 +1937,78 @@ export type Database = {
       search: {
         Args: {
           sortcolumn?: string
-          search?: string
-          offsets?: number
-          levels?: number
-          limits?: number
-          bucketname: string
-          prefix: string
           sortorder?: string
+          limits?: number
+          offsets?: number
+          search?: string
+          prefix: string
+          bucketname: string
+          levels?: number
         }
         Returns: {
+          created_at: string
+          last_accessed_at: string
+          metadata: Json
           name: string
           id: string
-          metadata: Json
-          last_accessed_at: string
-          created_at: string
           updated_at: string
         }[]
       }
       search_legacy_v1: {
         Args: {
-          sortorder?: string
-          sortcolumn?: string
-          search?: string
-          offsets?: number
-          levels?: number
           prefix: string
-          limits?: number
           bucketname: string
+          limits?: number
+          levels?: number
+          offsets?: number
+          search?: string
+          sortcolumn?: string
+          sortorder?: string
         }
         Returns: {
           metadata: Json
-          last_accessed_at: string
           created_at: string
-          updated_at: string
-          id: string
           name: string
+          id: string
+          updated_at: string
+          last_accessed_at: string
         }[]
       }
       search_v1_optimised: {
         Args: {
-          offsets?: number
-          search?: string
-          sortcolumn?: string
-          sortorder?: string
           prefix: string
           bucketname: string
           limits?: number
           levels?: number
+          offsets?: number
+          search?: string
+          sortcolumn?: string
+          sortorder?: string
         }
         Returns: {
+          created_at: string
           name: string
           id: string
           updated_at: string
-          created_at: string
           last_accessed_at: string
           metadata: Json
         }[]
       }
       search_v2: {
         Args: {
-          start_after?: string
-          levels?: number
           prefix: string
           bucket_name: string
+          levels?: number
           limits?: number
+          start_after?: string
         }
         Returns: {
           updated_at: string
           key: string
           name: string
           id: string
-          created_at: string
           metadata: Json
+          created_at: string
         }[]
       }
     }
@@ -2136,6 +2145,7 @@ export const Constants = {
         "confirmation_failed",
       ],
       content_state: ["draft", "published", "archived"],
+      frequency_type: ["once", "day", "week", "month", "year"],
       notification_type: ["info", "warning", "error", "success"],
       org_permission: [
         "role.manage",

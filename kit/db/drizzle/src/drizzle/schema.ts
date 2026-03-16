@@ -8,6 +8,7 @@ export const usersInAuth = users;
 export const aiThreadStatus = pgEnum("ai_thread_status", ['regular', 'archived'])
 export const bookingState = pgEnum("booking_state", ['requires_payment_method', 'requires_slot_confirmation', 'canceled', 'confirmed', 'charged', 'confirmation_failed'])
 export const contentState = pgEnum("content_state", ['draft', 'published', 'archived'])
+export const frequencyType = pgEnum("frequency_type", ['once', 'day', 'week', 'month', 'year'])
 export const notificationType = pgEnum("notification_type", ['info', 'warning', 'error', 'success'])
 export const orgPermission = pgEnum("org_permission", ['role.manage', 'organization.manage', 'member.manage', 'invitation.manage', 'setting.manage', 'media.manage'])
 export const slotState = pgEnum("slot_state", ['confirmed', 'requested'])
@@ -516,7 +517,8 @@ export const slot = pgTable("slot", {
 	customLabel: varchar("custom_label", { length: 255 }),
 	state: slotState().notNull(),
 	serviceId: uuid("service_id"),
-	frequency: jsonb().notNull(),
+	frequency: frequencyType().notNull(),
+	metaFrequency: text("meta_frequency"),
 	visible: boolean().default(true),
 	date: date().notNull(),
 	start: time().notNull(),

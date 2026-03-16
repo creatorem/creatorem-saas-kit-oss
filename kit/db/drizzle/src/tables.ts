@@ -31,6 +31,7 @@ export type BookingSmsReminder = InferSelectModel<typeof schema.bookingSmsRemind
 export type AiThreadStatusEnum = typeof schema.aiThreadStatus.enumValues[number];
 export type BookingStateEnum = typeof schema.bookingState.enumValues[number];
 export type ContentStateEnum = typeof schema.contentState.enumValues[number];
+export type FrequencyTypeEnum = typeof schema.frequencyType.enumValues[number];
 export type NotificationTypeEnum = typeof schema.notificationType.enumValues[number];
 export type OrgPermissionEnum = typeof schema.orgPermission.enumValues[number];
 export type SlotStateEnum = typeof schema.slotState.enumValues[number];
