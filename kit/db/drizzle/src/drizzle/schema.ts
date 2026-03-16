@@ -480,6 +480,36 @@ export const participantDataSchema = pgTable("participant_data_schema", {
 	pgPolicy("participant_data_schema_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
 ]);
 
+export const serviceParticipantDataSchema = pgTable("service_participant_data_schema", {
+	organizationId: uuid("organization_id").notNull(),
+	serviceId: uuid("service_id").notNull(),
+	participantDataSchemaId: uuid("participant_data_schema_id").notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_service_participant_data_schema_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
+	index("idx_service_participant_data_schema_participant_data_schema_id").using("btree", table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
+	index("idx_service_participant_data_schema_service_id").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops")),
+	index("idx_spds_participant_data_schema_id").using("btree", table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
+	index("idx_spds_service_id").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops")),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "service_participant_data_schema_organization_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.serviceId],
+			foreignColumns: [service.id],
+			name: "service_participant_data_schema_service_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.participantDataSchemaId],
+			foreignColumns: [participantDataSchema.id],
+			name: "service_participant_data_schema_participant_data_schema_id_fkey"
+		}).onDelete("cascade"),
+	pgPolicy("service_participant_data_schema_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+]);
+
 export const slot = pgTable("slot", {
 	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	organizationId: uuid("organization_id").notNull(),

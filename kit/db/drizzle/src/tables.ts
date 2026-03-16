@@ -19,6 +19,7 @@ export type OrganizationSetting = InferSelectModel<typeof schema.organizationSet
 export type Notification = InferSelectModel<typeof schema.notification>;
 export type Service = InferSelectModel<typeof schema.service>;
 export type ParticipantDataSchema = InferSelectModel<typeof schema.participantDataSchema>;
+export type ServiceParticipantDataSchema = InferSelectModel<typeof schema.serviceParticipantDataSchema>;
 export type Slot = InferSelectModel<typeof schema.slot>;
 export type SlotOccurrence = InferSelectModel<typeof schema.slotOccurrence>;
 export type Booking = InferSelectModel<typeof schema.booking>;
@@ -54,6 +55,7 @@ export const tableSchemaMap = {
     'notification': schema.notification,
     'service': schema.service,
     'participant_data_schema': schema.participantDataSchema,
+    'service_participant_data_schema': schema.serviceParticipantDataSchema,
     'slot': schema.slot,
     'slot_occurrence': schema.slotOccurrence,
     'booking': schema.booking,

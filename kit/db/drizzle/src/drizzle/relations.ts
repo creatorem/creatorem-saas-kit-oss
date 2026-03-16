@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, service, participantDataSchema, slot, slotOccurrence, booking, checkout, dateMemo, bookingSmsReminder } from "./schema";
+import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, service, participantDataSchema, serviceParticipantDataSchema, slot, slotOccurrence, booking, checkout, dateMemo, bookingSmsReminder } from "./schema";
 
 export const userRelations = relations(user, ({one, many}) => ({
 	usersInAuth: one(usersInAuth, {
@@ -117,6 +117,7 @@ export const organizationRelations = relations(organization, ({many}) => ({
 	notifications: many(notification),
 	services: many(service),
 	participantDataSchemas: many(participantDataSchema),
+	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 	slots: many(slot),
 	slotOccurrences: many(slotOccurrence),
 	bookings: many(booking),
@@ -189,6 +190,7 @@ export const serviceRelations = relations(service, ({one, many}) => ({
 		fields: [service.organizationId],
 		references: [organization.id]
 	}),
+	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 	slots: many(slot),
 	slotOccurrences: many(slotOccurrence),
 	bookings: many(booking),
@@ -206,6 +208,22 @@ export const participantDataSchemaRelations = relations(participantDataSchema, (
 	}),
 	participantDataSchemas: many(participantDataSchema, {
 		relationName: "participantDataSchema_displayAccordingToId_participantDataSchema_id"
+	}),
+	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
+}));
+
+export const serviceParticipantDataSchemaRelations = relations(serviceParticipantDataSchema, ({one}) => ({
+	organization: one(organization, {
+		fields: [serviceParticipantDataSchema.organizationId],
+		references: [organization.id]
+	}),
+	service: one(service, {
+		fields: [serviceParticipantDataSchema.serviceId],
+		references: [service.id]
+	}),
+	participantDataSchema: one(participantDataSchema, {
+		fields: [serviceParticipantDataSchema.participantDataSchemaId],
+		references: [participantDataSchema.id]
 	}),
 }));
 

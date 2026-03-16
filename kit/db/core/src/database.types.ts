@@ -1076,6 +1076,52 @@ export type Database = {
           },
         ]
       }
+      service_participant_data_schema: {
+        Row: {
+          created_at: string
+          organization_id: string
+          participant_data_schema_id: string
+          service_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          organization_id: string
+          participant_data_schema_id: string
+          service_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          organization_id?: string
+          participant_data_schema_id?: string
+          service_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_participant_data_schema_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_participant_data_schema_participant_data_schema_id_fkey"
+            columns: ["participant_data_schema_id"]
+            isOneToOne: false
+            referencedRelation: "participant_data_schema"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_participant_data_schema_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "service"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       slot: {
         Row: {
           company_member_id: string | null
