@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, service, participantDataSchema, serviceParticipantDataSchema, slot, slotOccurrence, booking, checkout, dateMemo, bookingSmsReminder } from "./schema";
+import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, service, participantDataSchema, slot, slotOccurrence, booking, checkout, dateMemo, bookingSmsReminder, servicePriceMatrix, servicePriceMatrixInterval, servicePriceExtra, serviceParticipantDataSchema, servicePriceMatrixCell } from "./schema";
 
 export const userRelations = relations(user, ({one, many}) => ({
 	usersInAuth: one(usersInAuth, {
@@ -117,13 +117,17 @@ export const organizationRelations = relations(organization, ({many}) => ({
 	notifications: many(notification),
 	services: many(service),
 	participantDataSchemas: many(participantDataSchema),
-	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 	slots: many(slot),
 	slotOccurrences: many(slotOccurrence),
 	bookings: many(booking),
 	checkouts: many(checkout),
 	dateMemos: many(dateMemo),
 	bookingSmsReminders: many(bookingSmsReminder),
+	servicePriceMatrices: many(servicePriceMatrix),
+	servicePriceMatrixIntervals: many(servicePriceMatrixInterval),
+	servicePriceExtras: many(servicePriceExtra),
+	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
+	servicePriceMatrixCells: many(servicePriceMatrixCell),
 }));
 
 export const organizationRolePermissionRelations = relations(organizationRolePermission, ({one}) => ({
@@ -190,10 +194,12 @@ export const serviceRelations = relations(service, ({one, many}) => ({
 		fields: [service.organizationId],
 		references: [organization.id]
 	}),
-	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 	slots: many(slot),
 	slotOccurrences: many(slotOccurrence),
 	bookings: many(booking),
+	servicePriceMatrices: many(servicePriceMatrix),
+	servicePriceExtras: many(servicePriceExtra),
+	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 }));
 
 export const participantDataSchemaRelations = relations(participantDataSchema, ({one, many}) => ({
@@ -209,22 +215,13 @@ export const participantDataSchemaRelations = relations(participantDataSchema, (
 	participantDataSchemas: many(participantDataSchema, {
 		relationName: "participantDataSchema_displayAccordingToId_participantDataSchema_id"
 	}),
+	servicePriceMatrices_colSchemaId: many(servicePriceMatrix, {
+		relationName: "servicePriceMatrix_colSchemaId_participantDataSchema_id"
+	}),
+	servicePriceMatrices_rowSchemaId: many(servicePriceMatrix, {
+		relationName: "servicePriceMatrix_rowSchemaId_participantDataSchema_id"
+	}),
 	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
-}));
-
-export const serviceParticipantDataSchemaRelations = relations(serviceParticipantDataSchema, ({one}) => ({
-	organization: one(organization, {
-		fields: [serviceParticipantDataSchema.organizationId],
-		references: [organization.id]
-	}),
-	service: one(service, {
-		fields: [serviceParticipantDataSchema.serviceId],
-		references: [service.id]
-	}),
-	participantDataSchema: one(participantDataSchema, {
-		fields: [serviceParticipantDataSchema.participantDataSchemaId],
-		references: [participantDataSchema.id]
-	}),
 }));
 
 export const slotRelations = relations(slot, ({one, many}) => ({
@@ -313,6 +310,77 @@ export const bookingSmsReminderRelations = relations(bookingSmsReminder, ({one})
 	}),
 	organization: one(organization, {
 		fields: [bookingSmsReminder.organizationId],
+		references: [organization.id]
+	}),
+}));
+
+export const servicePriceMatrixRelations = relations(servicePriceMatrix, ({one, many}) => ({
+	service: one(service, {
+		fields: [servicePriceMatrix.serviceId],
+		references: [service.id]
+	}),
+	organization: one(organization, {
+		fields: [servicePriceMatrix.organizationId],
+		references: [organization.id]
+	}),
+	participantDataSchema_colSchemaId: one(participantDataSchema, {
+		fields: [servicePriceMatrix.colSchemaId],
+		references: [participantDataSchema.id],
+		relationName: "servicePriceMatrix_colSchemaId_participantDataSchema_id"
+	}),
+	participantDataSchema_rowSchemaId: one(participantDataSchema, {
+		fields: [servicePriceMatrix.rowSchemaId],
+		references: [participantDataSchema.id],
+		relationName: "servicePriceMatrix_rowSchemaId_participantDataSchema_id"
+	}),
+	servicePriceMatrixIntervals: many(servicePriceMatrixInterval),
+	servicePriceMatrixCells: many(servicePriceMatrixCell),
+}));
+
+export const servicePriceMatrixIntervalRelations = relations(servicePriceMatrixInterval, ({one}) => ({
+	servicePriceMatrix: one(servicePriceMatrix, {
+		fields: [servicePriceMatrixInterval.matrixId],
+		references: [servicePriceMatrix.id]
+	}),
+	organization: one(organization, {
+		fields: [servicePriceMatrixInterval.organizationId],
+		references: [organization.id]
+	}),
+}));
+
+export const servicePriceExtraRelations = relations(servicePriceExtra, ({one}) => ({
+	service: one(service, {
+		fields: [servicePriceExtra.serviceId],
+		references: [service.id]
+	}),
+	organization: one(organization, {
+		fields: [servicePriceExtra.organizationId],
+		references: [organization.id]
+	}),
+}));
+
+export const serviceParticipantDataSchemaRelations = relations(serviceParticipantDataSchema, ({one}) => ({
+	organization: one(organization, {
+		fields: [serviceParticipantDataSchema.organizationId],
+		references: [organization.id]
+	}),
+	service: one(service, {
+		fields: [serviceParticipantDataSchema.serviceId],
+		references: [service.id]
+	}),
+	participantDataSchema: one(participantDataSchema, {
+		fields: [serviceParticipantDataSchema.participantDataSchemaId],
+		references: [participantDataSchema.id]
+	}),
+}));
+
+export const servicePriceMatrixCellRelations = relations(servicePriceMatrixCell, ({one}) => ({
+	servicePriceMatrix: one(servicePriceMatrix, {
+		fields: [servicePriceMatrixCell.matrixId],
+		references: [servicePriceMatrix.id]
+	}),
+	organization: one(organization, {
+		fields: [servicePriceMatrixCell.organizationId],
 		references: [organization.id]
 	}),
 }));

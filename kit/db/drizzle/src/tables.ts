@@ -19,19 +19,24 @@ export type OrganizationSetting = InferSelectModel<typeof schema.organizationSet
 export type Notification = InferSelectModel<typeof schema.notification>;
 export type Service = InferSelectModel<typeof schema.service>;
 export type ParticipantDataSchema = InferSelectModel<typeof schema.participantDataSchema>;
-export type ServiceParticipantDataSchema = InferSelectModel<typeof schema.serviceParticipantDataSchema>;
 export type Slot = InferSelectModel<typeof schema.slot>;
 export type SlotOccurrence = InferSelectModel<typeof schema.slotOccurrence>;
 export type Booking = InferSelectModel<typeof schema.booking>;
 export type Checkout = InferSelectModel<typeof schema.checkout>;
 export type DateMemo = InferSelectModel<typeof schema.dateMemo>;
 export type BookingSmsReminder = InferSelectModel<typeof schema.bookingSmsReminder>;
+export type ServicePriceMatrix = InferSelectModel<typeof schema.servicePriceMatrix>;
+export type ServicePriceMatrixInterval = InferSelectModel<typeof schema.servicePriceMatrixInterval>;
+export type ServicePriceExtra = InferSelectModel<typeof schema.servicePriceExtra>;
+export type ServiceParticipantDataSchema = InferSelectModel<typeof schema.serviceParticipantDataSchema>;
+export type ServicePriceMatrixCell = InferSelectModel<typeof schema.servicePriceMatrixCell>;
 
 // Enum Types
 export type AiThreadStatusEnum = typeof schema.aiThreadStatus.enumValues[number];
 export type BookingStateEnum = typeof schema.bookingState.enumValues[number];
 export type ContentStateEnum = typeof schema.contentState.enumValues[number];
 export type FrequencyTypeEnum = typeof schema.frequencyType.enumValues[number];
+export type MatrixAxisEnum = typeof schema.matrixAxis.enumValues[number];
 export type NotificationTypeEnum = typeof schema.notificationType.enumValues[number];
 export type OrgPermissionEnum = typeof schema.orgPermission.enumValues[number];
 export type SlotStateEnum = typeof schema.slotState.enumValues[number];
@@ -56,11 +61,15 @@ export const tableSchemaMap = {
     'notification': schema.notification,
     'service': schema.service,
     'participant_data_schema': schema.participantDataSchema,
-    'service_participant_data_schema': schema.serviceParticipantDataSchema,
     'slot': schema.slot,
     'slot_occurrence': schema.slotOccurrence,
     'booking': schema.booking,
     'checkout': schema.checkout,
     'date_memo': schema.dateMemo,
-    'booking_sms_reminder': schema.bookingSmsReminder
+    'booking_sms_reminder': schema.bookingSmsReminder,
+    'service_price_matrix': schema.servicePriceMatrix,
+    'service_price_matrix_interval': schema.servicePriceMatrixInterval,
+    'service_price_extra': schema.servicePriceExtra,
+    'service_participant_data_schema': schema.serviceParticipantDataSchema,
+    'service_price_matrix_cell': schema.servicePriceMatrixCell
 } as const;

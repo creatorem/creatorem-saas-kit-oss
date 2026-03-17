@@ -17,10 +17,10 @@ export type Database = {
     Functions: {
       graphql: {
         Args: {
+          operationName?: string
           extensions?: Json
           variables?: Json
           query?: string
-          operationName?: string
         }
         Returns: Json
       }
@@ -47,12 +47,12 @@ export type Database = {
       debug_jwt_info: {
         Args: Record<PropertyKey, never>
         Returns: {
+          total_user_sessions: number
           auth_user_id: string
+          detected_current_session: string
           jwt_session_id: string
           jwt_sid: string
           jwt_full: Json
-          detected_current_session: string
-          total_user_sessions: number
         }[]
       }
       get_user_email: {
@@ -66,15 +66,15 @@ export type Database = {
       get_user_sessions: {
         Args: Record<PropertyKey, never>
         Returns: {
-          updated_at: string
-          aal: string
-          not_after: string
           user_agent: string
           ip: unknown
+          not_after: string
+          aal: string
+          factor_id: string
+          updated_at: string
+          created_at: string
           user_id: string
           id: string
-          created_at: string
-          factor_id: string
         }[]
       }
       has_multiple_role_manage_permissions: {
@@ -97,7 +97,7 @@ export type Database = {
         Returns: boolean
       }
       update_session_details: {
-        Args: { session_id: string; new_ip?: unknown; new_user_agent?: string }
+        Args: { session_id: string; new_user_agent?: string; new_ip?: unknown }
         Returns: boolean
       }
       user_is_invited_to_org: {
@@ -113,7 +113,7 @@ export type Database = {
         Returns: boolean
       }
       user_org_role_is_higher_than: {
-        Args: { org_id: string; target_user_id: string }
+        Args: { target_user_id: string; org_id: string }
         Returns: boolean
       }
     }
@@ -1015,7 +1015,6 @@ export type Database = {
           min_participant: number
           name: string
           organization_id: string
-          prices: Json
           published_at: string | null
           relative_id: number
           sms_content: string | null
@@ -1037,7 +1036,6 @@ export type Database = {
           min_participant: number
           name: string
           organization_id: string
-          prices: Json
           published_at?: string | null
           relative_id: number
           sms_content?: string | null
@@ -1059,7 +1057,6 @@ export type Database = {
           min_participant?: number
           name?: string
           organization_id?: string
-          prices?: Json
           published_at?: string | null
           relative_id?: number
           sms_content?: string | null
@@ -1118,6 +1115,221 @@ export type Database = {
             columns: ["service_id"]
             isOneToOne: false
             referencedRelation: "service"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_price_extra: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string
+          id: string
+          is_default: boolean
+          organization_id: string
+          schema_doc_id: string | null
+          service_id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description: string
+          id?: string
+          is_default?: boolean
+          organization_id: string
+          schema_doc_id?: string | null
+          service_id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string
+          id?: string
+          is_default?: boolean
+          organization_id?: string
+          schema_doc_id?: string | null
+          service_id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_price_extra_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_price_extra_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "service"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_price_matrix: {
+        Row: {
+          col_schema_id: string | null
+          created_at: string
+          currency: string
+          fallback: number | null
+          id: string
+          organization_id: string
+          row_schema_id: string | null
+          service_id: string
+          updated_at: string
+        }
+        Insert: {
+          col_schema_id?: string | null
+          created_at?: string
+          currency?: string
+          fallback?: number | null
+          id?: string
+          organization_id: string
+          row_schema_id?: string | null
+          service_id: string
+          updated_at?: string
+        }
+        Update: {
+          col_schema_id?: string | null
+          created_at?: string
+          currency?: string
+          fallback?: number | null
+          id?: string
+          organization_id?: string
+          row_schema_id?: string | null
+          service_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_price_matrix_col_schema_id_fkey"
+            columns: ["col_schema_id"]
+            isOneToOne: false
+            referencedRelation: "participant_data_schema"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_price_matrix_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_price_matrix_row_schema_id_fkey"
+            columns: ["row_schema_id"]
+            isOneToOne: false
+            referencedRelation: "participant_data_schema"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_price_matrix_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: true
+            referencedRelation: "service"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_price_matrix_cell: {
+        Row: {
+          amount: number
+          col_index: number
+          created_at: string
+          matrix_id: string
+          organization_id: string
+          row_index: number
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          col_index: number
+          created_at?: string
+          matrix_id: string
+          organization_id: string
+          row_index: number
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          col_index?: number
+          created_at?: string
+          matrix_id?: string
+          organization_id?: string
+          row_index?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_price_matrix_cell_matrix_id_fkey"
+            columns: ["matrix_id"]
+            isOneToOne: false
+            referencedRelation: "service_price_matrix"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_price_matrix_cell_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_price_matrix_interval: {
+        Row: {
+          axis: Database["public"]["Enums"]["matrix_axis"]
+          created_at: string
+          end_value: number
+          id: string
+          index: number
+          matrix_id: string
+          organization_id: string
+          start_value: number
+          updated_at: string
+        }
+        Insert: {
+          axis: Database["public"]["Enums"]["matrix_axis"]
+          created_at?: string
+          end_value: number
+          id?: string
+          index: number
+          matrix_id: string
+          organization_id: string
+          start_value: number
+          updated_at?: string
+        }
+        Update: {
+          axis?: Database["public"]["Enums"]["matrix_axis"]
+          created_at?: string
+          end_value?: number
+          id?: string
+          index?: number
+          matrix_id?: string
+          organization_id?: string
+          start_value?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_price_matrix_interval_matrix_id_fkey"
+            columns: ["matrix_id"]
+            isOneToOne: false
+            referencedRelation: "service_price_matrix"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_price_matrix_interval_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
             referencedColumns: ["id"]
           },
         ]
@@ -1496,11 +1708,11 @@ export type Database = {
       }
       planoby_bootstrap_dev_reset_account: {
         Args: {
+          p_user_name?: string
+          p_user_email?: string
+          p_org_name?: string
           p_auth_user_id: string
           p_org_slug?: string
-          p_user_email?: string
-          p_user_name?: string
-          p_org_name?: string
         }
         Returns: string
       }
@@ -1512,12 +1724,16 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      planoby_get_service_prices_json: {
+        Args: { p_service_id: string }
+        Returns: Json
+      }
       planoby_org_setting_json: {
-        Args: { p_name: string; p_organization_id: string }
+        Args: { p_organization_id: string; p_name: string }
         Returns: Json
       }
       planoby_org_setting_text: {
-        Args: { p_organization_id: string; p_default?: string; p_name: string }
+        Args: { p_name: string; p_organization_id: string; p_default?: string }
         Returns: string
       }
       planoby_org_timezone_value: {
@@ -1533,7 +1749,7 @@ export type Database = {
         Returns: undefined
       }
       planoby_resolve_slot_occurrence_id: {
-        Args: { p_day: string; p_slot_id: string }
+        Args: { p_slot_id: string; p_day: string }
         Returns: string
       }
       planoby_should_emit_webhooks: {
@@ -1542,10 +1758,10 @@ export type Database = {
       }
       planoby_slot_matches_day_core: {
         Args: {
-          p_slot_date: string
-          p_frequency: string
           p_meta_frequency: string
           p_day: string
+          p_slot_date: string
+          p_frequency: string
         }
         Returns: boolean
       }
@@ -1564,13 +1780,13 @@ export type Database = {
       planoby_sync_slot_occurrences: {
         Args: {
           p_slot_id: string
-          p_window_start?: string
           p_window_end?: string
+          p_window_start?: string
         }
         Returns: undefined
       }
       planoby_timestamp_for_org_day_time: {
-        Args: { p_organization_id: string; p_day: string; p_time: string }
+        Args: { p_day: string; p_time: string; p_organization_id: string }
         Returns: string
       }
       user_org_role_is_higher_than: {
@@ -1589,6 +1805,7 @@ export type Database = {
         | "confirmation_failed"
       content_state: "draft" | "published" | "archived"
       frequency_type: "once" | "day" | "week" | "month" | "year"
+      matrix_axis: "row" | "col"
       notification_type: "info" | "warning" | "error" | "success"
       org_permission:
         | "role.manage"
@@ -1861,11 +2078,11 @@ export type Database = {
         Returns: undefined
       }
       can_insert_object: {
-        Args: { metadata: Json; owner: string; bucketid: string; name: string }
+        Args: { bucketid: string; owner: string; metadata: Json; name: string }
         Returns: undefined
       }
       delete_prefix: {
-        Args: { _name: string; _bucket_id: string }
+        Args: { _bucket_id: string; _name: string }
         Returns: boolean
       }
       extension: {
@@ -1902,32 +2119,32 @@ export type Database = {
       list_multipart_uploads_with_delimiter: {
         Args: {
           bucket_id: string
-          next_upload_token?: string
-          next_key_token?: string
-          max_keys?: number
-          delimiter_param: string
           prefix_param: string
+          delimiter_param: string
+          max_keys?: number
+          next_key_token?: string
+          next_upload_token?: string
         }
         Returns: {
-          created_at: string
-          id: string
           key: string
+          id: string
+          created_at: string
         }[]
       }
       list_objects_with_delimiter: {
         Args: {
+          next_token?: string
           bucket_id: string
           prefix_param: string
           delimiter_param: string
           max_keys?: number
           start_after?: string
-          next_token?: string
         }
         Returns: {
           name: string
-          updated_at: string
-          metadata: Json
           id: string
+          metadata: Json
+          updated_at: string
         }[]
       }
       operation: {
@@ -1936,79 +2153,79 @@ export type Database = {
       }
       search: {
         Args: {
-          sortcolumn?: string
-          sortorder?: string
           limits?: number
-          offsets?: number
-          search?: string
-          prefix: string
-          bucketname: string
           levels?: number
+          bucketname: string
+          search?: string
+          offsets?: number
+          sortorder?: string
+          sortcolumn?: string
+          prefix: string
         }
         Returns: {
-          created_at: string
           last_accessed_at: string
+          created_at: string
           metadata: Json
-          name: string
-          id: string
           updated_at: string
+          id: string
+          name: string
         }[]
       }
       search_legacy_v1: {
         Args: {
-          prefix: string
-          bucketname: string
-          limits?: number
-          levels?: number
-          offsets?: number
           search?: string
           sortcolumn?: string
           sortorder?: string
+          offsets?: number
+          bucketname: string
+          prefix: string
+          limits?: number
+          levels?: number
         }
         Returns: {
-          metadata: Json
-          created_at: string
           name: string
+          metadata: Json
+          last_accessed_at: string
           id: string
           updated_at: string
-          last_accessed_at: string
+          created_at: string
         }[]
       }
       search_v1_optimised: {
         Args: {
+          search?: string
           prefix: string
           bucketname: string
           limits?: number
           levels?: number
           offsets?: number
-          search?: string
           sortcolumn?: string
           sortorder?: string
         }
         Returns: {
-          created_at: string
           name: string
           id: string
           updated_at: string
+          created_at: string
           last_accessed_at: string
           metadata: Json
         }[]
       }
       search_v2: {
         Args: {
-          prefix: string
           bucket_name: string
-          levels?: number
           limits?: number
+          levels?: number
           start_after?: string
+          prefix: string
         }
         Returns: {
-          updated_at: string
           key: string
           name: string
           id: string
-          metadata: Json
+          updated_at: string
           created_at: string
+          metadata: Json
         }[]
       }
     }
@@ -2146,6 +2363,7 @@ export const Constants = {
       ],
       content_state: ["draft", "published", "archived"],
       frequency_type: ["once", "day", "week", "month", "year"],
+      matrix_axis: ["row", "col"],
       notification_type: ["info", "warning", "error", "success"],
       org_permission: [
         "role.manage",
