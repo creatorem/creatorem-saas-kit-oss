@@ -365,7 +365,6 @@ export type Database = {
           company_member_id: string | null
           created_at: string
           customer_note: string | null
-          day: string | null
           email: string | null
           end_at: string | null
           firstname: string
@@ -389,7 +388,6 @@ export type Database = {
           company_member_id?: string | null
           created_at?: string
           customer_note?: string | null
-          day?: string | null
           email?: string | null
           end_at?: string | null
           firstname: string
@@ -413,7 +411,6 @@ export type Database = {
           company_member_id?: string | null
           created_at?: string
           customer_note?: string | null
-          day?: string | null
           email?: string | null
           end_at?: string | null
           firstname?: string
@@ -522,9 +519,12 @@ export type Database = {
           appearance: Json
           content: Json
           created_at: string
+          custom_head_content: string | null
+          custom_javascript: string | null
           id: string
           name: string
           organization_id: string
+          page_title: string | null
           published_at: string | null
           relative_id: number
           slug: string
@@ -535,9 +535,12 @@ export type Database = {
           appearance: Json
           content: Json
           created_at?: string
+          custom_head_content?: string | null
+          custom_javascript?: string | null
           id?: string
           name: string
           organization_id: string
+          page_title?: string | null
           published_at?: string | null
           relative_id: number
           slug: string
@@ -548,9 +551,12 @@ export type Database = {
           appearance?: Json
           content?: Json
           created_at?: string
+          custom_head_content?: string | null
+          custom_javascript?: string | null
           id?: string
           name?: string
           organization_id?: string
+          page_title?: string | null
           published_at?: string | null
           relative_id?: number
           slug?: string
