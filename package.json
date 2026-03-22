@@ -25,7 +25,7 @@
     "test": "turbo test --cache-dir=.turbo",
     "syncpack:list": "pnpm dlx syncpack list-mismatches",
     "syncpack:fix": "pnpm dlx syncpack fix-mismatches",
-    "db:generate": "pnpm exec creatorem generate-sql migration apps/planoby-dashboard/.creatorem/setup.json",
+    "db:generate": "pnpm exec creatorem generate-sql",
     "supabase:start": "supabase status || supabase start",
     "supabase:stop": "supabase stop",
     "supabase:test": "supabase db test",
@@ -65,7 +65,7 @@
     "supabase": "^2.51.0",
     "ts-jest": "^29.4.1",
     "turbo": "^2.5.5",
-    "@creatorem/cli": "latest",
+    "@creatorem/cli": "workspace:*",
     "typescript": "~5.9.2",
     "zod": "^3.25.76"
   }
