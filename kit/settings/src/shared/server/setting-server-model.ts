@@ -176,8 +176,8 @@ export class SettingServerModel<
      * @param keys The setting keys to fetch
      * @returns A record of settings values indexed by their keys
      */
-    // async getSettings<K extends keyof T>(keys: K[]): Promise<Record<K, ExtractSettingsValues<T>[K]>> {
-    async getSettings<K extends keyof T>(keys: K[]): Promise<{ [key in K]: ExtractSettingsValues<T>[key] }> {
+    // async getSettings<K extends keyof T>(keys: readonly K[]): Promise<Record<K, ExtractSettingsValues<T>[K]>> {
+    async getSettings<K extends keyof T>(keys: readonly K[]): Promise<{ [key in K]: ExtractSettingsValues<T>[key] }> {
         const result: Record<string, any> = {};
         const toFetch: Record<string, K[]> = {};
 

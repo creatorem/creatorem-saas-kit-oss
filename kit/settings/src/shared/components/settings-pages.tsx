@@ -2,12 +2,12 @@
 
 import type { TrpcClientWithQuery } from '@creatorem/next-trpc/query-client';
 import { SettingsInputsBase, SettingWrapperComponent } from '@kit/utils/quick-form';
-import { useQuery } from '@tanstack/react-query';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { SettingsSchema } from '../../config/parse-schema-config';
 import type { parseUISettingConfig } from '../../config/parse-ui-config';
+import { useClientSettings } from '../client/use-client-settings';
 // import type { getSettingsValuesAction, getSettingsValuesSchema } from '../../router/get-settings-values';
-import type { getSettingsRouter } from '../../router/router';
+import type { settingsRouter } from '../../router/router';
 import {
     isFormConfig,
     isLogicInputConfig,
@@ -25,7 +25,7 @@ export interface SettingsPagesProps extends Pick<SettingFormComponentProps, 'inp
     };
     onNotFound?: () => void;
     Wrapper: SettingWrapperComponent;
-    clientTrpc: TrpcClientWithQuery<ReturnType<typeof getSettingsRouter>>;
+    clientTrpc: TrpcClientWithQuery<typeof settingsRouter>;
     SkeletonComponent: React.FC;
     settingsSchemas: SettingsSchema;
     settingsUI: ReturnType<typeof parseUISettingConfig>;
@@ -240,13 +240,9 @@ function SettingsFormInitializer({
         return settingKeys;
     }, [model, formId]);
 
-    const valuesRes = useQuery({
-        queryKey: [`get-settings-values-${formId}`],
-        queryFn: async () => {
-            return await clientTrpc.getSettingsValues.fetch({
-                settingKeys,
-            });
-        },
+    const valuesRes = useClientSettings({
+        clientTrpc,
+        settingKeys,
     });
 
     const submitHandler = async (values: Record<string, any>) => {
