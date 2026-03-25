@@ -28,6 +28,9 @@ export type BookingSmsReminder = InferSelectModel<typeof schema.bookingSmsRemind
 export type ServicePriceMatrix = InferSelectModel<typeof schema.servicePriceMatrix>;
 export type ServicePriceMatrixInterval = InferSelectModel<typeof schema.servicePriceMatrixInterval>;
 export type ServicePriceExtra = InferSelectModel<typeof schema.servicePriceExtra>;
+export type BookingCommunicationThread = InferSelectModel<typeof schema.bookingCommunicationThread>;
+export type BookingCommunicationMessage = InferSelectModel<typeof schema.bookingCommunicationMessage>;
+export type BookingCommunicationStatusEvent = InferSelectModel<typeof schema.bookingCommunicationStatusEvent>;
 export type ServiceParticipantDataSchema = InferSelectModel<typeof schema.serviceParticipantDataSchema>;
 export type ServicePriceMatrixCell = InferSelectModel<typeof schema.servicePriceMatrixCell>;
 
@@ -70,6 +73,9 @@ export const tableSchemaMap = {
     'service_price_matrix': schema.servicePriceMatrix,
     'service_price_matrix_interval': schema.servicePriceMatrixInterval,
     'service_price_extra': schema.servicePriceExtra,
+    'booking_communication_thread': schema.bookingCommunicationThread,
+    'booking_communication_message': schema.bookingCommunicationMessage,
+    'booking_communication_status_event': schema.bookingCommunicationStatusEvent,
     'service_participant_data_schema': schema.serviceParticipantDataSchema,
     'service_price_matrix_cell': schema.servicePriceMatrixCell
 } as const;

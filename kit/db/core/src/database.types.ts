@@ -17,10 +17,10 @@ export type Database = {
     Functions: {
       graphql: {
         Args: {
+          query?: string
+          variables?: Json
           operationName?: string
           extensions?: Json
-          variables?: Json
-          query?: string
         }
         Returns: Json
       }
@@ -47,12 +47,12 @@ export type Database = {
       debug_jwt_info: {
         Args: Record<PropertyKey, never>
         Returns: {
-          total_user_sessions: number
-          auth_user_id: string
-          detected_current_session: string
-          jwt_session_id: string
           jwt_sid: string
+          auth_user_id: string
+          jwt_session_id: string
           jwt_full: Json
+          detected_current_session: string
+          total_user_sessions: number
         }[]
       }
       get_user_email: {
@@ -66,15 +66,15 @@ export type Database = {
       get_user_sessions: {
         Args: Record<PropertyKey, never>
         Returns: {
+          not_after: string
+          id: string
+          user_id: string
+          created_at: string
+          updated_at: string
+          factor_id: string
+          aal: string
           user_agent: string
           ip: unknown
-          not_after: string
-          aal: string
-          factor_id: string
-          updated_at: string
-          created_at: string
-          user_id: string
-          id: string
         }[]
       }
       has_multiple_role_manage_permissions: {
@@ -83,8 +83,8 @@ export type Database = {
       }
       has_org_permission: {
         Args: {
-          org_id: string
           permission_name: Database["public"]["Enums"]["org_permission"]
+          org_id: string
         }
         Returns: boolean
       }
@@ -97,7 +97,7 @@ export type Database = {
         Returns: boolean
       }
       update_session_details: {
-        Args: { session_id: string; new_user_agent?: string; new_ip?: unknown }
+        Args: { new_ip?: unknown; session_id: string; new_user_agent?: string }
         Returns: boolean
       }
       user_is_invited_to_org: {
@@ -113,7 +113,7 @@ export type Database = {
         Returns: boolean
       }
       user_org_role_is_higher_than: {
-        Args: { target_user_id: string; org_id: string }
+        Args: { org_id: string; target_user_id: string }
         Returns: boolean
       }
     }
@@ -471,6 +471,215 @@ export type Database = {
             columns: ["slot_occurrence_id"]
             isOneToOne: false
             referencedRelation: "slot_occurrence"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_communication_message: {
+        Row: {
+          body_html: string | null
+          body_text: string | null
+          booking_id: string
+          channel: string
+          created_at: string
+          direction: string
+          id: string
+          in_reply_to_rfc: string | null
+          message_id_rfc: string | null
+          metadata: Json
+          organization_id: string
+          provider: string | null
+          provider_message_id: string | null
+          received_at: string | null
+          recipient: string | null
+          sender: string | null
+          sent_at: string | null
+          status: string
+          subject: string | null
+          thread_id: string
+          updated_at: string
+        }
+        Insert: {
+          body_html?: string | null
+          body_text?: string | null
+          booking_id: string
+          channel: string
+          created_at?: string
+          direction: string
+          id?: string
+          in_reply_to_rfc?: string | null
+          message_id_rfc?: string | null
+          metadata?: Json
+          organization_id: string
+          provider?: string | null
+          provider_message_id?: string | null
+          received_at?: string | null
+          recipient?: string | null
+          sender?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          thread_id: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string | null
+          body_text?: string | null
+          booking_id?: string
+          channel?: string
+          created_at?: string
+          direction?: string
+          id?: string
+          in_reply_to_rfc?: string | null
+          message_id_rfc?: string | null
+          metadata?: Json
+          organization_id?: string
+          provider?: string | null
+          provider_message_id?: string | null
+          received_at?: string | null
+          recipient?: string | null
+          sender?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          thread_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_communication_message_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_communication_message_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_communication_message_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "booking_communication_thread"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_communication_status_event: {
+        Row: {
+          booking_id: string
+          created_at: string
+          error: string | null
+          event_at: string
+          event_type: string
+          id: string
+          message_id: string
+          organization_id: string
+          payload: Json
+          provider: string | null
+          provider_event_id: string | null
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          error?: string | null
+          event_at?: string
+          event_type: string
+          id?: string
+          message_id: string
+          organization_id: string
+          payload?: Json
+          provider?: string | null
+          provider_event_id?: string | null
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          error?: string | null
+          event_at?: string
+          event_type?: string
+          id?: string
+          message_id?: string
+          organization_id?: string
+          payload?: Json
+          provider?: string | null
+          provider_event_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_communication_status_event_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_communication_status_event_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "booking_communication_message"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_communication_status_event_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_communication_thread: {
+        Row: {
+          booking_id: string
+          channel: string
+          created_at: string
+          id: string
+          last_message_at: string | null
+          organization_id: string
+          participant_key: string
+          provider_thread_key: string | null
+          updated_at: string
+        }
+        Insert: {
+          booking_id: string
+          channel: string
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          organization_id: string
+          participant_key: string
+          provider_thread_key?: string | null
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string
+          channel?: string
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          organization_id?: string
+          participant_key?: string
+          provider_thread_key?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_communication_thread_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_communication_thread_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
             referencedColumns: ["id"]
           },
         ]
@@ -1709,16 +1918,16 @@ export type Database = {
     }
     Functions: {
       planoby_align_date_to_weekly_days: {
-        Args: { p_date: string; p_direction?: number; p_days: Json }
+        Args: { p_days: Json; p_date: string; p_direction?: number }
         Returns: string
       }
       planoby_bootstrap_dev_reset_account: {
         Args: {
-          p_user_name?: string
-          p_user_email?: string
           p_org_name?: string
-          p_auth_user_id: string
           p_org_slug?: string
+          p_auth_user_id: string
+          p_user_email?: string
+          p_user_name?: string
         }
         Returns: string
       }
@@ -1735,11 +1944,11 @@ export type Database = {
         Returns: Json
       }
       planoby_org_setting_json: {
-        Args: { p_organization_id: string; p_name: string }
+        Args: { p_name: string; p_organization_id: string }
         Returns: Json
       }
       planoby_org_setting_text: {
-        Args: { p_name: string; p_organization_id: string; p_default?: string }
+        Args: { p_default?: string; p_name: string; p_organization_id: string }
         Returns: string
       }
       planoby_org_timezone_value: {
@@ -1764,10 +1973,10 @@ export type Database = {
       }
       planoby_slot_matches_day_core: {
         Args: {
-          p_meta_frequency: string
           p_day: string
-          p_slot_date: string
           p_frequency: string
+          p_meta_frequency: string
+          p_slot_date: string
         }
         Returns: boolean
       }
@@ -1785,18 +1994,18 @@ export type Database = {
       }
       planoby_sync_slot_occurrences: {
         Args: {
-          p_slot_id: string
           p_window_end?: string
           p_window_start?: string
+          p_slot_id: string
         }
         Returns: undefined
       }
       planoby_timestamp_for_org_day_time: {
-        Args: { p_day: string; p_time: string; p_organization_id: string }
+        Args: { p_time: string; p_organization_id: string; p_day: string }
         Returns: string
       }
       user_org_role_is_higher_than: {
-        Args: { org_id: string; target_user_id: string }
+        Args: { target_user_id: string; org_id: string }
         Returns: boolean
       }
     }
@@ -2080,15 +2289,15 @@ export type Database = {
     }
     Functions: {
       add_prefixes: {
-        Args: { _bucket_id: string; _name: string }
+        Args: { _name: string; _bucket_id: string }
         Returns: undefined
       }
       can_insert_object: {
-        Args: { bucketid: string; owner: string; metadata: Json; name: string }
+        Args: { name: string; owner: string; metadata: Json; bucketid: string }
         Returns: undefined
       }
       delete_prefix: {
-        Args: { _bucket_id: string; _name: string }
+        Args: { _name: string; _bucket_id: string }
         Returns: boolean
       }
       extension: {
@@ -2126,25 +2335,25 @@ export type Database = {
         Args: {
           bucket_id: string
           prefix_param: string
+          next_upload_token?: string
           delimiter_param: string
           max_keys?: number
           next_key_token?: string
-          next_upload_token?: string
         }
         Returns: {
-          key: string
           id: string
+          key: string
           created_at: string
         }[]
       }
       list_objects_with_delimiter: {
         Args: {
-          next_token?: string
           bucket_id: string
           prefix_param: string
           delimiter_param: string
           max_keys?: number
           start_after?: string
+          next_token?: string
         }
         Returns: {
           name: string
@@ -2159,52 +2368,52 @@ export type Database = {
       }
       search: {
         Args: {
-          limits?: number
           levels?: number
+          sortcolumn?: string
+          sortorder?: string
+          limits?: number
+          prefix: string
           bucketname: string
           search?: string
           offsets?: number
-          sortorder?: string
-          sortcolumn?: string
-          prefix: string
         }
         Returns: {
-          last_accessed_at: string
-          created_at: string
-          metadata: Json
-          updated_at: string
-          id: string
           name: string
+          id: string
+          updated_at: string
+          created_at: string
+          last_accessed_at: string
+          metadata: Json
         }[]
       }
       search_legacy_v1: {
         Args: {
-          search?: string
-          sortcolumn?: string
-          sortorder?: string
-          offsets?: number
           bucketname: string
-          prefix: string
-          limits?: number
           levels?: number
+          limits?: number
+          prefix: string
+          sortorder?: string
+          sortcolumn?: string
+          search?: string
+          offsets?: number
         }
         Returns: {
-          name: string
-          metadata: Json
-          last_accessed_at: string
-          id: string
           updated_at: string
           created_at: string
+          last_accessed_at: string
+          metadata: Json
+          id: string
+          name: string
         }[]
       }
       search_v1_optimised: {
         Args: {
-          search?: string
           prefix: string
           bucketname: string
           limits?: number
           levels?: number
           offsets?: number
+          search?: string
           sortcolumn?: string
           sortorder?: string
         }
@@ -2220,10 +2429,10 @@ export type Database = {
       search_v2: {
         Args: {
           bucket_name: string
-          limits?: number
-          levels?: number
           start_after?: string
+          limits?: number
           prefix: string
+          levels?: number
         }
         Returns: {
           key: string

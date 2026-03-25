@@ -599,9 +599,9 @@ export const booking = pgTable("booking", {
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
 	index("idx_booking_company_member_id").using("btree", table.companyMemberId.asc().nullsLast().op("uuid_ops")),
-	index("idx_booking_org_state").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.state.asc().nullsLast().op("enum_ops")),
-	index("idx_booking_org_member").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.companyMemberId.asc().nullsLast().op("uuid_ops")),
 	index("idx_booking_occurrence_id").using("btree", table.slotOccurrenceId.asc().nullsLast().op("uuid_ops")),
+	index("idx_booking_org_member").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.companyMemberId.asc().nullsLast().op("uuid_ops")),
+	index("idx_booking_org_state").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.state.asc().nullsLast().op("uuid_ops")),
 	index("idx_booking_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
 	index("idx_booking_relative_id").using("btree", table.relativeId.asc().nullsLast().op("int4_ops")),
 	index("idx_booking_service_id").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops")),
@@ -795,6 +795,122 @@ export const servicePriceExtra = pgTable("service_price_extra", {
 	pgPolicy("service_price_extra_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
 ]);
 
+export const bookingCommunicationThread = pgTable("booking_communication_thread", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	organizationId: uuid("organization_id").notNull(),
+	bookingId: uuid("booking_id").notNull(),
+	channel: varchar({ length: 20 }).notNull(),
+	participantKey: varchar("participant_key", { length: 320 }).notNull(),
+	providerThreadKey: varchar("provider_thread_key", { length: 255 }),
+	lastMessageAt: timestamp("last_message_at", { withTimezone: true, mode: 'string' }),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_booking_communication_thread_booking_channel").using("btree", table.bookingId.asc().nullsLast().op("uuid_ops"), table.channel.asc().nullsLast().op("uuid_ops")),
+	index("idx_booking_communication_thread_last_message_at").using("btree", table.lastMessageAt.desc().nullsFirst().op("timestamptz_ops")),
+	index("idx_booking_communication_thread_org_channel").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.channel.asc().nullsLast().op("uuid_ops")),
+	index("idx_booking_communication_thread_org_channel_last_activity").using("btree", table.organizationId.asc().nullsLast().op("timestamptz_ops"), table.channel.asc().nullsLast().op("text_ops"), table.lastMessageAt.desc().nullsFirst().op("text_ops"), table.createdAt.desc().nullsFirst().op("text_ops")),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "booking_communication_thread_organization_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.bookingId],
+			foreignColumns: [booking.id],
+			name: "booking_communication_thread_booking_id_fkey"
+		}).onDelete("cascade"),
+	unique("uq_booking_communication_thread_booking_channel_participant").on(table.bookingId, table.channel, table.participantKey),
+	pgPolicy("booking_communication_thread_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	check("booking_communication_thread_channel_check", sql`(channel)::text = ANY ((ARRAY['email'::character varying, 'sms'::character varying])::text[])`),
+]);
+
+export const bookingCommunicationMessage = pgTable("booking_communication_message", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	threadId: uuid("thread_id").notNull(),
+	organizationId: uuid("organization_id").notNull(),
+	bookingId: uuid("booking_id").notNull(),
+	direction: varchar({ length: 20 }).notNull(),
+	channel: varchar({ length: 20 }).notNull(),
+	status: varchar({ length: 20 }).default('queued').notNull(),
+	provider: varchar({ length: 80 }),
+	providerMessageId: varchar("provider_message_id", { length: 255 }),
+	messageIdRfc: varchar("message_id_rfc", { length: 255 }),
+	inReplyToRfc: varchar("in_reply_to_rfc", { length: 255 }),
+	sender: varchar({ length: 320 }),
+	recipient: varchar({ length: 320 }),
+	subject: text(),
+	bodyText: text("body_text"),
+	bodyHtml: text("body_html"),
+	metadata: jsonb().default({}).notNull(),
+	sentAt: timestamp("sent_at", { withTimezone: true, mode: 'string' }),
+	receivedAt: timestamp("received_at", { withTimezone: true, mode: 'string' }),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_booking_communication_message_booking_channel_created_at").using("btree", table.bookingId.asc().nullsLast().op("uuid_ops"), table.channel.asc().nullsLast().op("timestamptz_ops"), table.createdAt.desc().nullsFirst().op("uuid_ops")),
+	index("idx_booking_communication_message_booking_created_at").using("btree", table.bookingId.asc().nullsLast().op("timestamptz_ops"), table.createdAt.desc().nullsFirst().op("timestamptz_ops")),
+	index("idx_booking_communication_message_in_reply_to_rfc").using("btree", table.inReplyToRfc.asc().nullsLast().op("text_ops")),
+	index("idx_booking_communication_message_message_id_rfc").using("btree", table.messageIdRfc.asc().nullsLast().op("text_ops")),
+	index("idx_booking_communication_message_org_channel_created_at").using("btree", table.organizationId.asc().nullsLast().op("timestamptz_ops"), table.channel.asc().nullsLast().op("uuid_ops"), table.createdAt.desc().nullsFirst().op("uuid_ops")),
+	index("idx_booking_communication_message_thread_created_at").using("btree", table.threadId.asc().nullsLast().op("uuid_ops"), table.createdAt.asc().nullsLast().op("uuid_ops")),
+	uniqueIndex("uq_booking_communication_message_provider_message").using("btree", table.provider.asc().nullsLast().op("text_ops"), table.providerMessageId.asc().nullsLast().op("text_ops")).where(sql`(provider_message_id IS NOT NULL)`),
+	foreignKey({
+			columns: [table.threadId],
+			foreignColumns: [bookingCommunicationThread.id],
+			name: "booking_communication_message_thread_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "booking_communication_message_organization_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.bookingId],
+			foreignColumns: [booking.id],
+			name: "booking_communication_message_booking_id_fkey"
+		}).onDelete("cascade"),
+	pgPolicy("booking_communication_message_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	check("booking_communication_message_direction_check", sql`(direction)::text = ANY ((ARRAY['outbound'::character varying, 'inbound'::character varying])::text[])`),
+	check("booking_communication_message_channel_check", sql`(channel)::text = ANY ((ARRAY['email'::character varying, 'sms'::character varying])::text[])`),
+	check("booking_communication_message_status_check", sql`(status)::text = ANY ((ARRAY['queued'::character varying, 'sent'::character varying, 'delivered'::character varying, 'failed'::character varying, 'bounced'::character varying, 'complained'::character varying, 'opened'::character varying, 'clicked'::character varying, 'replied'::character varying, 'received'::character varying, 'skipped'::character varying])::text[])`),
+]);
+
+export const bookingCommunicationStatusEvent = pgTable("booking_communication_status_event", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	messageId: uuid("message_id").notNull(),
+	organizationId: uuid("organization_id").notNull(),
+	bookingId: uuid("booking_id").notNull(),
+	eventType: varchar("event_type", { length: 30 }).notNull(),
+	provider: varchar({ length: 80 }),
+	providerEventId: varchar("provider_event_id", { length: 255 }),
+	eventAt: timestamp("event_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	error: text(),
+	payload: jsonb().default({}).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_booking_communication_status_event_booking_event_at").using("btree", table.bookingId.asc().nullsLast().op("timestamptz_ops"), table.eventAt.desc().nullsFirst().op("uuid_ops")),
+	index("idx_booking_communication_status_event_message_event_at").using("btree", table.messageId.asc().nullsLast().op("uuid_ops"), table.eventAt.desc().nullsFirst().op("uuid_ops")),
+	uniqueIndex("uq_booking_communication_status_event_provider_event").using("btree", table.provider.asc().nullsLast().op("text_ops"), table.providerEventId.asc().nullsLast().op("text_ops")).where(sql`(provider_event_id IS NOT NULL)`),
+	foreignKey({
+			columns: [table.messageId],
+			foreignColumns: [bookingCommunicationMessage.id],
+			name: "booking_communication_status_event_message_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "booking_communication_status_event_organization_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.bookingId],
+			foreignColumns: [booking.id],
+			name: "booking_communication_status_event_booking_id_fkey"
+		}).onDelete("cascade"),
+	pgPolicy("booking_communication_status_event_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	check("booking_communication_status_event_event_type_check", sql`(event_type)::text = ANY ((ARRAY['queued'::character varying, 'sent'::character varying, 'delivered'::character varying, 'failed'::character varying, 'bounced'::character varying, 'complained'::character varying, 'opened'::character varying, 'clicked'::character varying, 'replied'::character varying, 'received'::character varying, 'provider_update'::character varying, 'skipped'::character varying])::text[])`),
+]);
+
 export const serviceParticipantDataSchema = pgTable("service_participant_data_schema", {
 	organizationId: uuid("organization_id").notNull(),
 	serviceId: uuid("service_id").notNull(),
@@ -805,8 +921,6 @@ export const serviceParticipantDataSchema = pgTable("service_participant_data_sc
 	index("idx_service_participant_data_schema_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
 	index("idx_service_participant_data_schema_participant_data_schema_id").using("btree", table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
 	index("idx_service_participant_data_schema_service_id").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops")),
-	index("idx_spds_participant_data_schema_id").using("btree", table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
-	index("idx_spds_service_id").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops")),
 	foreignKey({
 			columns: [table.organizationId],
 			foreignColumns: [organization.id],
@@ -862,4 +976,4 @@ export const agendaSlotDay = pgView("agenda_slot_day", {	slotOccurrenceId: uuid(
 	serviceCalendarColor: varchar("service_calendar_color", { length: 50 }),
 	serviceDuration: varchar("service_duration", { length: 50 }),
 	bookings: jsonb(),
-}).as(sql`SELECT so.id AS slot_occurrence_id, so.organization_id, so.company_member_id AS organization_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name AS service_name, s.calendar_color AS service_calendar_color, s.duration AS service_duration, COALESCE(jsonb_agg(jsonb_build_object('id', b.id, 'relative_id', b.relative_id, 'state', b.state, 'firstname', b.firstname, 'lastname', b.lastname, 'email', b.email, 'phone', b.phone, 'participants', b.participants, 'customer_note', b.customer_note, 'day', b.day, 'start_at', b.start_at, 'end_at', b.end_at) ORDER BY b.start_at, b.created_at) FILTER (WHERE b.id IS NOT NULL), '[]'::jsonb) AS bookings FROM slot_occurrence so LEFT JOIN service s ON s.id = so.service_id LEFT JOIN booking b ON b.slot_occurrence_id = so.id GROUP BY so.id, so.organization_id, so.company_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name, s.calendar_color, s.duration`);
+}).as(sql`SELECT so.id AS slot_occurrence_id, so.organization_id, so.company_member_id AS organization_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name AS service_name, s.calendar_color AS service_calendar_color, s.duration AS service_duration, COALESCE(jsonb_agg(jsonb_build_object('id', b.id, 'relative_id', b.relative_id, 'state', b.state, 'firstname', b.firstname, 'lastname', b.lastname, 'email', b.email, 'phone', b.phone, 'participants', b.participants, 'customer_note', b.customer_note, 'start_at', b.start_at, 'end_at', b.end_at) ORDER BY b.start_at, b.created_at) FILTER (WHERE b.id IS NOT NULL), '[]'::jsonb) AS bookings FROM slot_occurrence so LEFT JOIN service s ON s.id = so.service_id LEFT JOIN booking b ON b.slot_occurrence_id = so.id GROUP BY so.id, so.organization_id, so.company_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name, s.calendar_color, s.duration`);

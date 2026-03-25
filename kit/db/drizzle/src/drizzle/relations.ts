@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, service, participantDataSchema, slot, slotOccurrence, booking, checkout, dateMemo, bookingSmsReminder, servicePriceMatrix, servicePriceMatrixInterval, servicePriceExtra, serviceParticipantDataSchema, servicePriceMatrixCell } from "./schema";
+import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, service, participantDataSchema, slot, slotOccurrence, booking, checkout, dateMemo, bookingSmsReminder, servicePriceMatrix, servicePriceMatrixInterval, servicePriceExtra, bookingCommunicationThread, bookingCommunicationMessage, bookingCommunicationStatusEvent, serviceParticipantDataSchema, servicePriceMatrixCell } from "./schema";
 
 export const userRelations = relations(user, ({one, many}) => ({
 	usersInAuth: one(usersInAuth, {
@@ -126,6 +126,9 @@ export const organizationRelations = relations(organization, ({many}) => ({
 	servicePriceMatrices: many(servicePriceMatrix),
 	servicePriceMatrixIntervals: many(servicePriceMatrixInterval),
 	servicePriceExtras: many(servicePriceExtra),
+	bookingCommunicationThreads: many(bookingCommunicationThread),
+	bookingCommunicationMessages: many(bookingCommunicationMessage),
+	bookingCommunicationStatusEvents: many(bookingCommunicationStatusEvent),
 	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 	servicePriceMatrixCells: many(servicePriceMatrixCell),
 }));
@@ -283,6 +286,9 @@ export const bookingRelations = relations(booking, ({one, many}) => ({
 		references: [user.id]
 	}),
 	bookingSmsReminders: many(bookingSmsReminder),
+	bookingCommunicationThreads: many(bookingCommunicationThread),
+	bookingCommunicationMessages: many(bookingCommunicationMessage),
+	bookingCommunicationStatusEvents: many(bookingCommunicationStatusEvent),
 }));
 
 export const checkoutRelations = relations(checkout, ({one}) => ({
@@ -356,6 +362,49 @@ export const servicePriceExtraRelations = relations(servicePriceExtra, ({one}) =
 	organization: one(organization, {
 		fields: [servicePriceExtra.organizationId],
 		references: [organization.id]
+	}),
+}));
+
+export const bookingCommunicationThreadRelations = relations(bookingCommunicationThread, ({one, many}) => ({
+	organization: one(organization, {
+		fields: [bookingCommunicationThread.organizationId],
+		references: [organization.id]
+	}),
+	booking: one(booking, {
+		fields: [bookingCommunicationThread.bookingId],
+		references: [booking.id]
+	}),
+	bookingCommunicationMessages: many(bookingCommunicationMessage),
+}));
+
+export const bookingCommunicationMessageRelations = relations(bookingCommunicationMessage, ({one, many}) => ({
+	bookingCommunicationThread: one(bookingCommunicationThread, {
+		fields: [bookingCommunicationMessage.threadId],
+		references: [bookingCommunicationThread.id]
+	}),
+	organization: one(organization, {
+		fields: [bookingCommunicationMessage.organizationId],
+		references: [organization.id]
+	}),
+	booking: one(booking, {
+		fields: [bookingCommunicationMessage.bookingId],
+		references: [booking.id]
+	}),
+	bookingCommunicationStatusEvents: many(bookingCommunicationStatusEvent),
+}));
+
+export const bookingCommunicationStatusEventRelations = relations(bookingCommunicationStatusEvent, ({one}) => ({
+	bookingCommunicationMessage: one(bookingCommunicationMessage, {
+		fields: [bookingCommunicationStatusEvent.messageId],
+		references: [bookingCommunicationMessage.id]
+	}),
+	organization: one(organization, {
+		fields: [bookingCommunicationStatusEvent.organizationId],
+		references: [organization.id]
+	}),
+	booking: one(booking, {
+		fields: [bookingCommunicationStatusEvent.bookingId],
+		references: [booking.id]
 	}),
 }));
 
