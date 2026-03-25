@@ -40,8 +40,8 @@ export const authConfig = parseAuthConfig({
         numbers: false,
         uppercase: false,
     },
-    variant: {
-        type: 'two-column',
-        rightImageUrl: 'https://ui.shadcn.com/placeholder.svg',
-    },
+    // variant: {
+    //     type: 'two-column',
+    //     rightImageUrl: 'https://ui.shadcn.com/placeholder.svg',
+    // },
 });
