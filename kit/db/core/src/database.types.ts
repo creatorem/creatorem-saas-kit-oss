@@ -77,7 +77,7 @@ export type Database = {
           ip: unknown
         }[]
       }
-      has_multiple_role_manage_permissions: {
+      has_multiple_member_manage_permissions: {
         Args: { org_id: string }
         Returns: boolean
       }
@@ -2023,10 +2023,8 @@ export type Database = {
       matrix_axis: "row" | "col"
       notification_type: "info" | "warning" | "error" | "success"
       org_permission:
-        | "role.manage"
         | "organization.manage"
         | "member.manage"
-        | "invitation.manage"
         | "setting.manage"
         | "media.manage"
       slot_state: "confirmed" | "requested"
@@ -2581,10 +2579,8 @@ export const Constants = {
       matrix_axis: ["row", "col"],
       notification_type: ["info", "warning", "error", "success"],
       org_permission: [
-        "role.manage",
         "organization.manage",
         "member.manage",
-        "invitation.manage",
         "setting.manage",
         "media.manage",
       ],

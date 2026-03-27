@@ -1,0 +1,347 @@
+{
+  "contractId": "creatorem-agent-rules-v1",
+  "contractVersion": 1,
+  "language": "en",
+  "scope": "generic_creatorem_kit",
+  "objective": "Enable AI coding agents to implement features in Creatorem SaaS Kit with predictable quality by combining docs capability discovery, kit-first implementation, and example-driven integration patterns.",
+  "retrievalProtocol": {
+    "steps": [
+      "Resolve user intent to one or more capability IDs from mcp-index metadata before proposing implementation details.",
+      "Read the primary docs page and its Agent Recipe for each selected capability.",
+      "Locate concrete implementation entrypoints in kit/* for each capability.",
+      "Use examples/* only to map integration composition and app wiring patterns.",
+      "If docs and code conflict, follow source precedence and report the conflict with impacted files."
+    ]
+  },
+  "sourcePrecedence": [
+    {
+      "rank": 1,
+      "source": "kit_code",
+      "description": "kit/* source code and exported APIs are the implementation truth."
+    },
+    {
+      "rank": 2,
+      "source": "docs_contract",
+      "description": "apps/creatorem/content/docs and MCP Context/Agent Recipe define intended usage and integration rules."
+    },
+    {
+      "rank": 3,
+      "source": "examples",
+      "description": "examples/* provide real integration templates and composition references."
+    }
+  ],
+  "implementationWorkflow": [
+    "Start with capability discovery and select minimal capability set.",
+    "Implement in shared kit package first when behavior belongs to reusable module.",
+    "Wire app-level composition with filters/config/routes after shared changes.",
+    "Use examples to mirror integration structure for dashboard/mobile scenarios.",
+    "Keep naming and architecture consistent with existing kit conventions."
+  ],
+  "validationWorkflow": [
+    "Run docs contract and quality checks when docs/MCP contract content is changed.",
+    "Run typecheck/lint/tests scoped to changed packages or apps.",
+    "For database-affecting changes, run SQL generation/reset/types sequence in documented order.",
+    "Report executed commands and unresolved validation blockers in final output."
+  ],
+  "antiPatterns": [
+    "Reimplementing behavior directly in apps/* when @kit/* already provides the feature.",
+    "Bypassing settings APIs with direct DB reads/writes for keys supported by @kit/settings.",
+    "Treating examples/* as API authority when kit exports or docs contract disagree.",
+    "Skipping capability discovery and editing files from guesswork only.",
+    "Returning changes without explicit validation status and command evidence."
+  ],
+  "outputExpectations": [
+    "List changed files and summarize behavior-level impact.",
+    "State which capability IDs were used for retrieval.",
+    "State which @kit/* APIs were reused instead of app-local duplication.",
+    "List validation commands executed and any blockers.",
+    "If assumptions were required, enumerate them explicitly."
+  ],
+  "workflows": [
+    {
+      "id": "WF-SETTINGS-01",
+      "name": "Settings Fullstack Workflow",
+      "requiredActions": [
+        "Enqueue schema via server_get_settings_schema in app server filters before reads.",
+        "Use getServerSettings for server reads and getClientSettings/useClientSettings for client reads.",
+        "Use SettingsPages/updateSettingsForm or SettingServerModel.updateSettings for writes.",
+        "Preserve typed schema-driven behavior through parseSchemaSettingConfig and parseUISettingConfig usage."
+      ],
+      "capabilityRefs": [
+        "settings_architecture",
+        "settings_api_fullstack"
+      ],
+      "pathRefs": [
+        "kit/settings/src/shared/server/get-server-settings.ts",
+        "kit/settings/src/shared/client/get-client-settings.ts",
+        "kit/settings/src/shared/client/use-client-settings.ts",
+        "examples/pco-dashboard/lib/init-server-filters.ts",
+        "examples/pco-dashboard/app/dashboard/[slug]/settings/[[...settings]]/page-client.tsx",
+        "examples/pco-mobile/app/(app)/screens/settings/[...settings]/index.tsx"
+      ]
+    },
+    {
+      "id": "WF-I18N-01",
+      "name": "Cross-Env Translation Workflow",
+      "requiredActions": [
+        "Initialize cross-env filters in app i18n bootstrap.",
+        "Use applyCrossEnvAsyncFilter for package translations resolver.",
+        "Use applyCrossEnvFilter to compose namespaces.",
+        "Fallback to app-local locale JSON only when no package translation is returned."
+      ],
+      "capabilityRefs": [
+        "i18n_web_setup",
+        "i18n_usage_patterns",
+        "i18n_mobile_setup"
+      ],
+      "pathRefs": [
+        "examples/pco-dashboard/lib/init-cross-env-filters.ts",
+        "examples/pco-dashboard/config/i18n.config.ts",
+        "kit/i18n/src"
+      ]
+    },
+    {
+      "id": "WF-DB-01",
+      "name": "Database Generation Workflow",
+      "requiredActions": [
+        "Run SQL generation before reset/type refresh when schema/setup changed.",
+        "Use documented order: creatorem generate-sql -> pnpm run db:reset -> pnpm run db:types.",
+        "Do not manually edit generated migration bundles.",
+        "Confirm local Supabase is running before reset/types operations."
+      ],
+      "capabilityRefs": [
+        "database_workflow",
+        "repo_task_execution",
+        "project_generation_and_refactor"
+      ],
+      "pathRefs": [
+        "supabase/schemas",
+        "supabase/app-schemas",
+        "supabase/migrations",
+        "apps/creatorem/content/docs/(common)/database.mdx",
+        "apps/creatorem/content/docs/(common)/scripts.mdx"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "id": "AR-001",
+      "priority": "P0",
+      "trigger": "Any feature request, bugfix, or refactor",
+      "requiredActions": [
+        "Resolve target capabilities before selecting implementation files.",
+        "Read docs page What It Does, How To Use, MCP Context, and Agent Recipe sections.",
+        "Map capability entrypoints to concrete code paths before editing."
+      ],
+      "forbiddenActions": [
+        "Start implementation from guessed files without capability mapping.",
+        "Ignore MCP Context entrypoints when they exist."
+      ],
+      "validationExpectations": [
+        "At least one capability ID is referenced in task notes/output.",
+        "Selected files are traceable to capability entrypoints."
+      ],
+      "capabilityRefs": [
+        "mcp_doc_index",
+        "docs_platform",
+        "repo_navigation"
+      ],
+      "pathRefs": [
+        "apps/creatorem/content/.generated/mcp-index.json",
+        "apps/creatorem/content/docs/web/(root)/mcp-capabilities.mdx",
+        "apps/creatorem/content/docs/(common)/structure.mdx"
+      ],
+      "exampleRefs": [
+        "examples/pco-dashboard",
+        "examples/pco-mobile"
+      ]
+    },
+    {
+      "id": "AR-002",
+      "priority": "P0",
+      "trigger": "When implementing or changing reusable behavior",
+      "requiredActions": [
+        "Implement shared behavior in @kit/* first when ownership is reusable.",
+        "Keep app-level code focused on composition/configuration/filter wiring.",
+        "Reference kit exports and existing routers/hooks/components before creating new ones."
+      ],
+      "forbiddenActions": [
+        "Copy-paste reusable logic into apps/* as first option.",
+        "Create duplicate APIs that mirror existing kit capabilities."
+      ],
+      "validationExpectations": [
+        "Output explains why kit reuse was chosen or why app-local scope is necessary.",
+        "Changed app code shows composition around existing kit APIs."
+      ],
+      "capabilityRefs": [
+        "repo_navigation",
+        "app_configuration"
+      ],
+      "pathRefs": [
+        "kit",
+        "apps",
+        "apps/creatorem/content/docs/(common)/structure.mdx"
+      ],
+      "exampleRefs": [
+        "examples/pco-dashboard/config",
+        "examples/pco-mobile/config"
+      ]
+    },
+    {
+      "id": "AR-003",
+      "priority": "P0",
+      "trigger": "When docs, kit code, and examples diverge",
+      "requiredActions": [
+        "Apply source precedence strictly: kit code > docs > examples.",
+        "Document detected conflicts and selected resolution path.",
+        "Prefer updating docs/adapters when code truth changed."
+      ],
+      "forbiddenActions": [
+        "Treat example implementations as authoritative over kit exports.",
+        "Silently choose one source without conflict note."
+      ],
+      "validationExpectations": [
+        "Conflict note includes impacted files and precedence decision.",
+        "Follow-up docs updates are planned or implemented when needed."
+      ],
+      "capabilityRefs": [
+        "docs_platform",
+        "mcp_server_integration"
+      ],
+      "pathRefs": [
+        "apps/creatorem/content/docs",
+        "kit",
+        "examples"
+      ],
+      "exampleRefs": [
+        "examples/pco-dashboard/lib/init-server-filters.ts"
+      ]
+    },
+    {
+      "id": "AR-004",
+      "priority": "P0",
+      "trigger": "Settings-related feature implementation",
+      "requiredActions": [
+        "Follow WF-SETTINGS-01 without bypassing @kit/settings APIs.",
+        "Ensure schema/filter wiring exists before any settings read/write path.",
+        "Prefer typed getters/hooks over manual inference or raw settings DB access."
+      ],
+      "forbiddenActions": [
+        "Direct raw drizzle access for settings values already modeled in @kit/settings.",
+        "Skipping server_get_settings_schema enqueue step."
+      ],
+      "validationExpectations": [
+        "Server/client settings reads use sanctioned helpers.",
+        "Required schema keys are discoverable from configured schema map."
+      ],
+      "capabilityRefs": [
+        "settings_architecture",
+        "settings_api_fullstack",
+        "settings_mobile_ui"
+      ],
+      "pathRefs": [
+        "kit/settings/src/shared/server/get-server-settings.ts",
+        "kit/settings/src/shared/client/get-client-settings.ts",
+        "kit/settings/src/shared/client/use-client-settings.ts",
+        "examples/pco-dashboard/lib/init-server-filters.ts",
+        "examples/pco-mobile/config/settings.ui.config.tsx"
+      ],
+      "exampleRefs": [
+        "examples/pco-dashboard/app/dashboard/[slug]/settings/[[...settings]]/page-client.tsx",
+        "examples/pco-mobile/app/(app)/screens/settings/[...settings]/index.tsx"
+      ]
+    },
+    {
+      "id": "AR-005",
+      "priority": "P1",
+      "trigger": "Translation/i18n changes",
+      "requiredActions": [
+        "Follow WF-I18N-01 and keep package namespaces resolvable through cross-env filters.",
+        "Use i18next flow documented in docs and app config patterns.",
+        "Verify namespace registration includes package-level namespaces when required."
+      ],
+      "forbiddenActions": [
+        "Hardcode translation strings where namespace-based resolution exists.",
+        "Drop cross-env namespace resolution for package content."
+      ],
+      "validationExpectations": [
+        "i18n config shows namespace composition and resolver fallback behavior.",
+        "Package translations remain accessible for target languages."
+      ],
+      "capabilityRefs": [
+        "i18n_web_setup",
+        "i18n_usage_patterns",
+        "i18n_mobile_setup"
+      ],
+      "pathRefs": [
+        "examples/pco-dashboard/config/i18n.config.ts",
+        "examples/pco-dashboard/lib/init-cross-env-filters.ts",
+        "kit/i18n/src"
+      ],
+      "exampleRefs": [
+        "examples/pco-mobile/config/i18n.config.ts"
+      ]
+    },
+    {
+      "id": "AR-006",
+      "priority": "P1",
+      "trigger": "Database schema/setup/migration changes",
+      "requiredActions": [
+        "Follow WF-DB-01 command order.",
+        "Treat generated migration files as generated artifacts, not hand-authored sources.",
+        "Refresh types after reset to maintain DB/type alignment."
+      ],
+      "forbiddenActions": [
+        "Edit generated migration bundle manually.",
+        "Run db:types before reset when schema changed."
+      ],
+      "validationExpectations": [
+        "Command log demonstrates SQL generation/reset/types sequence.",
+        "Output states if database-affecting validations could not be run and why."
+      ],
+      "capabilityRefs": [
+        "database_workflow",
+        "repo_task_execution"
+      ],
+      "pathRefs": [
+        "supabase/schemas",
+        "supabase/app-schemas",
+        "supabase/migrations",
+        "package.json"
+      ],
+      "exampleRefs": [
+        "examples/pco-dashboard/.creatorem/schemas",
+        "examples/pco-mobile/.creatorem/schemas"
+      ]
+    },
+    {
+      "id": "AR-007",
+      "priority": "P0",
+      "trigger": "Before finalizing any implementation response",
+      "requiredActions": [
+        "Run relevant validation commands for touched scope (docs/contracts, typecheck, lint, tests).",
+        "Summarize changed paths and behavior impact.",
+        "Report exactly which commands were executed and which failed/skipped."
+      ],
+      "forbiddenActions": [
+        "Claim success without command evidence.",
+        "Omit known blockers affecting correctness."
+      ],
+      "validationExpectations": [
+        "Final output includes command results and residual risk statement.",
+        "Validation scope matches changed files/features."
+      ],
+      "capabilityRefs": [
+        "repo_task_execution"
+      ],
+      "pathRefs": [
+        "apps/creatorem/package.json",
+        "package.json"
+      ],
+      "exampleRefs": [
+        "examples/pco-dashboard",
+        "examples/pco-mobile"
+      ]
+    }
+  ]
+}

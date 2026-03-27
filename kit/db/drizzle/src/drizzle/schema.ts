@@ -11,7 +11,7 @@ export const contentState = pgEnum("content_state", ['draft', 'published', 'arch
 export const frequencyType = pgEnum("frequency_type", ['once', 'day', 'week', 'month', 'year'])
 export const matrixAxis = pgEnum("matrix_axis", ['row', 'col'])
 export const notificationType = pgEnum("notification_type", ['info', 'warning', 'error', 'success'])
-export const orgPermission = pgEnum("org_permission", ['role.manage', 'organization.manage', 'member.manage', 'invitation.manage', 'setting.manage', 'media.manage'])
+export const orgPermission = pgEnum("org_permission", ['organization.manage', 'member.manage', 'setting.manage', 'media.manage'])
 export const slotState = pgEnum("slot_state", ['confirmed', 'requested'])
 
 
@@ -271,7 +271,7 @@ export const organizationRole = pgTable("organization_role", {
 			name: "organization_role_organization_id_fkey"
 		}).onDelete("cascade"),
 	unique("organization_role_name_organization_id_key").on(table.name, table.organizationId),
-	pgPolicy("organization_role_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'role.manage'::org_permission))` }),
+	pgPolicy("organization_role_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'member.manage'::org_permission))` }),
 	pgPolicy("organization_role_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("organization_role_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("organization_role_read", { as: "permissive", for: "select", to: ["authenticated"] }),
@@ -296,10 +296,10 @@ export const organizationRolePermission = pgTable("organization_role_permission"
 			name: "organization_role_permission_organization_id_fkey"
 		}).onDelete("cascade"),
 	unique("organization_role_permission_role_id_permission_key").on(table.roleId, table.permission),
-	pgPolicy("organization_role_permission_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'role.manage'::org_permission) AND ((permission <> 'role.manage'::org_permission) OR (kit.has_multiple_role_manage_permissions(organization_id) AND (EXISTS ( SELECT 1
+	pgPolicy("organization_role_permission_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'member.manage'::org_permission) AND ((permission <> 'member.manage'::org_permission) OR (kit.has_multiple_member_manage_permissions(organization_id) AND (EXISTS ( SELECT 1
    FROM (organization_member om
      JOIN organization_role_permission orp ON ((orp.role_id = om.role_id)))
-  WHERE ((om.organization_id = organization_role_permission.organization_id) AND (orp.permission = 'role.manage'::org_permission) AND (om.role_id <> organization_role_permission.role_id)))))))` }),
+  WHERE ((om.organization_id = organization_role_permission.organization_id) AND (orp.permission = 'member.manage'::org_permission) AND (om.role_id <> organization_role_permission.role_id)))))))` }),
 	pgPolicy("organization_role_permission_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("organization_role_permission_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("organization_role_permission_read", { as: "permissive", for: "select", to: ["authenticated"] }),
@@ -364,7 +364,7 @@ export const organizationInvitation = pgTable("organization_invitation", {
 		}).onDelete("cascade"),
 	unique("organization_invitation_email_organization_id_key").on(table.email, table.organizationId),
 	unique("organization_invitation_invite_token_key").on(table.inviteToken),
-	pgPolicy("organization_invitation_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`((kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'invitation.manage'::org_permission)) OR ((email)::text ~~* (kit.get_user_email())::text))` }),
+	pgPolicy("organization_invitation_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`((kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'member.manage'::org_permission)) OR ((email)::text ~~* (kit.get_user_email())::text))` }),
 	pgPolicy("organization_invitation_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("organization_invitation_read", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("organization_invitation_create", { as: "permissive", for: "insert", to: ["authenticated"] }),
