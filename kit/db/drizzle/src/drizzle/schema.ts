@@ -11,7 +11,7 @@ export const contentState = pgEnum("content_state", ['draft', 'published', 'arch
 export const frequencyType = pgEnum("frequency_type", ['once', 'day', 'week', 'month', 'year'])
 export const matrixAxis = pgEnum("matrix_axis", ['row', 'col'])
 export const notificationType = pgEnum("notification_type", ['info', 'warning', 'error', 'success'])
-export const orgPermission = pgEnum("org_permission", ['organization.manage', 'member.manage', 'setting.manage', 'media.manage'])
+export const orgPermission = pgEnum("org_permission", ['organization.manage', 'member.manage', 'setting.manage', 'media.manage', 'booking.select', 'booking.insert', 'booking.update', 'booking.delete', 'service.select', 'service.insert', 'service.update', 'service.delete', 'checkout.select', 'checkout.insert', 'checkout.update', 'checkout.delete', 'slot.select', 'slot.insert', 'slot.update', 'slot.delete'])
 export const slotState = pgEnum("slot_state", ['confirmed', 'requested'])
 
 
@@ -31,10 +31,10 @@ export const user = pgTable("user", {
 			foreignColumns: [users.id],
 			name: "user_auth_user_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("user_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(( SELECT auth.uid() AS uid) = auth_user_id)` }),
-	pgPolicy("user_update", { as: "permissive", for: "update", to: ["authenticated"] }),
+	pgPolicy("user_create", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(( SELECT auth.uid() AS uid) = auth_user_id)`  }),
+	pgPolicy("user_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("user_read", { as: "permissive", for: "select", to: ["authenticated"] }),
-	pgPolicy("user_create", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("user_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const userSetting = pgTable("user_setting", {
@@ -251,10 +251,10 @@ export const organization = pgTable("organization", {
 }, (table) => [
 	unique("organization_slug_key").on(table.slug),
 	unique("organization_email_key").on(table.email),
-	pgPolicy("organization_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`kit.user_is_owner_of_org(id)` }),
-	pgPolicy("organization_update", { as: "permissive", for: "update", to: ["authenticated"] }),
+	pgPolicy("organization_create", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`true`  }),
+	pgPolicy("organization_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("organization_read", { as: "permissive", for: "select", to: ["authenticated"] }),
-	pgPolicy("organization_create", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("organization_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const organizationRole = pgTable("organization_role", {
@@ -272,9 +272,9 @@ export const organizationRole = pgTable("organization_role", {
 		}).onDelete("cascade"),
 	unique("organization_role_name_organization_id_key").on(table.name, table.organizationId),
 	pgPolicy("organization_role_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'member.manage'::org_permission))` }),
-	pgPolicy("organization_role_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("organization_role_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("organization_role_read", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("organization_role_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const organizationRolePermission = pgTable("organization_role_permission", {
@@ -300,9 +300,9 @@ export const organizationRolePermission = pgTable("organization_role_permission"
    FROM (organization_member om
      JOIN organization_role_permission orp ON ((orp.role_id = om.role_id)))
   WHERE ((om.organization_id = organization_role_permission.organization_id) AND (orp.permission = 'member.manage'::org_permission) AND (om.role_id <> organization_role_permission.role_id)))))))` }),
-	pgPolicy("organization_role_permission_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("organization_role_permission_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("organization_role_permission_read", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("organization_role_permission_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const organizationMember = pgTable("organization_member", {
@@ -330,10 +330,10 @@ export const organizationMember = pgTable("organization_member", {
 			name: "organization_member_organization_id_fkey"
 		}).onDelete("cascade"),
 	unique("organization_member_user_id_organization_id_key").on(table.userId, table.organizationId),
-	pgPolicy("organization_member_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND ((user_id = kit.get_user_id()) OR (kit.has_org_permission(organization_id, 'member.manage'::org_permission) AND kit.user_org_role_is_higher_than(organization_id, user_id))))` }),
-	pgPolicy("organization_member_update", { as: "permissive", for: "update", to: ["authenticated"] }),
+	pgPolicy("organization_member_create", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`kit.user_is_invited_to_org(organization_id)`  }),
+	pgPolicy("organization_member_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("organization_member_read", { as: "permissive", for: "select", to: ["authenticated"] }),
-	pgPolicy("organization_member_create", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("organization_member_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const organizationInvitation = pgTable("organization_invitation", {
@@ -364,10 +364,10 @@ export const organizationInvitation = pgTable("organization_invitation", {
 		}).onDelete("cascade"),
 	unique("organization_invitation_email_organization_id_key").on(table.email, table.organizationId),
 	unique("organization_invitation_invite_token_key").on(table.inviteToken),
-	pgPolicy("organization_invitation_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`((kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'member.manage'::org_permission)) OR ((email)::text ~~* (kit.get_user_email())::text))` }),
-	pgPolicy("organization_invitation_update", { as: "permissive", for: "update", to: ["authenticated"] }),
+	pgPolicy("organization_invitation_create", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'member.manage'::org_permission))`  }),
+	pgPolicy("organization_invitation_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("organization_invitation_read", { as: "permissive", for: "select", to: ["authenticated"] }),
-	pgPolicy("organization_invitation_create", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("organization_invitation_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const organizationSetting = pgTable("organization_setting", {
@@ -449,7 +449,10 @@ export const service = pgTable("service", {
 			foreignColumns: [organization.id],
 			name: "service_organization_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("service_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("service_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.delete'::org_permission))` }),
+	pgPolicy("service_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("service_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("service_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	check("service_min_participant_check", sql`min_participant >= 0`),
 	check("service_max_participant_check", sql`max_participant >= 0`),
 ]);
@@ -478,7 +481,10 @@ export const participantDataSchema = pgTable("participant_data_schema", {
 			name: "participant_data_schema_display_according_to_id_fkey"
 		}).onDelete("set null"),
 	unique("participant_data_schema_slug_key").on(table.slug),
-	pgPolicy("participant_data_schema_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("participant_data_schema_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.delete'::org_permission))` }),
+	pgPolicy("participant_data_schema_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("participant_data_schema_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("participant_data_schema_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const slot = pgTable("slot", {
@@ -521,7 +527,10 @@ export const slot = pgTable("slot", {
 			foreignColumns: [user.id],
 			name: "slot_company_member_id_fkey"
 		}).onDelete("set null"),
-	pgPolicy("slot_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("slot_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'slot.delete'::org_permission))` }),
+	pgPolicy("slot_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("slot_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("slot_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	check("slot_max_participant_check", sql`max_participant >= 0`),
 ]);
 
@@ -571,7 +580,10 @@ export const slotOccurrence = pgTable("slot_occurrence", {
 			foreignColumns: [user.id],
 			name: "slot_occurrence_company_member_id_fkey"
 		}).onDelete("set null"),
-	pgPolicy("slot_occurrence_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("slot_occurrence_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'slot.delete'::org_permission))` }),
+	pgPolicy("slot_occurrence_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("slot_occurrence_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("slot_occurrence_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	check("slot_occurrence_booking_count_check", sql`booking_count >= 0`),
 ]);
 
@@ -632,8 +644,11 @@ export const booking = pgTable("booking", {
 			foreignColumns: [user.id],
 			name: "booking_company_member_id_fkey"
 		}).onDelete("set null"),
-	pgPolicy("booking_insert_1", { as: "permissive", for: "insert", to: ["public"], withCheck: sql`true`  }),
-	pgPolicy("booking_all", { as: "permissive", for: "all", to: ["authenticated"] }),
+	pgPolicy("booking_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.delete'::org_permission))` }),
+	pgPolicy("booking_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("booking_insert_4", { as: "permissive", for: "insert", to: ["public"] }),
+	pgPolicy("booking_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("booking_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const checkout = pgTable("checkout", {
@@ -660,7 +675,10 @@ export const checkout = pgTable("checkout", {
 			name: "checkout_organization_id_fkey"
 		}).onDelete("cascade"),
 	unique("checkout_slug_key").on(table.slug),
-	pgPolicy("checkout_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("checkout_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'checkout.delete'::org_permission))` }),
+	pgPolicy("checkout_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("checkout_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("checkout_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const dateMemo = pgTable("date_memo", {
@@ -686,7 +704,10 @@ export const dateMemo = pgTable("date_memo", {
 			foreignColumns: [organizationRole.id],
 			name: "date_memo_organization_role_id_fkey"
 		}).onDelete("set null"),
-	pgPolicy("date_memo_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("date_memo_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'slot.delete'::org_permission))` }),
+	pgPolicy("date_memo_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("date_memo_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("date_memo_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const bookingSmsReminder = pgTable("booking_sms_reminder", {
@@ -708,6 +729,10 @@ export const bookingSmsReminder = pgTable("booking_sms_reminder", {
 			foreignColumns: [organization.id],
 			name: "booking_sms_reminder_organization_id_fkey"
 		}).onDelete("cascade"),
+	pgPolicy("booking_sms_reminder_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.delete'::org_permission))` }),
+	pgPolicy("booking_sms_reminder_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("booking_sms_reminder_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("booking_sms_reminder_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const servicePriceMatrix = pgTable("service_price_matrix", {
@@ -742,7 +767,10 @@ export const servicePriceMatrix = pgTable("service_price_matrix", {
 			name: "service_price_matrix_row_schema_id_fkey"
 		}).onDelete("set null"),
 	unique("service_price_matrix_service_id_key").on(table.serviceId),
-	pgPolicy("service_price_matrix_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("service_price_matrix_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.delete'::org_permission))` }),
+	pgPolicy("service_price_matrix_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("service_price_matrix_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("service_price_matrix_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const servicePriceMatrixInterval = pgTable("service_price_matrix_interval", {
@@ -767,7 +795,10 @@ export const servicePriceMatrixInterval = pgTable("service_price_matrix_interval
 			name: "service_price_matrix_interval_organization_id_fkey"
 		}).onDelete("cascade"),
 	unique("service_price_matrix_interval_matrix_id_axis_index_key").on(table.matrixId, table.axis, table.index),
-	pgPolicy("service_price_matrix_interval_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("service_price_matrix_interval_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.delete'::org_permission))` }),
+	pgPolicy("service_price_matrix_interval_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("service_price_matrix_interval_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("service_price_matrix_interval_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const servicePriceExtra = pgTable("service_price_extra", {
@@ -792,7 +823,10 @@ export const servicePriceExtra = pgTable("service_price_extra", {
 			foreignColumns: [organization.id],
 			name: "service_price_extra_organization_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("service_price_extra_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("service_price_extra_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.delete'::org_permission))` }),
+	pgPolicy("service_price_extra_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("service_price_extra_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("service_price_extra_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const bookingCommunicationThread = pgTable("booking_communication_thread", {
@@ -821,7 +855,10 @@ export const bookingCommunicationThread = pgTable("booking_communication_thread"
 			name: "booking_communication_thread_booking_id_fkey"
 		}).onDelete("cascade"),
 	unique("uq_booking_communication_thread_booking_channel_participant").on(table.bookingId, table.channel, table.participantKey),
-	pgPolicy("booking_communication_thread_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("booking_communication_thread_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.delete'::org_permission))` }),
+	pgPolicy("booking_communication_thread_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("booking_communication_thread_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("booking_communication_thread_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	check("booking_communication_thread_channel_check", sql`(channel)::text = ANY ((ARRAY['email'::character varying, 'sms'::character varying])::text[])`),
 ]);
 
@@ -870,7 +907,10 @@ export const bookingCommunicationMessage = pgTable("booking_communication_messag
 			foreignColumns: [booking.id],
 			name: "booking_communication_message_booking_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("booking_communication_message_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("booking_communication_message_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.delete'::org_permission))` }),
+	pgPolicy("booking_communication_message_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("booking_communication_message_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("booking_communication_message_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	check("booking_communication_message_direction_check", sql`(direction)::text = ANY ((ARRAY['outbound'::character varying, 'inbound'::character varying])::text[])`),
 	check("booking_communication_message_channel_check", sql`(channel)::text = ANY ((ARRAY['email'::character varying, 'sms'::character varying])::text[])`),
 	check("booking_communication_message_status_check", sql`(status)::text = ANY ((ARRAY['queued'::character varying, 'sent'::character varying, 'delivered'::character varying, 'failed'::character varying, 'bounced'::character varying, 'complained'::character varying, 'opened'::character varying, 'clicked'::character varying, 'replied'::character varying, 'received'::character varying, 'skipped'::character varying])::text[])`),
@@ -907,7 +947,10 @@ export const bookingCommunicationStatusEvent = pgTable("booking_communication_st
 			foreignColumns: [booking.id],
 			name: "booking_communication_status_event_booking_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("booking_communication_status_event_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("booking_communication_status_event_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.delete'::org_permission))` }),
+	pgPolicy("booking_communication_status_event_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("booking_communication_status_event_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("booking_communication_status_event_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	check("booking_communication_status_event_event_type_check", sql`(event_type)::text = ANY ((ARRAY['queued'::character varying, 'sent'::character varying, 'delivered'::character varying, 'failed'::character varying, 'bounced'::character varying, 'complained'::character varying, 'opened'::character varying, 'clicked'::character varying, 'replied'::character varying, 'received'::character varying, 'provider_update'::character varying, 'skipped'::character varying])::text[])`),
 ]);
 
@@ -937,7 +980,10 @@ export const serviceParticipantDataSchema = pgTable("service_participant_data_sc
 			name: "service_participant_data_schema_participant_data_schema_id_fkey"
 		}).onDelete("cascade"),
 	primaryKey({ columns: [table.serviceId, table.participantDataSchemaId], name: "service_participant_data_schema_pkey"}),
-	pgPolicy("service_participant_data_schema_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("service_participant_data_schema_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.delete'::org_permission))` }),
+	pgPolicy("service_participant_data_schema_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("service_participant_data_schema_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("service_participant_data_schema_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const servicePriceMatrixCell = pgTable("service_price_matrix_cell", {
@@ -960,7 +1006,10 @@ export const servicePriceMatrixCell = pgTable("service_price_matrix_cell", {
 			name: "service_price_matrix_cell_organization_id_fkey"
 		}).onDelete("cascade"),
 	primaryKey({ columns: [table.matrixId, table.rowIndex, table.colIndex], name: "service_price_matrix_cell_pkey"}),
-	pgPolicy("service_price_matrix_cell_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`, withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'organization.manage'::org_permission))`  }),
+	pgPolicy("service_price_matrix_cell_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.delete'::org_permission))` }),
+	pgPolicy("service_price_matrix_cell_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("service_price_matrix_cell_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("service_price_matrix_cell_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 export const agendaSlotDay = pgView("agenda_slot_day", {	slotOccurrenceId: uuid("slot_occurrence_id"),
 	organizationId: uuid("organization_id"),

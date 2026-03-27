@@ -17,10 +17,10 @@ export type Database = {
     Functions: {
       graphql: {
         Args: {
-          query?: string
-          variables?: Json
           operationName?: string
           extensions?: Json
+          variables?: Json
+          query?: string
         }
         Returns: Json
       }
@@ -48,11 +48,11 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: {
           jwt_sid: string
+          jwt_full: Json
+          total_user_sessions: number
+          detected_current_session: string
           auth_user_id: string
           jwt_session_id: string
-          jwt_full: Json
-          detected_current_session: string
-          total_user_sessions: number
         }[]
       }
       get_user_email: {
@@ -66,15 +66,15 @@ export type Database = {
       get_user_sessions: {
         Args: Record<PropertyKey, never>
         Returns: {
-          not_after: string
           id: string
-          user_id: string
           created_at: string
-          updated_at: string
-          factor_id: string
-          aal: string
-          user_agent: string
           ip: unknown
+          user_agent: string
+          not_after: string
+          aal: string
+          factor_id: string
+          updated_at: string
+          user_id: string
         }[]
       }
       has_multiple_member_manage_permissions: {
@@ -83,8 +83,8 @@ export type Database = {
       }
       has_org_permission: {
         Args: {
-          permission_name: Database["public"]["Enums"]["org_permission"]
           org_id: string
+          permission_name: Database["public"]["Enums"]["org_permission"]
         }
         Returns: boolean
       }
@@ -97,7 +97,7 @@ export type Database = {
         Returns: boolean
       }
       update_session_details: {
-        Args: { new_ip?: unknown; session_id: string; new_user_agent?: string }
+        Args: { new_ip?: unknown; new_user_agent?: string; session_id: string }
         Returns: boolean
       }
       user_is_invited_to_org: {
@@ -113,7 +113,7 @@ export type Database = {
         Returns: boolean
       }
       user_org_role_is_higher_than: {
-        Args: { org_id: string; target_user_id: string }
+        Args: { target_user_id: string; org_id: string }
         Returns: boolean
       }
     }
@@ -1918,16 +1918,16 @@ export type Database = {
     }
     Functions: {
       planoby_align_date_to_weekly_days: {
-        Args: { p_days: Json; p_date: string; p_direction?: number }
+        Args: { p_date: string; p_direction?: number; p_days: Json }
         Returns: string
       }
       planoby_bootstrap_dev_reset_account: {
         Args: {
           p_org_name?: string
-          p_org_slug?: string
-          p_auth_user_id: string
-          p_user_email?: string
           p_user_name?: string
+          p_user_email?: string
+          p_auth_user_id: string
+          p_org_slug?: string
         }
         Returns: string
       }
@@ -1944,11 +1944,11 @@ export type Database = {
         Returns: Json
       }
       planoby_org_setting_json: {
-        Args: { p_name: string; p_organization_id: string }
+        Args: { p_organization_id: string; p_name: string }
         Returns: Json
       }
       planoby_org_setting_text: {
-        Args: { p_default?: string; p_name: string; p_organization_id: string }
+        Args: { p_name: string; p_default?: string; p_organization_id: string }
         Returns: string
       }
       planoby_org_timezone_value: {
@@ -1964,7 +1964,7 @@ export type Database = {
         Returns: undefined
       }
       planoby_resolve_slot_occurrence_id: {
-        Args: { p_slot_id: string; p_day: string }
+        Args: { p_day: string; p_slot_id: string }
         Returns: string
       }
       planoby_should_emit_webhooks: {
@@ -1974,8 +1974,8 @@ export type Database = {
       planoby_slot_matches_day_core: {
         Args: {
           p_day: string
-          p_frequency: string
           p_meta_frequency: string
+          p_frequency: string
           p_slot_date: string
         }
         Returns: boolean
@@ -1994,14 +1994,14 @@ export type Database = {
       }
       planoby_sync_slot_occurrences: {
         Args: {
+          p_slot_id: string
           p_window_end?: string
           p_window_start?: string
-          p_slot_id: string
         }
         Returns: undefined
       }
       planoby_timestamp_for_org_day_time: {
-        Args: { p_time: string; p_organization_id: string; p_day: string }
+        Args: { p_day: string; p_organization_id: string; p_time: string }
         Returns: string
       }
       user_org_role_is_higher_than: {
@@ -2027,6 +2027,22 @@ export type Database = {
         | "member.manage"
         | "setting.manage"
         | "media.manage"
+        | "booking.select"
+        | "booking.insert"
+        | "booking.update"
+        | "booking.delete"
+        | "service.select"
+        | "service.insert"
+        | "service.update"
+        | "service.delete"
+        | "checkout.select"
+        | "checkout.insert"
+        | "checkout.update"
+        | "checkout.delete"
+        | "slot.select"
+        | "slot.insert"
+        | "slot.update"
+        | "slot.delete"
       slot_state: "confirmed" | "requested"
     }
     CompositeTypes: {
@@ -2287,15 +2303,15 @@ export type Database = {
     }
     Functions: {
       add_prefixes: {
-        Args: { _name: string; _bucket_id: string }
+        Args: { _bucket_id: string; _name: string }
         Returns: undefined
       }
       can_insert_object: {
-        Args: { name: string; owner: string; metadata: Json; bucketid: string }
+        Args: { bucketid: string; name: string; owner: string; metadata: Json }
         Returns: undefined
       }
       delete_prefix: {
-        Args: { _name: string; _bucket_id: string }
+        Args: { _bucket_id: string; _name: string }
         Returns: boolean
       }
       extension: {
@@ -2325,23 +2341,23 @@ export type Database = {
       get_size_by_bucket: {
         Args: Record<PropertyKey, never>
         Returns: {
-          bucket_id: string
           size: number
+          bucket_id: string
         }[]
       }
       list_multipart_uploads_with_delimiter: {
         Args: {
           bucket_id: string
-          prefix_param: string
           next_upload_token?: string
-          delimiter_param: string
-          max_keys?: number
           next_key_token?: string
+          max_keys?: number
+          delimiter_param: string
+          prefix_param: string
         }
         Returns: {
+          created_at: string
           id: string
           key: string
-          created_at: string
         }[]
       }
       list_objects_with_delimiter: {
@@ -2354,10 +2370,10 @@ export type Database = {
           next_token?: string
         }
         Returns: {
+          updated_at: string
           name: string
           id: string
           metadata: Json
-          updated_at: string
         }[]
       }
       operation: {
@@ -2367,13 +2383,13 @@ export type Database = {
       search: {
         Args: {
           levels?: number
-          sortcolumn?: string
           sortorder?: string
           limits?: number
-          prefix: string
           bucketname: string
           search?: string
           offsets?: number
+          sortcolumn?: string
+          prefix: string
         }
         Returns: {
           name: string
@@ -2386,59 +2402,59 @@ export type Database = {
       }
       search_legacy_v1: {
         Args: {
-          bucketname: string
-          levels?: number
-          limits?: number
           prefix: string
-          sortorder?: string
-          sortcolumn?: string
-          search?: string
+          bucketname: string
+          limits?: number
+          levels?: number
           offsets?: number
+          search?: string
+          sortcolumn?: string
+          sortorder?: string
         }
         Returns: {
+          id: string
+          name: string
           updated_at: string
           created_at: string
           last_accessed_at: string
           metadata: Json
-          id: string
-          name: string
         }[]
       }
       search_v1_optimised: {
         Args: {
-          prefix: string
           bucketname: string
-          limits?: number
-          levels?: number
-          offsets?: number
-          search?: string
-          sortcolumn?: string
           sortorder?: string
+          sortcolumn?: string
+          search?: string
+          offsets?: number
+          prefix: string
+          levels?: number
+          limits?: number
         }
         Returns: {
-          name: string
-          id: string
-          updated_at: string
-          created_at: string
-          last_accessed_at: string
           metadata: Json
+          last_accessed_at: string
+          created_at: string
+          updated_at: string
+          id: string
+          name: string
         }[]
       }
       search_v2: {
         Args: {
-          bucket_name: string
-          start_after?: string
-          limits?: number
-          prefix: string
           levels?: number
+          prefix: string
+          limits?: number
+          start_after?: string
+          bucket_name: string
         }
         Returns: {
-          key: string
-          name: string
-          id: string
-          updated_at: string
-          created_at: string
           metadata: Json
+          created_at: string
+          updated_at: string
+          id: string
+          name: string
+          key: string
         }[]
       }
     }
@@ -2583,6 +2599,22 @@ export const Constants = {
         "member.manage",
         "setting.manage",
         "media.manage",
+        "booking.select",
+        "booking.insert",
+        "booking.update",
+        "booking.delete",
+        "service.select",
+        "service.insert",
+        "service.update",
+        "service.delete",
+        "checkout.select",
+        "checkout.insert",
+        "checkout.update",
+        "checkout.delete",
+        "slot.select",
+        "slot.insert",
+        "slot.update",
+        "slot.delete",
       ],
       slot_state: ["confirmed", "requested"],
     },
