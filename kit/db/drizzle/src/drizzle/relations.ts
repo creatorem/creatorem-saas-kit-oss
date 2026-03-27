@@ -310,24 +310,24 @@ export const dateMemoRelations = relations(dateMemo, ({one}) => ({
 }));
 
 export const bookingSmsReminderRelations = relations(bookingSmsReminder, ({one}) => ({
-	booking: one(booking, {
-		fields: [bookingSmsReminder.bookingId],
-		references: [booking.id]
-	}),
 	organization: one(organization, {
 		fields: [bookingSmsReminder.organizationId],
 		references: [organization.id]
 	}),
+	booking: one(booking, {
+		fields: [bookingSmsReminder.bookingId],
+		references: [booking.id]
+	}),
 }));
 
 export const servicePriceMatrixRelations = relations(servicePriceMatrix, ({one, many}) => ({
-	service: one(service, {
-		fields: [servicePriceMatrix.serviceId],
-		references: [service.id]
-	}),
 	organization: one(organization, {
 		fields: [servicePriceMatrix.organizationId],
 		references: [organization.id]
+	}),
+	service: one(service, {
+		fields: [servicePriceMatrix.serviceId],
+		references: [service.id]
 	}),
 	participantDataSchema_colSchemaId: one(participantDataSchema, {
 		fields: [servicePriceMatrix.colSchemaId],
@@ -344,24 +344,24 @@ export const servicePriceMatrixRelations = relations(servicePriceMatrix, ({one, 
 }));
 
 export const servicePriceMatrixIntervalRelations = relations(servicePriceMatrixInterval, ({one}) => ({
-	servicePriceMatrix: one(servicePriceMatrix, {
-		fields: [servicePriceMatrixInterval.matrixId],
-		references: [servicePriceMatrix.id]
-	}),
 	organization: one(organization, {
 		fields: [servicePriceMatrixInterval.organizationId],
 		references: [organization.id]
 	}),
+	servicePriceMatrix: one(servicePriceMatrix, {
+		fields: [servicePriceMatrixInterval.matrixId],
+		references: [servicePriceMatrix.id]
+	}),
 }));
 
 export const servicePriceExtraRelations = relations(servicePriceExtra, ({one}) => ({
-	service: one(service, {
-		fields: [servicePriceExtra.serviceId],
-		references: [service.id]
-	}),
 	organization: one(organization, {
 		fields: [servicePriceExtra.organizationId],
 		references: [organization.id]
+	}),
+	service: one(service, {
+		fields: [servicePriceExtra.serviceId],
+		references: [service.id]
 	}),
 }));
 
@@ -378,13 +378,13 @@ export const bookingCommunicationThreadRelations = relations(bookingCommunicatio
 }));
 
 export const bookingCommunicationMessageRelations = relations(bookingCommunicationMessage, ({one, many}) => ({
-	bookingCommunicationThread: one(bookingCommunicationThread, {
-		fields: [bookingCommunicationMessage.threadId],
-		references: [bookingCommunicationThread.id]
-	}),
 	organization: one(organization, {
 		fields: [bookingCommunicationMessage.organizationId],
 		references: [organization.id]
+	}),
+	bookingCommunicationThread: one(bookingCommunicationThread, {
+		fields: [bookingCommunicationMessage.threadId],
+		references: [bookingCommunicationThread.id]
 	}),
 	booking: one(booking, {
 		fields: [bookingCommunicationMessage.bookingId],
@@ -394,13 +394,13 @@ export const bookingCommunicationMessageRelations = relations(bookingCommunicati
 }));
 
 export const bookingCommunicationStatusEventRelations = relations(bookingCommunicationStatusEvent, ({one}) => ({
-	bookingCommunicationMessage: one(bookingCommunicationMessage, {
-		fields: [bookingCommunicationStatusEvent.messageId],
-		references: [bookingCommunicationMessage.id]
-	}),
 	organization: one(organization, {
 		fields: [bookingCommunicationStatusEvent.organizationId],
 		references: [organization.id]
+	}),
+	bookingCommunicationMessage: one(bookingCommunicationMessage, {
+		fields: [bookingCommunicationStatusEvent.messageId],
+		references: [bookingCommunicationMessage.id]
 	}),
 	booking: one(booking, {
 		fields: [bookingCommunicationStatusEvent.bookingId],
@@ -424,12 +424,12 @@ export const serviceParticipantDataSchemaRelations = relations(serviceParticipan
 }));
 
 export const servicePriceMatrixCellRelations = relations(servicePriceMatrixCell, ({one}) => ({
-	servicePriceMatrix: one(servicePriceMatrix, {
-		fields: [servicePriceMatrixCell.matrixId],
-		references: [servicePriceMatrix.id]
-	}),
 	organization: one(organization, {
 		fields: [servicePriceMatrixCell.organizationId],
 		references: [organization.id]
+	}),
+	servicePriceMatrix: one(servicePriceMatrix, {
+		fields: [servicePriceMatrixCell.matrixId],
+		references: [servicePriceMatrix.id]
 	}),
 }));

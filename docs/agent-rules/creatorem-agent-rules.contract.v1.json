@@ -33,6 +33,7 @@
   "implementationWorkflow": [
     "Start with capability discovery and select minimal capability set.",
     "Implement in shared kit package first when behavior belongs to reusable module.",
+    "Prefer filter-based composition (client/server/cross-env) over app-local hardcoded integration when filter extension points exist.",
     "Wire app-level composition with filters/config/routes after shared changes.",
     "Use examples to mirror integration structure for dashboard/mobile scenarios.",
     "Keep naming and architecture consistent with existing kit conventions."
@@ -45,6 +46,7 @@
   ],
   "antiPatterns": [
     "Reimplementing behavior directly in apps/* when @kit/* already provides the feature.",
+    "Bypassing filter extension points with app-local hardcoded integration when filter hooks exist.",
     "Bypassing settings APIs with direct DB reads/writes for keys supported by @kit/settings.",
     "Treating examples/* as API authority when kit exports or docs contract disagree.",
     "Skipping capability discovery and editing files from guesswork only.",
@@ -98,6 +100,31 @@
         "examples/pco-dashboard/lib/init-cross-env-filters.ts",
         "examples/pco-dashboard/config/i18n.config.ts",
         "kit/i18n/src"
+      ]
+    },
+    {
+      "id": "WF-FILTERS-01",
+      "name": "Filter-First Modularity Workflow",
+      "requiredActions": [
+        "Identify the target filter namespace first (client/server/cross-env).",
+        "Verify slug signature in FilterList before implementing changes.",
+        "Register filters in package modules and initialize them in app entrypoints.",
+        "Document filter parameters in feature docs when filter-backed behavior is changed."
+      ],
+      "capabilityRefs": [
+        "filter_api_architecture",
+        "app_configuration",
+        "repo_navigation"
+      ],
+      "pathRefs": [
+        "kit/utils/src/filters/list.ts",
+        "kit/utils/src/filters/filter-engine.ts",
+        "apps/dashboard/hooks/use-filters.ts",
+        "apps/dashboard/lib/init-server-filters.ts",
+        "apps/dashboard/lib/init-cross-env-filters.ts",
+        "apps/mobile/hooks/use-filters.ts",
+        "apps/mobile/config/i18n.config.ts",
+        "apps/creatorem/content/docs/(common)/filters-api.mdx"
       ]
     },
     {
@@ -316,6 +343,49 @@
     },
     {
       "id": "AR-007",
+      "priority": "P0",
+      "trigger": "When implementing or updating filter-backed features",
+      "requiredActions": [
+        "Follow WF-FILTERS-01 before editing app integration code.",
+        "Verify filter slug parameters and return type from FilterList.",
+        "Wire/verify app initialization files for the selected namespace.",
+        "Update feature docs Filter API table with filter parameters and init paths."
+      ],
+      "forbiddenActions": [
+        "Implement app-local behavior that duplicates existing filter extension points.",
+        "Change filter behavior without verifying typed filter contract.",
+        "Ship filter-backed feature updates without docs section updates."
+      ],
+      "validationExpectations": [
+        "Output identifies namespace and init files used.",
+        "Changed docs include Filter API section updates for impacted feature pages.",
+        "Filter registration and apply points are traceable in changed files."
+      ],
+      "capabilityRefs": [
+        "filter_api_architecture",
+        "settings_api_fullstack",
+        "i18n_web_setup",
+        "i18n_mobile_setup"
+      ],
+      "pathRefs": [
+        "kit/utils/src/filters/list.ts",
+        "apps/dashboard/hooks/use-filters.ts",
+        "apps/dashboard/lib/init-server-filters.ts",
+        "apps/dashboard/lib/init-cross-env-filters.ts",
+        "apps/mobile/hooks/use-filters.ts",
+        "apps/mobile/config/i18n.config.ts",
+        "apps/creatorem/content/docs/(common)/filters-api.mdx"
+      ],
+      "exampleRefs": [
+        "examples/pco-dashboard/hooks/use-filters.ts",
+        "examples/pco-dashboard/lib/init-server-filters.ts",
+        "examples/pco-dashboard/lib/init-cross-env-filters.ts",
+        "examples/pco-mobile/hooks/use-filters.ts",
+        "examples/pco-mobile/config/i18n.config.ts"
+      ]
+    },
+    {
+      "id": "AR-008",
       "priority": "P0",
       "trigger": "Before finalizing any implementation response",
       "requiredActions": [
