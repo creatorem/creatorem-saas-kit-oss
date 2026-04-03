@@ -47,12 +47,12 @@ export type Database = {
       debug_jwt_info: {
         Args: Record<PropertyKey, never>
         Returns: {
-          jwt_sid: string
-          jwt_full: Json
-          total_user_sessions: number
-          detected_current_session: string
           auth_user_id: string
           jwt_session_id: string
+          jwt_sid: string
+          jwt_full: Json
+          detected_current_session: string
+          total_user_sessions: number
         }[]
       }
       get_user_email: {
@@ -66,15 +66,15 @@ export type Database = {
       get_user_sessions: {
         Args: Record<PropertyKey, never>
         Returns: {
-          id: string
-          created_at: string
-          ip: unknown
           user_agent: string
-          not_after: string
-          aal: string
-          factor_id: string
-          updated_at: string
+          id: string
           user_id: string
+          created_at: string
+          updated_at: string
+          factor_id: string
+          aal: string
+          not_after: string
+          ip: unknown
         }[]
       }
       has_multiple_member_manage_permissions: {
@@ -97,7 +97,7 @@ export type Database = {
         Returns: boolean
       }
       update_session_details: {
-        Args: { new_ip?: unknown; new_user_agent?: string; session_id: string }
+        Args: { session_id: string; new_user_agent?: string; new_ip?: unknown }
         Returns: boolean
       }
       user_is_invited_to_org: {
@@ -113,7 +113,7 @@ export type Database = {
         Returns: boolean
       }
       user_org_role_is_higher_than: {
-        Args: { target_user_id: string; org_id: string }
+        Args: { org_id: string; target_user_id: string }
         Returns: boolean
       }
     }
@@ -364,70 +364,175 @@ export type Database = {
         Row: {
           company_member_id: string | null
           created_at: string
+          customer_country: string | null
           customer_note: string | null
+          customer_street: string | null
+          customer_zip: string | null
           email: string | null
           end_at: string | null
           firstname: string
           id: string
+          invoice_snapshot: Json
           lastname: string | null
           note: string | null
           organization_id: string
           participants: Json | null
+          payment_amount: number | null
+          payment_authorized_at: string | null
+          payment_captured_at: string | null
+          payment_currency: string | null
+          payment_discount_amount: number
+          payment_discount_code: string | null
+          payment_discount_code_normalized: string | null
+          payment_discount_name: string | null
+          payment_discount_type:
+            | Database["public"]["Enums"]["discount_type"]
+            | null
+          payment_discount_value: number | null
+          payment_error: string | null
+          payment_failed_at: string | null
+          payment_intent_id: string | null
+          payment_metadata: Json
+          payment_mode: string
+          payment_refunded_amount: number
+          payment_refunded_at: string | null
+          payment_released_at: string | null
+          payment_status: Database["public"]["Enums"]["booking_payment_status"]
+          payment_subtotal_amount: number | null
+          payment_subtotal_before_discount_amount: number | null
+          payment_tax_amount: number | null
+          payment_tax_breakdown: Json
+          payment_tax_exclusive_amount: number | null
+          payment_tax_inclusive_amount: number | null
           phone: string | null
           published_at: string | null
           relative_id: number
           service_id: string | null
+          setup_intent_id: string | null
           slot_id: string | null
           slot_occurrence_id: string | null
           start_at: string | null
           state: Database["public"]["Enums"]["booking_state"]
+          stripe_connect_account_id: string | null
+          stripe_customer_id: string | null
           stripe_key: string | null
+          stripe_payment_method_id: string | null
           updated_at: string
         }
         Insert: {
           company_member_id?: string | null
           created_at?: string
+          customer_country?: string | null
           customer_note?: string | null
+          customer_street?: string | null
+          customer_zip?: string | null
           email?: string | null
           end_at?: string | null
           firstname: string
           id?: string
+          invoice_snapshot?: Json
           lastname?: string | null
           note?: string | null
           organization_id: string
           participants?: Json | null
+          payment_amount?: number | null
+          payment_authorized_at?: string | null
+          payment_captured_at?: string | null
+          payment_currency?: string | null
+          payment_discount_amount?: number
+          payment_discount_code?: string | null
+          payment_discount_code_normalized?: string | null
+          payment_discount_name?: string | null
+          payment_discount_type?:
+            | Database["public"]["Enums"]["discount_type"]
+            | null
+          payment_discount_value?: number | null
+          payment_error?: string | null
+          payment_failed_at?: string | null
+          payment_intent_id?: string | null
+          payment_metadata?: Json
+          payment_mode?: string
+          payment_refunded_amount?: number
+          payment_refunded_at?: string | null
+          payment_released_at?: string | null
+          payment_status?: Database["public"]["Enums"]["booking_payment_status"]
+          payment_subtotal_amount?: number | null
+          payment_subtotal_before_discount_amount?: number | null
+          payment_tax_amount?: number | null
+          payment_tax_breakdown?: Json
+          payment_tax_exclusive_amount?: number | null
+          payment_tax_inclusive_amount?: number | null
           phone?: string | null
           published_at?: string | null
           relative_id: number
           service_id?: string | null
+          setup_intent_id?: string | null
           slot_id?: string | null
           slot_occurrence_id?: string | null
           start_at?: string | null
           state: Database["public"]["Enums"]["booking_state"]
+          stripe_connect_account_id?: string | null
+          stripe_customer_id?: string | null
           stripe_key?: string | null
+          stripe_payment_method_id?: string | null
           updated_at?: string
         }
         Update: {
           company_member_id?: string | null
           created_at?: string
+          customer_country?: string | null
           customer_note?: string | null
+          customer_street?: string | null
+          customer_zip?: string | null
           email?: string | null
           end_at?: string | null
           firstname?: string
           id?: string
+          invoice_snapshot?: Json
           lastname?: string | null
           note?: string | null
           organization_id?: string
           participants?: Json | null
+          payment_amount?: number | null
+          payment_authorized_at?: string | null
+          payment_captured_at?: string | null
+          payment_currency?: string | null
+          payment_discount_amount?: number
+          payment_discount_code?: string | null
+          payment_discount_code_normalized?: string | null
+          payment_discount_name?: string | null
+          payment_discount_type?:
+            | Database["public"]["Enums"]["discount_type"]
+            | null
+          payment_discount_value?: number | null
+          payment_error?: string | null
+          payment_failed_at?: string | null
+          payment_intent_id?: string | null
+          payment_metadata?: Json
+          payment_mode?: string
+          payment_refunded_amount?: number
+          payment_refunded_at?: string | null
+          payment_released_at?: string | null
+          payment_status?: Database["public"]["Enums"]["booking_payment_status"]
+          payment_subtotal_amount?: number | null
+          payment_subtotal_before_discount_amount?: number | null
+          payment_tax_amount?: number | null
+          payment_tax_breakdown?: Json
+          payment_tax_exclusive_amount?: number | null
+          payment_tax_inclusive_amount?: number | null
           phone?: string | null
           published_at?: string | null
           relative_id?: number
           service_id?: string | null
+          setup_intent_id?: string | null
           slot_id?: string | null
           slot_occurrence_id?: string | null
           start_at?: string | null
           state?: Database["public"]["Enums"]["booking_state"]
+          stripe_connect_account_id?: string | null
+          stripe_customer_id?: string | null
           stripe_key?: string | null
+          stripe_payment_method_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -471,6 +576,109 @@ export type Database = {
             columns: ["slot_occurrence_id"]
             isOneToOne: false
             referencedRelation: "slot_occurrence"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_client_access_challenge: {
+        Row: {
+          attempts: number
+          consumed_at: string | null
+          created_at: string
+          email_normalized: string
+          expires_at: string
+          id: string
+          max_attempts: number
+          organization_id: string
+          otp_hash: string
+          otp_salt: string
+          requested_ip: string | null
+          requested_user_agent: string | null
+        }
+        Insert: {
+          attempts?: number
+          consumed_at?: string | null
+          created_at?: string
+          email_normalized: string
+          expires_at: string
+          id?: string
+          max_attempts?: number
+          organization_id: string
+          otp_hash: string
+          otp_salt: string
+          requested_ip?: string | null
+          requested_user_agent?: string | null
+        }
+        Update: {
+          attempts?: number
+          consumed_at?: string | null
+          created_at?: string
+          email_normalized?: string
+          expires_at?: string
+          id?: string
+          max_attempts?: number
+          organization_id?: string
+          otp_hash?: string
+          otp_salt?: string
+          requested_ip?: string | null
+          requested_user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_client_access_challenge_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_client_access_session: {
+        Row: {
+          created_at: string
+          created_ip: string | null
+          created_user_agent: string | null
+          email_normalized: string
+          expires_at: string
+          id: string
+          idle_expires_at: string
+          last_accessed_at: string
+          organization_id: string
+          revoked_at: string | null
+          token_hash: string
+        }
+        Insert: {
+          created_at?: string
+          created_ip?: string | null
+          created_user_agent?: string | null
+          email_normalized: string
+          expires_at: string
+          id?: string
+          idle_expires_at: string
+          last_accessed_at?: string
+          organization_id: string
+          revoked_at?: string | null
+          token_hash: string
+        }
+        Update: {
+          created_at?: string
+          created_ip?: string | null
+          created_user_agent?: string | null
+          email_normalized?: string
+          expires_at?: string
+          id?: string
+          idle_expires_at?: string
+          last_accessed_at?: string
+          organization_id?: string
+          revoked_at?: string | null
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_client_access_session_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
             referencedColumns: ["id"]
           },
         ]
@@ -782,6 +990,145 @@ export type Database = {
           },
         ]
       }
+      checkout_page_view: {
+        Row: {
+          checkout_id: string
+          created_at: string
+          id: string
+          organization_id: string
+          referrer: string | null
+          session_id: string
+          user_agent: string | null
+          view_id: string
+        }
+        Insert: {
+          checkout_id: string
+          created_at?: string
+          id?: string
+          organization_id: string
+          referrer?: string | null
+          session_id: string
+          user_agent?: string | null
+          view_id: string
+        }
+        Update: {
+          checkout_id?: string
+          created_at?: string
+          id?: string
+          organization_id?: string
+          referrer?: string | null
+          session_id?: string
+          user_agent?: string | null
+          view_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checkout_page_view_checkout_id_fkey"
+            columns: ["checkout_id"]
+            isOneToOne: false
+            referencedRelation: "checkout"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkout_page_view_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      credit_note: {
+        Row: {
+          booking_id: string
+          created_at: string
+          currency: string
+          id: string
+          invoice_id: string
+          issued_at: string
+          metadata: Json
+          number: string
+          organization_id: string
+          pdf_path: string | null
+          pdf_public_url: string | null
+          reason: string | null
+          refund_amount: number
+          refund_tax_amount: number
+          sequence: number
+          snapshot: Json
+          status: Database["public"]["Enums"]["credit_note_status"]
+          stripe_refund_id: string | null
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          currency: string
+          id?: string
+          invoice_id: string
+          issued_at?: string
+          metadata?: Json
+          number: string
+          organization_id: string
+          pdf_path?: string | null
+          pdf_public_url?: string | null
+          reason?: string | null
+          refund_amount: number
+          refund_tax_amount?: number
+          sequence: number
+          snapshot?: Json
+          status?: Database["public"]["Enums"]["credit_note_status"]
+          stripe_refund_id?: string | null
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          invoice_id?: string
+          issued_at?: string
+          metadata?: Json
+          number?: string
+          organization_id?: string
+          pdf_path?: string | null
+          pdf_public_url?: string | null
+          reason?: string | null
+          refund_amount?: number
+          refund_tax_amount?: number
+          sequence?: number
+          snapshot?: Json
+          status?: Database["public"]["Enums"]["credit_note_status"]
+          stripe_refund_id?: string | null
+          updated_at?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_note_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_note_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_note_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       date_memo: {
         Row: {
           color: string | null
@@ -793,6 +1140,7 @@ export type Database = {
           organization_role_id: string | null
           published_at: string | null
           updated_at: string
+          user_id: string
         }
         Insert: {
           color?: string | null
@@ -804,6 +1152,7 @@ export type Database = {
           organization_role_id?: string | null
           published_at?: string | null
           updated_at?: string
+          user_id?: string
         }
         Update: {
           color?: string | null
@@ -815,6 +1164,7 @@ export type Database = {
           organization_role_id?: string | null
           published_at?: string | null
           updated_at?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -829,6 +1179,132 @@ export type Database = {
             columns: ["organization_role_id"]
             isOneToOne: false
             referencedRelation: "organization_role"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "date_memo_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoice: {
+        Row: {
+          booking_id: string
+          created_at: string
+          currency: string
+          id: string
+          metadata: Json
+          number: string
+          organization_id: string
+          paid_at: string | null
+          pdf_path: string | null
+          pdf_public_url: string | null
+          refunded_amount: number
+          sequence: number
+          snapshot: Json
+          status: Database["public"]["Enums"]["invoice_status"]
+          stripe_charge_id: string | null
+          stripe_payment_intent_id: string | null
+          subtotal_amount: number
+          tax_amount: number
+          total_amount: number
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          currency: string
+          id?: string
+          metadata?: Json
+          number: string
+          organization_id: string
+          paid_at?: string | null
+          pdf_path?: string | null
+          pdf_public_url?: string | null
+          refunded_amount?: number
+          sequence: number
+          snapshot?: Json
+          status?: Database["public"]["Enums"]["invoice_status"]
+          stripe_charge_id?: string | null
+          stripe_payment_intent_id?: string | null
+          subtotal_amount: number
+          tax_amount: number
+          total_amount: number
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          metadata?: Json
+          number?: string
+          organization_id?: string
+          paid_at?: string | null
+          pdf_path?: string | null
+          pdf_public_url?: string | null
+          refunded_amount?: number
+          sequence?: number
+          snapshot?: Json
+          status?: Database["public"]["Enums"]["invoice_status"]
+          stripe_charge_id?: string | null
+          stripe_payment_intent_id?: string | null
+          subtotal_amount?: number
+          tax_amount?: number
+          total_amount?: number
+          updated_at?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoice_counter: {
+        Row: {
+          created_at: string
+          last_value: number
+          organization_id: string
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          last_value?: number
+          organization_id: string
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          created_at?: string
+          last_value?: number
+          organization_id?: string
+          updated_at?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_counter_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
             referencedColumns: ["id"]
           },
         ]
@@ -940,6 +1416,187 @@ export type Database = {
           website?: string | null
         }
         Relationships: []
+      }
+      organization_discount_code: {
+        Row: {
+          active: boolean
+          code: string
+          code_normalized: string
+          created_at: string
+          expires_on: string | null
+          fixed_amount: number | null
+          id: string
+          limit_per_email: boolean
+          max_total_uses: number | null
+          metadata: Json
+          name: string
+          organization_id: string
+          percentage_amount: number | null
+          type: Database["public"]["Enums"]["discount_type"]
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          code_normalized: string
+          created_at?: string
+          expires_on?: string | null
+          fixed_amount?: number | null
+          id?: string
+          limit_per_email?: boolean
+          max_total_uses?: number | null
+          metadata?: Json
+          name: string
+          organization_id: string
+          percentage_amount?: number | null
+          type: Database["public"]["Enums"]["discount_type"]
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          code_normalized?: string
+          created_at?: string
+          expires_on?: string | null
+          fixed_amount?: number | null
+          id?: string
+          limit_per_email?: boolean
+          max_total_uses?: number | null
+          metadata?: Json
+          name?: string
+          organization_id?: string
+          percentage_amount?: number | null
+          type?: Database["public"]["Enums"]["discount_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_discount_code_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_discount_code_redemption: {
+        Row: {
+          booking_id: string | null
+          consumed_at: string | null
+          created_at: string
+          discount_amount: number
+          discount_code_id: string
+          id: string
+          metadata: Json
+          normalized_email: string | null
+          organization_id: string
+          release_reason: string | null
+          released_at: string | null
+          reserved_until: string | null
+          status: Database["public"]["Enums"]["discount_redemption_status"]
+          updated_at: string
+        }
+        Insert: {
+          booking_id?: string | null
+          consumed_at?: string | null
+          created_at?: string
+          discount_amount?: number
+          discount_code_id: string
+          id?: string
+          metadata?: Json
+          normalized_email?: string | null
+          organization_id: string
+          release_reason?: string | null
+          released_at?: string | null
+          reserved_until?: string | null
+          status?: Database["public"]["Enums"]["discount_redemption_status"]
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string | null
+          consumed_at?: string | null
+          created_at?: string
+          discount_amount?: number
+          discount_code_id?: string
+          id?: string
+          metadata?: Json
+          normalized_email?: string | null
+          organization_id?: string
+          release_reason?: string | null
+          released_at?: string | null
+          reserved_until?: string | null
+          status?: Database["public"]["Enums"]["discount_redemption_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_discount_code_redemption_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_discount_code_redemption_discount_code_id_fkey"
+            columns: ["discount_code_id"]
+            isOneToOne: false
+            referencedRelation: "organization_discount_code"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_discount_code_redemption_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_discount_code_service: {
+        Row: {
+          created_at: string
+          discount_code_id: string
+          organization_id: string
+          service_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          discount_code_id: string
+          organization_id: string
+          service_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          discount_code_id?: string
+          organization_id?: string
+          service_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_discount_code_service_discount_code_id_fkey"
+            columns: ["discount_code_id"]
+            isOneToOne: false
+            referencedRelation: "organization_discount_code"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_discount_code_service_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_discount_code_service_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "service"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       organization_invitation: {
         Row: {
@@ -1163,6 +1820,50 @@ export type Database = {
           },
         ]
       }
+      organization_tax: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          id: string
+          mode: Database["public"]["Enums"]["tax_mode"]
+          name: string
+          organization_id: string
+          rate: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          mode?: Database["public"]["Enums"]["tax_mode"]
+          name: string
+          organization_id: string
+          rate: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          mode?: Database["public"]["Enums"]["tax_mode"]
+          name?: string
+          organization_id?: string
+          rate?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_tax_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       participant_data_schema: {
         Row: {
           created_at: string
@@ -1214,6 +1915,51 @@ export type Database = {
           },
         ]
       }
+      planoby_stripe_event_log: {
+        Row: {
+          booking_id: string | null
+          event_type: string
+          id: string
+          organization_id: string | null
+          payload: Json
+          processed_at: string
+          stripe_event_id: string
+        }
+        Insert: {
+          booking_id?: string | null
+          event_type: string
+          id?: string
+          organization_id?: string | null
+          payload?: Json
+          processed_at?: string
+          stripe_event_id: string
+        }
+        Update: {
+          booking_id?: string | null
+          event_type?: string
+          id?: string
+          organization_id?: string | null
+          payload?: Json
+          processed_at?: string
+          stripe_event_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "planoby_stripe_event_log_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "planoby_stripe_event_log_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       service: {
         Row: {
           calendar_color: string
@@ -1234,6 +1980,7 @@ export type Database = {
           relative_id: number
           sms_content: string | null
           state: Database["public"]["Enums"]["content_state"]
+          tax_mode: Database["public"]["Enums"]["service_tax_mode"]
           updated_at: string
         }
         Insert: {
@@ -1255,6 +2002,7 @@ export type Database = {
           relative_id: number
           sms_content?: string | null
           state?: Database["public"]["Enums"]["content_state"]
+          tax_mode?: Database["public"]["Enums"]["service_tax_mode"]
           updated_at?: string
         }
         Update: {
@@ -1276,6 +2024,7 @@ export type Database = {
           relative_id?: number
           sms_content?: string | null
           state?: Database["public"]["Enums"]["content_state"]
+          tax_mode?: Database["public"]["Enums"]["service_tax_mode"]
           updated_at?: string
         }
         Relationships: [
@@ -1545,6 +2294,52 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_tax_assignment: {
+        Row: {
+          created_at: string
+          organization_id: string
+          service_id: string
+          tax_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          organization_id: string
+          service_id: string
+          tax_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          organization_id?: string
+          service_id?: string
+          tax_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_tax_assignment_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_tax_assignment_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "service"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_tax_assignment_tax_id_fkey"
+            columns: ["tax_id"]
+            isOneToOne: false
+            referencedRelation: "organization_tax"
             referencedColumns: ["id"]
           },
         ]
@@ -1918,15 +2713,15 @@ export type Database = {
     }
     Functions: {
       planoby_align_date_to_weekly_days: {
-        Args: { p_date: string; p_direction?: number; p_days: Json }
+        Args: { p_direction?: number; p_days: Json; p_date: string }
         Returns: string
       }
       planoby_bootstrap_dev_reset_account: {
         Args: {
-          p_org_name?: string
           p_user_name?: string
-          p_user_email?: string
           p_auth_user_id: string
+          p_user_email?: string
+          p_org_name?: string
           p_org_slug?: string
         }
         Returns: string
@@ -1948,7 +2743,7 @@ export type Database = {
         Returns: Json
       }
       planoby_org_setting_text: {
-        Args: { p_name: string; p_default?: string; p_organization_id: string }
+        Args: { p_organization_id: string; p_default?: string; p_name: string }
         Returns: string
       }
       planoby_org_timezone_value: {
@@ -1964,7 +2759,7 @@ export type Database = {
         Returns: undefined
       }
       planoby_resolve_slot_occurrence_id: {
-        Args: { p_day: string; p_slot_id: string }
+        Args: { p_slot_id: string; p_day: string }
         Returns: string
       }
       planoby_should_emit_webhooks: {
@@ -1974,9 +2769,9 @@ export type Database = {
       planoby_slot_matches_day_core: {
         Args: {
           p_day: string
-          p_meta_frequency: string
           p_frequency: string
           p_slot_date: string
+          p_meta_frequency: string
         }
         Returns: boolean
       }
@@ -1994,23 +2789,32 @@ export type Database = {
       }
       planoby_sync_slot_occurrences: {
         Args: {
-          p_slot_id: string
           p_window_end?: string
+          p_slot_id: string
           p_window_start?: string
         }
         Returns: undefined
       }
       planoby_timestamp_for_org_day_time: {
-        Args: { p_day: string; p_organization_id: string; p_time: string }
+        Args: { p_organization_id: string; p_time: string; p_day: string }
         Returns: string
       }
       user_org_role_is_higher_than: {
-        Args: { target_user_id: string; org_id: string }
+        Args: { org_id: string; target_user_id: string }
         Returns: boolean
       }
     }
     Enums: {
       ai_thread_status: "regular" | "archived"
+      booking_payment_status:
+        | "none"
+        | "setup_pending"
+        | "setup_succeeded"
+        | "payment_pending"
+        | "authorized"
+        | "captured"
+        | "failed"
+        | "released"
       booking_state:
         | "requires_payment_method"
         | "requires_slot_confirmation"
@@ -2018,8 +2822,14 @@ export type Database = {
         | "confirmed"
         | "charged"
         | "confirmation_failed"
+        | "partially_refunded"
+        | "refunded"
       content_state: "draft" | "published" | "archived"
+      credit_note_status: "issued" | "void"
+      discount_redemption_status: "reserved" | "consumed" | "released"
+      discount_type: "percentage" | "fixed"
       frequency_type: "once" | "day" | "week" | "month" | "year"
+      invoice_status: "issued" | "partially_refunded" | "refunded"
       matrix_axis: "row" | "col"
       notification_type: "info" | "warning" | "error" | "success"
       org_permission:
@@ -2043,7 +2853,13 @@ export type Database = {
         | "slot.insert"
         | "slot.update"
         | "slot.delete"
+        | "slot_admin.select"
+        | "slot_admin.insert"
+        | "slot_admin.update"
+        | "slot_admin.delete"
+      service_tax_mode: "all" | "custom"
       slot_state: "confirmed" | "requested"
+      tax_mode: "inclusive" | "exclusive"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2303,11 +3119,11 @@ export type Database = {
     }
     Functions: {
       add_prefixes: {
-        Args: { _bucket_id: string; _name: string }
+        Args: { _name: string; _bucket_id: string }
         Returns: undefined
       }
       can_insert_object: {
-        Args: { bucketid: string; name: string; owner: string; metadata: Json }
+        Args: { metadata: Json; bucketid: string; name: string; owner: string }
         Returns: undefined
       }
       delete_prefix: {
@@ -2348,32 +3164,32 @@ export type Database = {
       list_multipart_uploads_with_delimiter: {
         Args: {
           bucket_id: string
-          next_upload_token?: string
-          next_key_token?: string
-          max_keys?: number
-          delimiter_param: string
           prefix_param: string
+          delimiter_param: string
+          max_keys?: number
+          next_key_token?: string
+          next_upload_token?: string
         }
         Returns: {
-          created_at: string
           id: string
+          created_at: string
           key: string
         }[]
       }
       list_objects_with_delimiter: {
         Args: {
-          bucket_id: string
-          prefix_param: string
-          delimiter_param: string
           max_keys?: number
-          start_after?: string
+          delimiter_param: string
+          prefix_param: string
+          bucket_id: string
           next_token?: string
+          start_after?: string
         }
         Returns: {
           updated_at: string
-          name: string
-          id: string
           metadata: Json
+          id: string
+          name: string
         }[]
       }
       operation: {
@@ -2382,79 +3198,79 @@ export type Database = {
       }
       search: {
         Args: {
-          levels?: number
           sortorder?: string
-          limits?: number
-          bucketname: string
           search?: string
           offsets?: number
+          limits?: number
+          levels?: number
           sortcolumn?: string
           prefix: string
+          bucketname: string
         }
         Returns: {
+          metadata: Json
+          last_accessed_at: string
+          created_at: string
           name: string
           id: string
           updated_at: string
-          created_at: string
-          last_accessed_at: string
-          metadata: Json
         }[]
       }
       search_legacy_v1: {
         Args: {
+          levels?: number
+          limits?: number
+          search?: string
+          offsets?: number
           prefix: string
           bucketname: string
-          limits?: number
-          levels?: number
-          offsets?: number
-          search?: string
-          sortcolumn?: string
           sortorder?: string
+          sortcolumn?: string
         }
         Returns: {
+          metadata: Json
+          last_accessed_at: string
+          created_at: string
+          updated_at: string
           id: string
           name: string
-          updated_at: string
-          created_at: string
-          last_accessed_at: string
-          metadata: Json
         }[]
       }
       search_v1_optimised: {
         Args: {
-          bucketname: string
-          sortorder?: string
-          sortcolumn?: string
-          search?: string
-          offsets?: number
           prefix: string
-          levels?: number
+          bucketname: string
           limits?: number
+          levels?: number
+          offsets?: number
+          search?: string
+          sortcolumn?: string
+          sortorder?: string
         }
         Returns: {
           metadata: Json
-          last_accessed_at: string
-          created_at: string
-          updated_at: string
-          id: string
           name: string
+          id: string
+          updated_at: string
+          created_at: string
+          last_accessed_at: string
         }[]
       }
       search_v2: {
         Args: {
           levels?: number
           prefix: string
+          bucket_name: string
           limits?: number
           start_after?: string
-          bucket_name: string
         }
         Returns: {
+          key: string
+          name: string
+          id: string
           metadata: Json
           created_at: string
           updated_at: string
-          id: string
-          name: string
-          key: string
         }[]
       }
     }
@@ -2582,6 +3398,16 @@ export const Constants = {
   public: {
     Enums: {
       ai_thread_status: ["regular", "archived"],
+      booking_payment_status: [
+        "none",
+        "setup_pending",
+        "setup_succeeded",
+        "payment_pending",
+        "authorized",
+        "captured",
+        "failed",
+        "released",
+      ],
       booking_state: [
         "requires_payment_method",
         "requires_slot_confirmation",
@@ -2589,9 +3415,15 @@ export const Constants = {
         "confirmed",
         "charged",
         "confirmation_failed",
+        "partially_refunded",
+        "refunded",
       ],
       content_state: ["draft", "published", "archived"],
+      credit_note_status: ["issued", "void"],
+      discount_redemption_status: ["reserved", "consumed", "released"],
+      discount_type: ["percentage", "fixed"],
       frequency_type: ["once", "day", "week", "month", "year"],
+      invoice_status: ["issued", "partially_refunded", "refunded"],
       matrix_axis: ["row", "col"],
       notification_type: ["info", "warning", "error", "success"],
       org_permission: [
@@ -2615,8 +3447,14 @@ export const Constants = {
         "slot.insert",
         "slot.update",
         "slot.delete",
+        "slot_admin.select",
+        "slot_admin.insert",
+        "slot_admin.update",
+        "slot_admin.delete",
       ],
+      service_tax_mode: ["all", "custom"],
       slot_state: ["confirmed", "requested"],
+      tax_mode: ["inclusive", "exclusive"],
     },
   },
   storage: {

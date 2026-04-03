@@ -34,12 +34,14 @@ type EnhancedDataTableProps<TData> = React.ComponentPropsWithoutRef<typeof Table
     table: ReactTable<TData>;
     fixedHeader?: boolean;
     onRowClicked?: (row: Row<TData>) => void;
+    getRowClassName?: (row: Row<TData>) => string | undefined;
 };
 
 function EnhancedDataTable<TData>({
     table,
     fixedHeader,
     onRowClicked,
+    getRowClassName,
     ...other
 }: EnhancedDataTableProps<TData>): React.JSX.Element {
     const visibleColumns = table.getAllColumns().filter((c) => c.getIsVisible()).length;
@@ -101,7 +103,7 @@ function EnhancedDataTable<TData>({
                     <TableRow
                         key={row.id}
                         data-state={row.getIsSelected() && 'selected'}
-                        className={cn('last:border-b-0', onRowClicked && 'cursor-pointer')}
+                        className={cn('last:border-b-0', onRowClicked && 'cursor-pointer', getRowClassName?.(row))}
                         onClick={() => onRowClicked?.(row)}
                     >
                         {row.getVisibleCells().map((cell) => {

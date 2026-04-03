@@ -49,7 +49,7 @@ Target naming/identifier conventions for this refactor:
 
 | Domain | Controllers / Routes | Service logic | Lifecycle logic |
 |---|---|---|---|
-| `booking` | `findByCompany`, `findOnConfirmation`, `createStripeSetup`, `confirmStripeSetup`, `charge`, `handleStripeWebhook`, `sendRecapEmail`, `bulkDelete`, core CRUD | `sendRecapBookingEmail`, `sendAdminEmail` | `beforeCreate` validation + `relative_id`, `afterCreate` email + reminder registration, `beforeUpdate` state-transition side effects, `beforeDelete` cleanup |
+| `booking` | `findByCompany`, `findOnConfirmation`, `sendRecapEmail`, `bulkDelete`, core CRUD | `sendRecapBookingEmail`, `sendAdminEmail` | `beforeCreate` validation + `relative_id`, `afterCreate` email + reminder registration, `beforeUpdate` state-transition side effects, `beforeDelete` cleanup |
 | `slot` | `findByCompany`, `createRequestedSlot`, `findForAgenda`, `findForCheckout`, `mergeSlots`, `move`, `unlink`, custom `update`, core CRUD | `extractDays`, `findSlotsAccordingDays`, `assignBookingsToSlots` | weekly-frequency conformity check, excluded-days booking guard, booking day shift on slot date move, reminder time updates |
 | `service` | `findByCompany`, core CRUD | core | `beforeCreate` set `relative_id` |
 | `participant-data-schema` | `findByCompany`, core CRUD | core | slug generation on create/update |
@@ -68,7 +68,7 @@ Target naming/identifier conventions for this refactor:
 ## 3.1 Implemented server surface
 
 - `packages/planoby/shared/src/server`:
-  - `router.booking.ts`: `archiveBookings`, `singleBooking`, `createBooking`, `updateBooking`, `bookingFindByOrganization`, `bookingFindOnConfirmation`, `bookingCreateStripeSetup`, `bookingConfirmStripeSetup`, `bookingCharge`, `bookingHandleStripeWebhook`, `bookingSendRecapEmail`, `bookingBulkDelete`
+  - `router.booking.ts`: `archiveBookings`, `singleBooking`, `createBooking`, `updateBooking`, `paymentConnectGetStatus`, `paymentConnectCreateOnboardingLink`, `paymentConnectSyncAccount`, `bookingChargeSavedMethod`, `bookingFindByOrganization`, `bookingFindOnConfirmation`, `bookingSendRecapEmail`, `bookingBulkDelete`
   - `router.checkout.ts`: `archiveCheckouts`, `singleCheckout`, `createCheckout`, `updateCheckout`, `checkoutFindByOrganization`
   - `router.service.ts`: `archiveServices`, `singleService`, `createService`, `updateService`, `serviceFindByOrganization`
   - `router.agenda.ts`: `agendaInit`, `agendaFindForDays`, `findForCheckout`, `agendaFindDateMemos`, slot/date-memo CRUD helpers, merge/unlink/move
@@ -124,7 +124,7 @@ Status legend:
 |---|---|---|
 | Booking archive/create/update/read (dashboard) | Implemented | Via `router.booking.ts` |
 | Booking public confirmation fetch (`find-on-confirmation`) | Implemented | `bookingFindOnConfirmation` in `router.booking.ts` |
-| Booking Stripe setup/confirm/charge/webhook | Implemented | `bookingCreateStripeSetup`, `bookingConfirmStripeSetup`, `bookingCharge`, `bookingHandleStripeWebhook` in `router.booking.ts` |
+| Booking Stripe Connect and later debit | Implemented | Connect onboarding/status and manual debit are handled by `paymentConnect*` + `bookingChargeSavedMethod` in `router.booking.ts`; public booking payment orchestration uses `/api/planoby-billing/public/*` and `/api/planoby-billing/webhook` |
 | Booking recap email endpoint | Implemented | `bookingSendRecapEmail` in `router.booking.ts` |
 | Booking bulk delete endpoint | Implemented | `bookingBulkDelete` in `router.booking.ts` with organization-scoped guard |
 | Booking lifecycle rules (validation, reminders, state transition emails) | Partial | SQL trigger guards + webhook notifications + cron reminder worker implemented; SMS localization/placeholder parity vs legacy translator still simplified |
