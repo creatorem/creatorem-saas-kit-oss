@@ -125,9 +125,9 @@ const DashboardBody = React.forwardRef<DashboardBodyElement, DashboardBodyProps>
                 ref={ref}
                 {...other}
             >
-                <ScrollArea scrollBarClassName={'sm:pb-2'} className="h-full">
+                <ScrollArea scrollBarClassName={'sm:pb-2'} className="h-full [&>div>div]:h-full">
                     {/* remove 3 borders on y and 2 borders on x */}
-                    <div className="3xl:h-[calc(100vh-var(--primary-bar-height)-2*var(--dashboard-padding)-3px)] transition-[width] duration-200 ease-linear group-data-[state=collapsed]/sidebar-wrapper:w-[calc(100vw-var(--sidebar-width-icon)-var(--dashboard-padding)-2px)] lg:w-[calc(100vw-var(--sidebar-width)-var(--dashboard-padding)-2px)]">
+                    <div className="h-full 3xl:h-[calc(100vh-var(--primary-bar-height)-2*var(--dashboard-padding)-3px)] transition-[width] duration-200 ease-linear group-data-[state=collapsed]/sidebar-wrapper:w-[calc(100vw-var(--sidebar-width-icon)-var(--dashboard-padding)-2px)] lg:w-[calc(100vw-var(--sidebar-width)-var(--dashboard-padding)-2px)]">
                         {children}
                     </div>
                 </ScrollArea>

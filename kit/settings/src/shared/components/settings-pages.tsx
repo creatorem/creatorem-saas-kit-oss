@@ -243,7 +243,13 @@ function SettingsFormInitializer({
     const valuesRes = useClientSettings({
         clientTrpc,
         settingKeys,
+        staleTime: 0,
+        refetchOnMount: 'always',
     });
+
+    const formValuesKey = useMemo(() => {
+        return JSON.stringify(valuesRes.data ?? {});
+    }, [valuesRes.data]);
 
     const submitHandler = async (values: Record<string, any>) => {
         await model.executeFormLogicCallbacks(formId, values);
@@ -261,6 +267,7 @@ function SettingsFormInitializer({
 
     return (
         <SettingFormComponent
+            key={`${formId}:${formValuesKey}`}
             {...props}
             model={model}
             formId={formId}
