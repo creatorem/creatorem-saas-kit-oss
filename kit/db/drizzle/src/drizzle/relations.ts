@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, participantDataSchema, slot, service, slotOccurrence, checkout, checkoutPageView, dateMemo, booking, bookingSmsReminder, servicePriceMatrix, servicePriceMatrixInterval, planobyStripeEventLog, organizationTax, invoice, creditNote, bookingClientAccessChallenge, bookingClientAccessSession, servicePriceExtra, bookingCommunicationThread, bookingCommunicationMessage, bookingCommunicationStatusEvent, organizationDiscountCode, organizationDiscountCodeRedemption, googleCalendarConnection, googleCalendarBinding, googleCalendarEventMap, googleCalendarSyncJob, serviceParticipantDataSchema, checkoutService, serviceTaxAssignment, invoiceCounter, organizationDiscountCodeService, servicePriceMatrixCell } from "./schema";
+import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, participantDataSchema, slot, service, slotOccurrence, checkout, checkoutPageView, dateMemo, booking, bookingSmsReminder, servicePriceMatrix, servicePriceMatrixInterval, planobyStripeEventLog, organizationTax, invoice, creditNote, bookingClientAccessChallenge, bookingClientAccessSession, servicePriceExtra, bookingCommunicationThread, bookingCommunicationMessage, bookingCommunicationStatusEvent, organizationDiscountCode, organizationDiscountCodeRedemption, googleCalendarConnection, googleCalendarBinding, googleCalendarEventMap, googleCalendarSyncJob, fiscalPdpConnection, fiscalTransmission, fiscalTransactionReportItem, fiscalPaymentReportItem, vatValidationLog, fiscalExportJob, serviceParticipantDataSchema, checkoutService, serviceTaxAssignment, invoiceCounter, organizationDiscountCodeService, servicePriceMatrixCell } from "./schema";
 
 export const userRelations = relations(user, ({one, many}) => ({
 	usersInAuth: one(usersInAuth, {
@@ -20,7 +20,6 @@ export const userRelations = relations(user, ({one, many}) => ({
 	slots: many(slot),
 	slotOccurrences: many(slotOccurrence),
 	dateMemos: many(dateMemo),
-	bookings: many(booking),
 	googleCalendarConnections: many(googleCalendarConnection),
 	googleCalendarBindings_organizationMemberId: many(googleCalendarBinding, {
 		relationName: "googleCalendarBinding_organizationMemberId_user_id"
@@ -30,6 +29,7 @@ export const userRelations = relations(user, ({one, many}) => ({
 	}),
 	googleCalendarEventMaps: many(googleCalendarEventMap),
 	googleCalendarSyncJobs: many(googleCalendarSyncJob),
+	bookings: many(booking),
 }));
 
 export const usersInAuthRelations = relations(usersInAuth, ({many}) => ({
@@ -135,7 +135,6 @@ export const organizationRelations = relations(organization, ({many}) => ({
 	servicePriceMatrixIntervals: many(servicePriceMatrixInterval),
 	planobyStripeEventLogs: many(planobyStripeEventLog),
 	services: many(service),
-	bookings: many(booking),
 	organizationTaxes: many(organizationTax),
 	invoices: many(invoice),
 	creditNotes: many(creditNote),
@@ -151,6 +150,13 @@ export const organizationRelations = relations(organization, ({many}) => ({
 	googleCalendarBindings: many(googleCalendarBinding),
 	googleCalendarEventMaps: many(googleCalendarEventMap),
 	googleCalendarSyncJobs: many(googleCalendarSyncJob),
+	bookings: many(booking),
+	fiscalPdpConnections: many(fiscalPdpConnection),
+	fiscalTransmissions: many(fiscalTransmission),
+	fiscalTransactionReportItems: many(fiscalTransactionReportItem),
+	fiscalPaymentReportItems: many(fiscalPaymentReportItem),
+	vatValidationLogs: many(vatValidationLog),
+	fiscalExportJobs: many(fiscalExportJob),
 	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 	checkoutServices: many(checkoutService),
 	serviceTaxAssignments: many(serviceTaxAssignment),
@@ -265,8 +271,8 @@ export const serviceRelations = relations(service, ({one, many}) => ({
 		fields: [service.organizationId],
 		references: [organization.id]
 	}),
-	bookings: many(booking),
 	servicePriceExtras: many(servicePriceExtra),
+	bookings: many(booking),
 	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 	checkoutServices: many(checkoutService),
 	serviceTaxAssignments: many(serviceTaxAssignment),
@@ -290,8 +296,8 @@ export const slotOccurrenceRelations = relations(slotOccurrence, ({one, many}) =
 		fields: [slotOccurrence.slotId],
 		references: [slot.id]
 	}),
-	bookings: many(booking),
 	googleCalendarEventMaps: many(googleCalendarEventMap),
+	bookings: many(booking),
 }));
 
 export const checkoutPageViewRelations = relations(checkoutPageView, ({one}) => ({
@@ -343,6 +349,12 @@ export const bookingSmsReminderRelations = relations(bookingSmsReminder, ({one})
 export const bookingRelations = relations(booking, ({one, many}) => ({
 	bookingSmsReminders: many(bookingSmsReminder),
 	planobyStripeEventLogs: many(planobyStripeEventLog),
+	invoices: many(invoice),
+	creditNotes: many(creditNote),
+	bookingCommunicationThreads: many(bookingCommunicationThread),
+	bookingCommunicationMessages: many(bookingCommunicationMessage),
+	bookingCommunicationStatusEvents: many(bookingCommunicationStatusEvent),
+	organizationDiscountCodeRedemptions: many(organizationDiscountCodeRedemption),
 	user: one(user, {
 		fields: [booking.companyMemberId],
 		references: [user.id]
@@ -363,12 +375,10 @@ export const bookingRelations = relations(booking, ({one, many}) => ({
 		fields: [booking.slotOccurrenceId],
 		references: [slotOccurrence.id]
 	}),
-	invoices: many(invoice),
-	creditNotes: many(creditNote),
-	bookingCommunicationThreads: many(bookingCommunicationThread),
-	bookingCommunicationMessages: many(bookingCommunicationMessage),
-	bookingCommunicationStatusEvents: many(bookingCommunicationStatusEvent),
-	organizationDiscountCodeRedemptions: many(organizationDiscountCodeRedemption),
+	fiscalTransmissions: many(fiscalTransmission),
+	fiscalTransactionReportItems: many(fiscalTransactionReportItem),
+	fiscalPaymentReportItems: many(fiscalPaymentReportItem),
+	vatValidationLogs: many(vatValidationLog),
 }));
 
 export const servicePriceMatrixRelations = relations(servicePriceMatrix, ({one, many}) => ({
@@ -434,6 +444,9 @@ export const invoiceRelations = relations(invoice, ({one, many}) => ({
 		references: [organization.id]
 	}),
 	creditNotes: many(creditNote),
+	fiscalTransmissions: many(fiscalTransmission),
+	fiscalTransactionReportItems: many(fiscalTransactionReportItem),
+	fiscalPaymentReportItems: many(fiscalPaymentReportItem),
 }));
 
 export const creditNoteRelations = relations(creditNote, ({one}) => ({
@@ -595,6 +608,91 @@ export const googleCalendarSyncJobRelations = relations(googleCalendarSyncJob, (
 	user: one(user, {
 		fields: [googleCalendarSyncJob.userId],
 		references: [user.id]
+	}),
+}));
+
+export const fiscalPdpConnectionRelations = relations(fiscalPdpConnection, ({one, many}) => ({
+	organization: one(organization, {
+		fields: [fiscalPdpConnection.organizationId],
+		references: [organization.id]
+	}),
+	fiscalTransmissions: many(fiscalTransmission),
+}));
+
+export const fiscalTransmissionRelations = relations(fiscalTransmission, ({one, many}) => ({
+	booking: one(booking, {
+		fields: [fiscalTransmission.bookingId],
+		references: [booking.id]
+	}),
+	fiscalPdpConnection: one(fiscalPdpConnection, {
+		fields: [fiscalTransmission.connectionId],
+		references: [fiscalPdpConnection.id]
+	}),
+	invoice: one(invoice, {
+		fields: [fiscalTransmission.invoiceId],
+		references: [invoice.id]
+	}),
+	organization: one(organization, {
+		fields: [fiscalTransmission.organizationId],
+		references: [organization.id]
+	}),
+	fiscalTransactionReportItems: many(fiscalTransactionReportItem),
+	fiscalPaymentReportItems: many(fiscalPaymentReportItem),
+}));
+
+export const fiscalTransactionReportItemRelations = relations(fiscalTransactionReportItem, ({one}) => ({
+	booking: one(booking, {
+		fields: [fiscalTransactionReportItem.bookingId],
+		references: [booking.id]
+	}),
+	invoice: one(invoice, {
+		fields: [fiscalTransactionReportItem.invoiceId],
+		references: [invoice.id]
+	}),
+	organization: one(organization, {
+		fields: [fiscalTransactionReportItem.organizationId],
+		references: [organization.id]
+	}),
+	fiscalTransmission: one(fiscalTransmission, {
+		fields: [fiscalTransactionReportItem.transmissionId],
+		references: [fiscalTransmission.id]
+	}),
+}));
+
+export const fiscalPaymentReportItemRelations = relations(fiscalPaymentReportItem, ({one}) => ({
+	booking: one(booking, {
+		fields: [fiscalPaymentReportItem.bookingId],
+		references: [booking.id]
+	}),
+	invoice: one(invoice, {
+		fields: [fiscalPaymentReportItem.invoiceId],
+		references: [invoice.id]
+	}),
+	organization: one(organization, {
+		fields: [fiscalPaymentReportItem.organizationId],
+		references: [organization.id]
+	}),
+	fiscalTransmission: one(fiscalTransmission, {
+		fields: [fiscalPaymentReportItem.transmissionId],
+		references: [fiscalTransmission.id]
+	}),
+}));
+
+export const vatValidationLogRelations = relations(vatValidationLog, ({one}) => ({
+	booking: one(booking, {
+		fields: [vatValidationLog.bookingId],
+		references: [booking.id]
+	}),
+	organization: one(organization, {
+		fields: [vatValidationLog.organizationId],
+		references: [organization.id]
+	}),
+}));
+
+export const fiscalExportJobRelations = relations(fiscalExportJob, ({one}) => ({
+	organization: one(organization, {
+		fields: [fiscalExportJob.organizationId],
+		references: [organization.id]
 	}),
 }));
 

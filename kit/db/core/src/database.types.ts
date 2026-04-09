@@ -364,13 +364,23 @@ export type Database = {
         Row: {
           company_member_id: string | null
           created_at: string
+          customer_billing_address_line1: string | null
+          customer_billing_address_line2: string | null
+          customer_billing_country: string | null
+          customer_billing_zip: string | null
+          customer_business_mode: Database["public"]["Enums"]["fiscal_classification_mode"]
+          customer_company_name: string | null
           customer_country: string | null
           customer_note: string | null
+          customer_siren: string | null
           customer_street: string | null
+          customer_vat_number: string | null
           customer_zip: string | null
           email: string | null
           end_at: string | null
           firstname: string
+          fiscal_buyer_snapshot: Json
+          fiscal_party_type_resolved: Database["public"]["Enums"]["fiscal_party_type"]
           id: string
           invoice_snapshot: Json
           lastname: string | null
@@ -418,17 +428,29 @@ export type Database = {
           stripe_key: string | null
           stripe_payment_method_id: string | null
           updated_at: string
+          vat_validation_message: string | null
+          vat_validation_status: Database["public"]["Enums"]["vat_validation_status"]
         }
         Insert: {
           company_member_id?: string | null
           created_at?: string
+          customer_billing_address_line1?: string | null
+          customer_billing_address_line2?: string | null
+          customer_billing_country?: string | null
+          customer_billing_zip?: string | null
+          customer_business_mode?: Database["public"]["Enums"]["fiscal_classification_mode"]
+          customer_company_name?: string | null
           customer_country?: string | null
           customer_note?: string | null
+          customer_siren?: string | null
           customer_street?: string | null
+          customer_vat_number?: string | null
           customer_zip?: string | null
           email?: string | null
           end_at?: string | null
           firstname: string
+          fiscal_buyer_snapshot?: Json
+          fiscal_party_type_resolved?: Database["public"]["Enums"]["fiscal_party_type"]
           id?: string
           invoice_snapshot?: Json
           lastname?: string | null
@@ -476,17 +498,29 @@ export type Database = {
           stripe_key?: string | null
           stripe_payment_method_id?: string | null
           updated_at?: string
+          vat_validation_message?: string | null
+          vat_validation_status?: Database["public"]["Enums"]["vat_validation_status"]
         }
         Update: {
           company_member_id?: string | null
           created_at?: string
+          customer_billing_address_line1?: string | null
+          customer_billing_address_line2?: string | null
+          customer_billing_country?: string | null
+          customer_billing_zip?: string | null
+          customer_business_mode?: Database["public"]["Enums"]["fiscal_classification_mode"]
+          customer_company_name?: string | null
           customer_country?: string | null
           customer_note?: string | null
+          customer_siren?: string | null
           customer_street?: string | null
+          customer_vat_number?: string | null
           customer_zip?: string | null
           email?: string | null
           end_at?: string | null
           firstname?: string
+          fiscal_buyer_snapshot?: Json
+          fiscal_party_type_resolved?: Database["public"]["Enums"]["fiscal_party_type"]
           id?: string
           invoice_snapshot?: Json
           lastname?: string | null
@@ -534,6 +568,8 @@ export type Database = {
           stripe_key?: string | null
           stripe_payment_method_id?: string | null
           updated_at?: string
+          vat_validation_message?: string | null
+          vat_validation_status?: Database["public"]["Enums"]["vat_validation_status"]
         }
         Relationships: [
           {
@@ -1235,6 +1271,397 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fiscal_export_job: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          file_path: string | null
+          file_public_url: string | null
+          format: string
+          id: string
+          organization_id: string
+          payload: Json
+          period_end: string | null
+          period_start: string | null
+          status: Database["public"]["Enums"]["fiscal_export_status"]
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          file_path?: string | null
+          file_public_url?: string | null
+          format?: string
+          id?: string
+          organization_id: string
+          payload?: Json
+          period_end?: string | null
+          period_start?: string | null
+          status?: Database["public"]["Enums"]["fiscal_export_status"]
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          file_path?: string | null
+          file_public_url?: string | null
+          format?: string
+          id?: string
+          organization_id?: string
+          payload?: Json
+          period_end?: string | null
+          period_start?: string | null
+          status?: Database["public"]["Enums"]["fiscal_export_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fiscal_export_job_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fiscal_payment_report_item: {
+        Row: {
+          booking_id: string | null
+          created_at: string
+          currency: string
+          id: string
+          invoice_id: string | null
+          organization_id: string
+          paid_amount: number
+          paid_at: string
+          payload: Json
+          payment_intent_id: string | null
+          transmission_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          booking_id?: string | null
+          created_at?: string
+          currency: string
+          id?: string
+          invoice_id?: string | null
+          organization_id: string
+          paid_amount: number
+          paid_at: string
+          payload?: Json
+          payment_intent_id?: string | null
+          transmission_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          invoice_id?: string | null
+          organization_id?: string
+          paid_amount?: number
+          paid_at?: string
+          payload?: Json
+          payment_intent_id?: string | null
+          transmission_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fiscal_payment_report_item_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fiscal_payment_report_item_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fiscal_payment_report_item_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fiscal_payment_report_item_transmission_id_fkey"
+            columns: ["transmission_id"]
+            isOneToOne: false
+            referencedRelation: "fiscal_transmission"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fiscal_pdp_connection: {
+        Row: {
+          account_id: string | null
+          connected_at: string | null
+          created_at: string
+          credentials_encrypted: Json
+          disconnected_at: string | null
+          external_reference: string | null
+          id: string
+          is_active: boolean
+          last_error: string | null
+          last_synced_at: string | null
+          metadata: Json
+          organization_id: string
+          provider_slug: string
+          status: Database["public"]["Enums"]["pdp_connection_status"]
+          updated_at: string
+        }
+        Insert: {
+          account_id?: string | null
+          connected_at?: string | null
+          created_at?: string
+          credentials_encrypted?: Json
+          disconnected_at?: string | null
+          external_reference?: string | null
+          id?: string
+          is_active?: boolean
+          last_error?: string | null
+          last_synced_at?: string | null
+          metadata?: Json
+          organization_id: string
+          provider_slug: string
+          status?: Database["public"]["Enums"]["pdp_connection_status"]
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string | null
+          connected_at?: string | null
+          created_at?: string
+          credentials_encrypted?: Json
+          disconnected_at?: string | null
+          external_reference?: string | null
+          id?: string
+          is_active?: boolean
+          last_error?: string | null
+          last_synced_at?: string | null
+          metadata?: Json
+          organization_id?: string
+          provider_slug?: string
+          status?: Database["public"]["Enums"]["pdp_connection_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fiscal_pdp_connection_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fiscal_transaction_report_item: {
+        Row: {
+          amount: number
+          booking_id: string | null
+          created_at: string
+          currency: string
+          id: string
+          invoice_id: string | null
+          operation_category: string
+          operation_date: string
+          organization_id: string
+          party_type: Database["public"]["Enums"]["fiscal_party_type"]
+          payload: Json
+          tax_amount: number
+          transmission_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          booking_id?: string | null
+          created_at?: string
+          currency: string
+          id?: string
+          invoice_id?: string | null
+          operation_category?: string
+          operation_date: string
+          organization_id: string
+          party_type?: Database["public"]["Enums"]["fiscal_party_type"]
+          payload?: Json
+          tax_amount?: number
+          transmission_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          booking_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          invoice_id?: string | null
+          operation_category?: string
+          operation_date?: string
+          organization_id?: string
+          party_type?: Database["public"]["Enums"]["fiscal_party_type"]
+          payload?: Json
+          tax_amount?: number
+          transmission_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fiscal_transaction_report_item_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fiscal_transaction_report_item_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fiscal_transaction_report_item_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fiscal_transaction_report_item_transmission_id_fkey"
+            columns: ["transmission_id"]
+            isOneToOne: false
+            referencedRelation: "fiscal_transmission"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fiscal_transmission: {
+        Row: {
+          accepted_at: string | null
+          attempt_count: number
+          attempt_scope: string | null
+          booking_id: string | null
+          connection_id: string | null
+          created_at: string
+          dead_letter_at: string | null
+          error_code: string | null
+          error_message: string | null
+          id: string
+          idempotency_key: string
+          invoice_id: string | null
+          max_attempts: number
+          metadata: Json
+          next_retry_at: string | null
+          organization_id: string
+          payload: Json
+          processed_at: string | null
+          provider_document_id: string | null
+          provider_slug: string
+          provider_status: string | null
+          rejected_at: string | null
+          response_payload: Json
+          status: Database["public"]["Enums"]["fiscal_transmission_status"]
+          submitted_at: string | null
+          transmission_type: Database["public"]["Enums"]["fiscal_transmission_type"]
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          attempt_count?: number
+          attempt_scope?: string | null
+          booking_id?: string | null
+          connection_id?: string | null
+          created_at?: string
+          dead_letter_at?: string | null
+          error_code?: string | null
+          error_message?: string | null
+          id?: string
+          idempotency_key: string
+          invoice_id?: string | null
+          max_attempts?: number
+          metadata?: Json
+          next_retry_at?: string | null
+          organization_id: string
+          payload?: Json
+          processed_at?: string | null
+          provider_document_id?: string | null
+          provider_slug: string
+          provider_status?: string | null
+          rejected_at?: string | null
+          response_payload?: Json
+          status?: Database["public"]["Enums"]["fiscal_transmission_status"]
+          submitted_at?: string | null
+          transmission_type: Database["public"]["Enums"]["fiscal_transmission_type"]
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          attempt_count?: number
+          attempt_scope?: string | null
+          booking_id?: string | null
+          connection_id?: string | null
+          created_at?: string
+          dead_letter_at?: string | null
+          error_code?: string | null
+          error_message?: string | null
+          id?: string
+          idempotency_key?: string
+          invoice_id?: string | null
+          max_attempts?: number
+          metadata?: Json
+          next_retry_at?: string | null
+          organization_id?: string
+          payload?: Json
+          processed_at?: string | null
+          provider_document_id?: string | null
+          provider_slug?: string
+          provider_status?: string | null
+          rejected_at?: string | null
+          response_payload?: Json
+          status?: Database["public"]["Enums"]["fiscal_transmission_status"]
+          submitted_at?: string | null
+          transmission_type?: Database["public"]["Enums"]["fiscal_transmission_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fiscal_transmission_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fiscal_transmission_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "fiscal_pdp_connection"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fiscal_transmission_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fiscal_transmission_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
             referencedColumns: ["id"]
           },
         ]
@@ -2943,6 +3370,66 @@ export type Database = {
           },
         ]
       }
+      vat_validation_log: {
+        Row: {
+          booking_id: string | null
+          checked_at: string
+          country_code: string | null
+          created_at: string
+          id: string
+          message: string | null
+          normalized_vat_number: string | null
+          organization_id: string
+          provider: string
+          raw_response: Json
+          status: Database["public"]["Enums"]["vat_validation_status"]
+          vat_number: string | null
+        }
+        Insert: {
+          booking_id?: string | null
+          checked_at?: string
+          country_code?: string | null
+          created_at?: string
+          id?: string
+          message?: string | null
+          normalized_vat_number?: string | null
+          organization_id: string
+          provider?: string
+          raw_response?: Json
+          status?: Database["public"]["Enums"]["vat_validation_status"]
+          vat_number?: string | null
+        }
+        Update: {
+          booking_id?: string | null
+          checked_at?: string
+          country_code?: string | null
+          created_at?: string
+          id?: string
+          message?: string | null
+          normalized_vat_number?: string | null
+          organization_id?: string
+          provider?: string
+          raw_response?: Json
+          status?: Database["public"]["Enums"]["vat_validation_status"]
+          vat_number?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vat_validation_log_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vat_validation_log_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       agenda_slot_day: {
@@ -3111,6 +3598,20 @@ export type Database = {
       credit_note_status: "issued" | "void"
       discount_redemption_status: "reserved" | "consumed" | "released"
       discount_type: "percentage" | "fixed"
+      fiscal_classification_mode: "auto" | "force_b2b" | "force_b2c"
+      fiscal_export_status: "pending" | "completed" | "failed"
+      fiscal_party_type: "b2c" | "b2b_fr" | "b2b_non_fr"
+      fiscal_transmission_status:
+        | "pending"
+        | "submitted"
+        | "accepted"
+        | "rejected"
+        | "retrying"
+        | "dead_letter"
+      fiscal_transmission_type:
+        | "einvoice_b2b_fr"
+        | "ereporting_transaction"
+        | "ereporting_payment"
       frequency_type: "once" | "day" | "week" | "month" | "year"
       invoice_status: "issued" | "partially_refunded" | "refunded"
       matrix_axis: "row" | "col"
@@ -3140,9 +3641,19 @@ export type Database = {
         | "slot_admin.insert"
         | "slot_admin.update"
         | "slot_admin.delete"
+      pdp_connection_status:
+        | "not_connected"
+        | "connecting"
+        | "connected"
+        | "error"
       service_tax_mode: "all" | "custom"
       slot_state: "confirmed" | "requested"
       tax_mode: "inclusive" | "exclusive"
+      vat_validation_status:
+        | "not_checked"
+        | "valid"
+        | "invalid"
+        | "service_unavailable"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3705,6 +4216,22 @@ export const Constants = {
       credit_note_status: ["issued", "void"],
       discount_redemption_status: ["reserved", "consumed", "released"],
       discount_type: ["percentage", "fixed"],
+      fiscal_classification_mode: ["auto", "force_b2b", "force_b2c"],
+      fiscal_export_status: ["pending", "completed", "failed"],
+      fiscal_party_type: ["b2c", "b2b_fr", "b2b_non_fr"],
+      fiscal_transmission_status: [
+        "pending",
+        "submitted",
+        "accepted",
+        "rejected",
+        "retrying",
+        "dead_letter",
+      ],
+      fiscal_transmission_type: [
+        "einvoice_b2b_fr",
+        "ereporting_transaction",
+        "ereporting_payment",
+      ],
       frequency_type: ["once", "day", "week", "month", "year"],
       invoice_status: ["issued", "partially_refunded", "refunded"],
       matrix_axis: ["row", "col"],
@@ -3735,9 +4262,21 @@ export const Constants = {
         "slot_admin.update",
         "slot_admin.delete",
       ],
+      pdp_connection_status: [
+        "not_connected",
+        "connecting",
+        "connected",
+        "error",
+      ],
       service_tax_mode: ["all", "custom"],
       slot_state: ["confirmed", "requested"],
       tax_mode: ["inclusive", "exclusive"],
+      vat_validation_status: [
+        "not_checked",
+        "valid",
+        "invalid",
+        "service_unavailable",
+      ],
     },
   },
   storage: {

@@ -21,6 +21,7 @@ import {
     BanIcon,
     BarChart3Icon,
     BellIcon,
+    BellRingIcon,
     BellOffIcon,
     BlendIcon,
     BookIcon,
@@ -484,6 +485,7 @@ const lucideIcons = {
     ArrowUpDown: ArrowUpDownIcon,
     // Navigation icons
     Home: HomeIcon,
+    BellRing: BellRingIcon,
     Settings: SettingsIcon,
     Settings2: Settings2Icon,
     MessagesSquare: MessagesSquareIcon,

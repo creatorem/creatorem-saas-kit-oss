@@ -27,7 +27,6 @@ export type ServicePriceMatrix = InferSelectModel<typeof schema.servicePriceMatr
 export type ServicePriceMatrixInterval = InferSelectModel<typeof schema.servicePriceMatrixInterval>;
 export type PlanobyStripeEventLog = InferSelectModel<typeof schema.planobyStripeEventLog>;
 export type Service = InferSelectModel<typeof schema.service>;
-export type Booking = InferSelectModel<typeof schema.booking>;
 export type OrganizationTax = InferSelectModel<typeof schema.organizationTax>;
 export type Invoice = InferSelectModel<typeof schema.invoice>;
 export type CreditNote = InferSelectModel<typeof schema.creditNote>;
@@ -44,6 +43,13 @@ export type GoogleCalendarConnection = InferSelectModel<typeof schema.googleCale
 export type GoogleCalendarBinding = InferSelectModel<typeof schema.googleCalendarBinding>;
 export type GoogleCalendarEventMap = InferSelectModel<typeof schema.googleCalendarEventMap>;
 export type GoogleCalendarSyncJob = InferSelectModel<typeof schema.googleCalendarSyncJob>;
+export type Booking = InferSelectModel<typeof schema.booking>;
+export type FiscalPdpConnection = InferSelectModel<typeof schema.fiscalPdpConnection>;
+export type FiscalTransmission = InferSelectModel<typeof schema.fiscalTransmission>;
+export type FiscalTransactionReportItem = InferSelectModel<typeof schema.fiscalTransactionReportItem>;
+export type FiscalPaymentReportItem = InferSelectModel<typeof schema.fiscalPaymentReportItem>;
+export type VatValidationLog = InferSelectModel<typeof schema.vatValidationLog>;
+export type FiscalExportJob = InferSelectModel<typeof schema.fiscalExportJob>;
 export type ServiceParticipantDataSchema = InferSelectModel<typeof schema.serviceParticipantDataSchema>;
 export type CheckoutService = InferSelectModel<typeof schema.checkoutService>;
 export type ServiceTaxAssignment = InferSelectModel<typeof schema.serviceTaxAssignment>;
@@ -59,14 +65,21 @@ export type ContentStateEnum = typeof schema.contentState.enumValues[number];
 export type CreditNoteStatusEnum = typeof schema.creditNoteStatus.enumValues[number];
 export type DiscountRedemptionStatusEnum = typeof schema.discountRedemptionStatus.enumValues[number];
 export type DiscountTypeEnum = typeof schema.discountType.enumValues[number];
+export type FiscalClassificationModeEnum = typeof schema.fiscalClassificationMode.enumValues[number];
+export type FiscalExportStatusEnum = typeof schema.fiscalExportStatus.enumValues[number];
+export type FiscalPartyTypeEnum = typeof schema.fiscalPartyType.enumValues[number];
+export type FiscalTransmissionStatusEnum = typeof schema.fiscalTransmissionStatus.enumValues[number];
+export type FiscalTransmissionTypeEnum = typeof schema.fiscalTransmissionType.enumValues[number];
 export type FrequencyTypeEnum = typeof schema.frequencyType.enumValues[number];
 export type InvoiceStatusEnum = typeof schema.invoiceStatus.enumValues[number];
 export type MatrixAxisEnum = typeof schema.matrixAxis.enumValues[number];
 export type NotificationTypeEnum = typeof schema.notificationType.enumValues[number];
 export type OrgPermissionEnum = typeof schema.orgPermission.enumValues[number];
+export type PdpConnectionStatusEnum = typeof schema.pdpConnectionStatus.enumValues[number];
 export type ServiceTaxModeEnum = typeof schema.serviceTaxMode.enumValues[number];
 export type SlotStateEnum = typeof schema.slotState.enumValues[number];
 export type TaxModeEnum = typeof schema.taxMode.enumValues[number];
+export type VatValidationStatusEnum = typeof schema.vatValidationStatus.enumValues[number];
 
 // Table Schema Map for Dynamic Access
 export const tableSchemaMap = {
@@ -96,7 +109,6 @@ export const tableSchemaMap = {
     'service_price_matrix_interval': schema.servicePriceMatrixInterval,
     'planoby_stripe_event_log': schema.planobyStripeEventLog,
     'service': schema.service,
-    'booking': schema.booking,
     'organization_tax': schema.organizationTax,
     'invoice': schema.invoice,
     'credit_note': schema.creditNote,
@@ -113,6 +125,13 @@ export const tableSchemaMap = {
     'google_calendar_binding': schema.googleCalendarBinding,
     'google_calendar_event_map': schema.googleCalendarEventMap,
     'google_calendar_sync_job': schema.googleCalendarSyncJob,
+    'booking': schema.booking,
+    'fiscal_pdp_connection': schema.fiscalPdpConnection,
+    'fiscal_transmission': schema.fiscalTransmission,
+    'fiscal_transaction_report_item': schema.fiscalTransactionReportItem,
+    'fiscal_payment_report_item': schema.fiscalPaymentReportItem,
+    'vat_validation_log': schema.vatValidationLog,
+    'fiscal_export_job': schema.fiscalExportJob,
     'service_participant_data_schema': schema.serviceParticipantDataSchema,
     'checkout_service': schema.checkoutService,
     'service_tax_assignment': schema.serviceTaxAssignment,
