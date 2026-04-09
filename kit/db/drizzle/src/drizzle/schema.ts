@@ -562,36 +562,6 @@ export const slotOccurrence = pgTable("slot_occurrence", {
 	check("slot_occurrence_booking_count_check", sql`booking_count >= 0`),
 ]);
 
-export const checkout = pgTable("checkout", {
-	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-	organizationId: uuid("organization_id").notNull(),
-	appearance: jsonb().notNull(),
-	content: jsonb().notNull(),
-	state: contentState().default('draft').notNull(),
-	relativeId: integer("relative_id").notNull(),
-	name: varchar({ length: 255 }).notNull(),
-	slug: varchar({ length: 255 }).notNull(),
-	publishedAt: timestamp("published_at", { withTimezone: true, mode: 'string' }),
-	pageTitle: varchar("page_title", { length: 255 }),
-	customHeadContent: text("custom_head_content"),
-	customJavascript: text("custom_javascript"),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-	index("idx_checkout_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
-	index("idx_checkout_relative_id").using("btree", table.relativeId.asc().nullsLast().op("int4_ops")),
-	foreignKey({
-			columns: [table.organizationId],
-			foreignColumns: [organization.id],
-			name: "checkout_organization_id_fkey"
-		}).onDelete("cascade"),
-	unique("checkout_slug_key").on(table.slug),
-	pgPolicy("checkout_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'checkout.delete'::org_permission))` }),
-	pgPolicy("checkout_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
-	pgPolicy("checkout_select", { as: "permissive", for: "select", to: ["authenticated"] }),
-	pgPolicy("checkout_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
-]);
-
 export const checkoutPageView = pgTable("checkout_page_view", {
 	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	organizationId: uuid("organization_id").notNull(),
@@ -657,7 +627,7 @@ export const dateMemo = pgTable("date_memo", {
 	pgPolicy("date_memo_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND (kit.has_org_permission(organization_id, 'slot_admin.delete'::org_permission) OR (kit.has_org_permission(organization_id, 'slot.delete'::org_permission) AND (user_id = kit.get_user_id()))))` }),
 	pgPolicy("date_memo_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("date_memo_select", { as: "permissive", for: "select", to: ["authenticated"] }),
-	pgPolicy("date_memo_update", { as: "permissive", for: "update", to: ["authenticated"] }),
+	pgPolicy("date_memo_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const bookingSmsReminder = pgTable("booking_sms_reminder", {
@@ -1097,6 +1067,38 @@ export const bookingClientAccessSession = pgTable("booking_client_access_session
 	check("booking_client_access_session_idle_expiry_check", sql`idle_expires_at <= expires_at`),
 ]);
 
+export const checkout = pgTable("checkout", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	organizationId: uuid("organization_id").notNull(),
+	appearance: jsonb().notNull(),
+	content: jsonb().notNull(),
+	settings: jsonb().default({}).notNull(),
+	state: contentState().default('draft').notNull(),
+	relativeId: integer("relative_id").notNull(),
+	name: varchar({ length: 255 }).notNull(),
+	slug: varchar({ length: 255 }).notNull(),
+	publishedAt: timestamp("published_at", { withTimezone: true, mode: 'string' }),
+	pageTitle: varchar("page_title", { length: 255 }),
+	customHeadContent: text("custom_head_content"),
+	customJavascript: text("custom_javascript"),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_checkout_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
+	index("idx_checkout_relative_id").using("btree", table.relativeId.asc().nullsLast().op("int4_ops")),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "checkout_organization_id_fkey"
+		}).onDelete("cascade"),
+	unique("checkout_slug_key").on(table.slug),
+	pgPolicy("checkout_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'checkout.delete'::org_permission))` }),
+	pgPolicy("checkout_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("checkout_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("checkout_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
+	check("checkout_settings_is_object_chk", sql`jsonb_typeof(settings) = 'object'::text`),
+]);
+
 export const servicePriceExtra = pgTable("service_price_extra", {
 	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	organizationId: uuid("organization_id").notNull(),
@@ -1235,13 +1237,10 @@ export const bookingCommunicationStatusEvent = pgTable("booking_communication_st
 	payload: jsonb().default({}).notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
-	index("idx_booking_communication_status_event_booking_event_at").using("btree", table.bookingId.asc().nullsLast().op("timestamptz_ops"), table.eventAt.desc().nullsFirst().op("uuid_ops")),
 	index("idx_booking_communication_status_event_booking_id").using("btree", table.bookingId.asc().nullsLast().op("uuid_ops")),
-	index("idx_booking_communication_status_event_message_event_at").using("btree", table.messageId.asc().nullsLast().op("timestamptz_ops"), table.eventAt.desc().nullsFirst().op("timestamptz_ops")),
 	index("idx_booking_communication_status_event_message_id").using("btree", table.messageId.asc().nullsLast().op("uuid_ops")),
 	index("idx_booking_communication_status_event_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
 	index("idx_booking_communication_status_event_provider_event_id").using("btree", table.providerEventId.asc().nullsLast().op("text_ops")),
-	uniqueIndex("uq_booking_communication_status_event_provider_event").using("btree", table.provider.asc().nullsLast().op("text_ops"), table.providerEventId.asc().nullsLast().op("text_ops")).where(sql`(provider_event_id IS NOT NULL)`),
 	foreignKey({
 			columns: [table.bookingId],
 			foreignColumns: [booking.id],
@@ -1346,6 +1345,141 @@ export const organizationDiscountCodeRedemption = pgTable("organization_discount
 	check("chk_discount_redemption_status_timestamps", sql`((status = 'reserved'::discount_redemption_status) AND (reserved_until IS NOT NULL) AND (consumed_at IS NULL)) OR ((status = 'consumed'::discount_redemption_status) AND (consumed_at IS NOT NULL)) OR ((status = 'released'::discount_redemption_status) AND (released_at IS NOT NULL))`),
 ]);
 
+export const googleCalendarConnection = pgTable("google_calendar_connection", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	userId: uuid("user_id").notNull(),
+	googleEmail: varchar("google_email", { length: 320 }),
+	googleSub: varchar("google_sub", { length: 255 }),
+	accessTokenEncrypted: text("access_token_encrypted"),
+	refreshTokenEncrypted: text("refresh_token_encrypted").notNull(),
+	tokenExpiresAt: timestamp("token_expires_at", { withTimezone: true, mode: 'string' }),
+	revokedAt: timestamp("revoked_at", { withTimezone: true, mode: 'string' }),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	uniqueIndex("uq_google_calendar_connection_user").using("btree", table.userId.asc().nullsLast().op("uuid_ops")),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "google_calendar_connection_user_id_fkey"
+		}).onDelete("cascade"),
+	pgPolicy("google_calendar_connection_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(user_id = kit.get_user_id())` }),
+	pgPolicy("google_calendar_connection_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("google_calendar_connection_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("google_calendar_connection_update", { as: "permissive", for: "update", to: ["authenticated"] }),
+]);
+
+export const googleCalendarBinding = pgTable("google_calendar_binding", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	userId: uuid("user_id").notNull(),
+	organizationId: uuid("organization_id").notNull(),
+	scopeType: varchar("scope_type", { length: 32 }).notNull(),
+	organizationMemberId: uuid("organization_member_id"),
+	calendarId: text("calendar_id").notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_google_calendar_binding_org").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
+	index("idx_google_calendar_binding_scope").using("btree", table.userId.asc().nullsLast().op("text_ops"), table.organizationId.asc().nullsLast().op("uuid_ops"), table.scopeType.asc().nullsLast().op("uuid_ops"), table.organizationMemberId.asc().nullsLast().op("uuid_ops")),
+	uniqueIndex("uq_google_calendar_binding_all_scope").using("btree", table.userId.asc().nullsLast().op("uuid_ops"), table.organizationId.asc().nullsLast().op("uuid_ops")).where(sql`((scope_type)::text = 'all'::text)`),
+	uniqueIndex("uq_google_calendar_binding_member_scope").using("btree", table.userId.asc().nullsLast().op("uuid_ops"), table.organizationId.asc().nullsLast().op("uuid_ops"), table.organizationMemberId.asc().nullsLast().op("uuid_ops")).where(sql`((scope_type)::text = 'member'::text)`),
+	uniqueIndex("uq_google_calendar_binding_unassigned_scope").using("btree", table.userId.asc().nullsLast().op("uuid_ops"), table.organizationId.asc().nullsLast().op("uuid_ops")).where(sql`((scope_type)::text = 'unassigned'::text)`),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "google_calendar_binding_organization_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.organizationMemberId],
+			foreignColumns: [user.id],
+			name: "google_calendar_binding_organization_member_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "google_calendar_binding_user_id_fkey"
+		}).onDelete("cascade"),
+	pgPolicy("google_calendar_binding_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(user_id = kit.get_user_id())` }),
+	pgPolicy("google_calendar_binding_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("google_calendar_binding_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("google_calendar_binding_update", { as: "permissive", for: "update", to: ["authenticated"] }),
+	check("google_calendar_binding_check", sql`(((scope_type)::text = 'member'::text) AND (organization_member_id IS NOT NULL)) OR (((scope_type)::text = ANY ((ARRAY['all'::character varying, 'unassigned'::character varying])::text[])) AND (organization_member_id IS NULL))`),
+	check("google_calendar_binding_scope_type_check", sql`(scope_type)::text = ANY ((ARRAY['all'::character varying, 'member'::character varying, 'unassigned'::character varying])::text[])`),
+]);
+
+export const googleCalendarEventMap = pgTable("google_calendar_event_map", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	userId: uuid("user_id").notNull(),
+	organizationId: uuid("organization_id").notNull(),
+	bindingId: uuid("binding_id").notNull(),
+	slotOccurrenceId: uuid("slot_occurrence_id").notNull(),
+	googleEventId: text("google_event_id").notNull(),
+	payloadHash: varchar("payload_hash", { length: 64 }).notNull(),
+	lastSyncedAt: timestamp("last_synced_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_google_calendar_event_map_user_org").using("btree", table.userId.asc().nullsLast().op("uuid_ops"), table.organizationId.asc().nullsLast().op("uuid_ops")),
+	uniqueIndex("uq_google_calendar_event_map_binding_occurrence").using("btree", table.bindingId.asc().nullsLast().op("uuid_ops"), table.slotOccurrenceId.asc().nullsLast().op("uuid_ops")),
+	foreignKey({
+			columns: [table.bindingId],
+			foreignColumns: [googleCalendarBinding.id],
+			name: "google_calendar_event_map_binding_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "google_calendar_event_map_organization_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.slotOccurrenceId],
+			foreignColumns: [slotOccurrence.id],
+			name: "google_calendar_event_map_slot_occurrence_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "google_calendar_event_map_user_id_fkey"
+		}).onDelete("cascade"),
+	pgPolicy("google_calendar_event_map_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(user_id = kit.get_user_id())` }),
+	pgPolicy("google_calendar_event_map_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("google_calendar_event_map_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("google_calendar_event_map_update", { as: "permissive", for: "update", to: ["authenticated"] }),
+]);
+
+export const googleCalendarSyncJob = pgTable("google_calendar_sync_job", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	userId: uuid("user_id").notNull(),
+	organizationId: uuid("organization_id").notNull(),
+	reason: varchar({ length: 64 }).notNull(),
+	status: varchar({ length: 32 }).default('queued').notNull(),
+	attempts: integer().default(0).notNull(),
+	runAt: timestamp("run_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	dedupeKey: varchar("dedupe_key", { length: 255 }).notNull(),
+	lastError: text("last_error"),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_google_calendar_sync_job_status_run").using("btree", table.status.asc().nullsLast().op("text_ops"), table.runAt.asc().nullsLast().op("text_ops")),
+	uniqueIndex("uq_google_calendar_sync_job_active_dedupe").using("btree", table.dedupeKey.asc().nullsLast().op("text_ops")).where(sql`((status)::text = ANY ((ARRAY['queued'::character varying, 'running'::character varying])::text[]))`),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "google_calendar_sync_job_organization_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "google_calendar_sync_job_user_id_fkey"
+		}).onDelete("cascade"),
+	pgPolicy("google_calendar_sync_job_delete", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`false` }),
+	pgPolicy("google_calendar_sync_job_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("google_calendar_sync_job_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("google_calendar_sync_job_update", { as: "permissive", for: "update", to: ["authenticated"] }),
+	check("google_calendar_sync_job_attempts_check", sql`attempts >= 0`),
+	check("google_calendar_sync_job_status_check", sql`(status)::text = ANY ((ARRAY['queued'::character varying, 'running'::character varying, 'succeeded'::character varying, 'failed'::character varying, 'permanent_failed'::character varying])::text[])`),
+]);
+
 export const serviceParticipantDataSchema = pgTable("service_participant_data_schema", {
 	organizationId: uuid("organization_id").notNull(),
 	serviceId: uuid("service_id").notNull(),
@@ -1376,6 +1510,40 @@ export const serviceParticipantDataSchema = pgTable("service_participant_data_sc
 	pgPolicy("service_participant_data_schema_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("service_participant_data_schema_select", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("service_participant_data_schema_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
+]);
+
+export const checkoutService = pgTable("checkout_service", {
+	organizationId: uuid("organization_id").notNull(),
+	checkoutId: uuid("checkout_id").notNull(),
+	serviceId: uuid("service_id").notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_checkout_service_checkout_id").using("btree", table.checkoutId.asc().nullsLast().op("uuid_ops")),
+	index("idx_checkout_service_org_checkout").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.checkoutId.asc().nullsLast().op("uuid_ops")),
+	index("idx_checkout_service_org_service").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.serviceId.asc().nullsLast().op("uuid_ops")),
+	index("idx_checkout_service_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
+	index("idx_checkout_service_service_id").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops")),
+	foreignKey({
+			columns: [table.checkoutId],
+			foreignColumns: [checkout.id],
+			name: "checkout_service_checkout_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "checkout_service_organization_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.serviceId],
+			foreignColumns: [service.id],
+			name: "checkout_service_service_id_fkey"
+		}).onDelete("cascade"),
+	primaryKey({ columns: [table.checkoutId, table.serviceId], name: "checkout_service_pkey"}),
+	pgPolicy("checkout_service_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'checkout.update'::org_permission))` }),
+	pgPolicy("checkout_service_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("checkout_service_select", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("checkout_service_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 ]);
 
 export const serviceTaxAssignment = pgTable("service_tax_assignment", {

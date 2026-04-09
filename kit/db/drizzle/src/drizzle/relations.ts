@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, participantDataSchema, slot, service, slotOccurrence, checkout, checkoutPageView, dateMemo, booking, bookingSmsReminder, servicePriceMatrix, servicePriceMatrixInterval, planobyStripeEventLog, organizationTax, invoice, creditNote, bookingClientAccessChallenge, bookingClientAccessSession, servicePriceExtra, bookingCommunicationThread, bookingCommunicationMessage, bookingCommunicationStatusEvent, organizationDiscountCode, organizationDiscountCodeRedemption, serviceParticipantDataSchema, serviceTaxAssignment, invoiceCounter, organizationDiscountCodeService, servicePriceMatrixCell } from "./schema";
+import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, participantDataSchema, slot, service, slotOccurrence, checkout, checkoutPageView, dateMemo, booking, bookingSmsReminder, servicePriceMatrix, servicePriceMatrixInterval, planobyStripeEventLog, organizationTax, invoice, creditNote, bookingClientAccessChallenge, bookingClientAccessSession, servicePriceExtra, bookingCommunicationThread, bookingCommunicationMessage, bookingCommunicationStatusEvent, organizationDiscountCode, organizationDiscountCodeRedemption, googleCalendarConnection, googleCalendarBinding, googleCalendarEventMap, googleCalendarSyncJob, serviceParticipantDataSchema, checkoutService, serviceTaxAssignment, invoiceCounter, organizationDiscountCodeService, servicePriceMatrixCell } from "./schema";
 
 export const userRelations = relations(user, ({one, many}) => ({
 	usersInAuth: one(usersInAuth, {
@@ -21,6 +21,15 @@ export const userRelations = relations(user, ({one, many}) => ({
 	slotOccurrences: many(slotOccurrence),
 	dateMemos: many(dateMemo),
 	bookings: many(booking),
+	googleCalendarConnections: many(googleCalendarConnection),
+	googleCalendarBindings_organizationMemberId: many(googleCalendarBinding, {
+		relationName: "googleCalendarBinding_organizationMemberId_user_id"
+	}),
+	googleCalendarBindings_userId: many(googleCalendarBinding, {
+		relationName: "googleCalendarBinding_userId_user_id"
+	}),
+	googleCalendarEventMaps: many(googleCalendarEventMap),
+	googleCalendarSyncJobs: many(googleCalendarSyncJob),
 }));
 
 export const usersInAuthRelations = relations(usersInAuth, ({many}) => ({
@@ -119,7 +128,6 @@ export const organizationRelations = relations(organization, ({many}) => ({
 	participantDataSchemas: many(participantDataSchema),
 	slots: many(slot),
 	slotOccurrences: many(slotOccurrence),
-	checkouts: many(checkout),
 	checkoutPageViews: many(checkoutPageView),
 	dateMemos: many(dateMemo),
 	bookingSmsReminders: many(bookingSmsReminder),
@@ -133,13 +141,18 @@ export const organizationRelations = relations(organization, ({many}) => ({
 	creditNotes: many(creditNote),
 	bookingClientAccessChallenges: many(bookingClientAccessChallenge),
 	bookingClientAccessSessions: many(bookingClientAccessSession),
+	checkouts: many(checkout),
 	servicePriceExtras: many(servicePriceExtra),
 	bookingCommunicationThreads: many(bookingCommunicationThread),
 	bookingCommunicationMessages: many(bookingCommunicationMessage),
 	bookingCommunicationStatusEvents: many(bookingCommunicationStatusEvent),
 	organizationDiscountCodes: many(organizationDiscountCode),
 	organizationDiscountCodeRedemptions: many(organizationDiscountCodeRedemption),
+	googleCalendarBindings: many(googleCalendarBinding),
+	googleCalendarEventMaps: many(googleCalendarEventMap),
+	googleCalendarSyncJobs: many(googleCalendarSyncJob),
 	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
+	checkoutServices: many(checkoutService),
 	serviceTaxAssignments: many(serviceTaxAssignment),
 	invoiceCounters: many(invoiceCounter),
 	organizationDiscountCodeServices: many(organizationDiscountCodeService),
@@ -255,6 +268,7 @@ export const serviceRelations = relations(service, ({one, many}) => ({
 	bookings: many(booking),
 	servicePriceExtras: many(servicePriceExtra),
 	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
+	checkoutServices: many(checkoutService),
 	serviceTaxAssignments: many(serviceTaxAssignment),
 	organizationDiscountCodeServices: many(organizationDiscountCodeService),
 }));
@@ -277,14 +291,7 @@ export const slotOccurrenceRelations = relations(slotOccurrence, ({one, many}) =
 		references: [slot.id]
 	}),
 	bookings: many(booking),
-}));
-
-export const checkoutRelations = relations(checkout, ({one, many}) => ({
-	organization: one(organization, {
-		fields: [checkout.organizationId],
-		references: [organization.id]
-	}),
-	checkoutPageViews: many(checkoutPageView),
+	googleCalendarEventMaps: many(googleCalendarEventMap),
 }));
 
 export const checkoutPageViewRelations = relations(checkoutPageView, ({one}) => ({
@@ -296,6 +303,15 @@ export const checkoutPageViewRelations = relations(checkoutPageView, ({one}) => 
 		fields: [checkoutPageView.organizationId],
 		references: [organization.id]
 	}),
+}));
+
+export const checkoutRelations = relations(checkout, ({one, many}) => ({
+	checkoutPageViews: many(checkoutPageView),
+	organization: one(organization, {
+		fields: [checkout.organizationId],
+		references: [organization.id]
+	}),
+	checkoutServices: many(checkoutService),
 }));
 
 export const dateMemoRelations = relations(dateMemo, ({one}) => ({
@@ -527,6 +543,61 @@ export const organizationDiscountCodeRedemptionRelations = relations(organizatio
 	}),
 }));
 
+export const googleCalendarConnectionRelations = relations(googleCalendarConnection, ({one}) => ({
+	user: one(user, {
+		fields: [googleCalendarConnection.userId],
+		references: [user.id]
+	}),
+}));
+
+export const googleCalendarBindingRelations = relations(googleCalendarBinding, ({one, many}) => ({
+	organization: one(organization, {
+		fields: [googleCalendarBinding.organizationId],
+		references: [organization.id]
+	}),
+	user_organizationMemberId: one(user, {
+		fields: [googleCalendarBinding.organizationMemberId],
+		references: [user.id],
+		relationName: "googleCalendarBinding_organizationMemberId_user_id"
+	}),
+	user_userId: one(user, {
+		fields: [googleCalendarBinding.userId],
+		references: [user.id],
+		relationName: "googleCalendarBinding_userId_user_id"
+	}),
+	googleCalendarEventMaps: many(googleCalendarEventMap),
+}));
+
+export const googleCalendarEventMapRelations = relations(googleCalendarEventMap, ({one}) => ({
+	googleCalendarBinding: one(googleCalendarBinding, {
+		fields: [googleCalendarEventMap.bindingId],
+		references: [googleCalendarBinding.id]
+	}),
+	organization: one(organization, {
+		fields: [googleCalendarEventMap.organizationId],
+		references: [organization.id]
+	}),
+	slotOccurrence: one(slotOccurrence, {
+		fields: [googleCalendarEventMap.slotOccurrenceId],
+		references: [slotOccurrence.id]
+	}),
+	user: one(user, {
+		fields: [googleCalendarEventMap.userId],
+		references: [user.id]
+	}),
+}));
+
+export const googleCalendarSyncJobRelations = relations(googleCalendarSyncJob, ({one}) => ({
+	organization: one(organization, {
+		fields: [googleCalendarSyncJob.organizationId],
+		references: [organization.id]
+	}),
+	user: one(user, {
+		fields: [googleCalendarSyncJob.userId],
+		references: [user.id]
+	}),
+}));
+
 export const serviceParticipantDataSchemaRelations = relations(serviceParticipantDataSchema, ({one}) => ({
 	organization: one(organization, {
 		fields: [serviceParticipantDataSchema.organizationId],
@@ -538,6 +609,21 @@ export const serviceParticipantDataSchemaRelations = relations(serviceParticipan
 	}),
 	service: one(service, {
 		fields: [serviceParticipantDataSchema.serviceId],
+		references: [service.id]
+	}),
+}));
+
+export const checkoutServiceRelations = relations(checkoutService, ({one}) => ({
+	checkout: one(checkout, {
+		fields: [checkoutService.checkoutId],
+		references: [checkout.id]
+	}),
+	organization: one(organization, {
+		fields: [checkoutService.organizationId],
+		references: [organization.id]
+	}),
+	service: one(service, {
+		fields: [checkoutService.serviceId],
 		references: [service.id]
 	}),
 }));

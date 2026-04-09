@@ -17,10 +17,10 @@ export type Database = {
     Functions: {
       graphql: {
         Args: {
-          operationName?: string
           extensions?: Json
-          variables?: Json
+          operationName?: string
           query?: string
+          variables?: Json
         }
         Returns: Json
       }
@@ -47,12 +47,12 @@ export type Database = {
       debug_jwt_info: {
         Args: Record<PropertyKey, never>
         Returns: {
-          auth_user_id: string
           jwt_session_id: string
-          jwt_sid: string
-          jwt_full: Json
-          detected_current_session: string
+          auth_user_id: string
           total_user_sessions: number
+          detected_current_session: string
+          jwt_full: Json
+          jwt_sid: string
         }[]
       }
       get_user_email: {
@@ -66,15 +66,15 @@ export type Database = {
       get_user_sessions: {
         Args: Record<PropertyKey, never>
         Returns: {
-          user_agent: string
-          id: string
           user_id: string
-          created_at: string
-          updated_at: string
           factor_id: string
-          aal: string
-          not_after: string
+          updated_at: string
+          created_at: string
+          id: string
           ip: unknown
+          user_agent: string
+          not_after: string
+          aal: string
         }[]
       }
       has_multiple_member_manage_permissions: {
@@ -97,7 +97,7 @@ export type Database = {
         Returns: boolean
       }
       update_session_details: {
-        Args: { session_id: string; new_user_agent?: string; new_ip?: unknown }
+        Args: { new_ip?: unknown; new_user_agent?: string; session_id: string }
         Returns: boolean
       }
       user_is_invited_to_org: {
@@ -944,6 +944,7 @@ export type Database = {
           page_title: string | null
           published_at: string | null
           relative_id: number
+          settings: Json
           slug: string
           state: Database["public"]["Enums"]["content_state"]
           updated_at: string
@@ -960,6 +961,7 @@ export type Database = {
           page_title?: string | null
           published_at?: string | null
           relative_id: number
+          settings?: Json
           slug: string
           state?: Database["public"]["Enums"]["content_state"]
           updated_at?: string
@@ -976,6 +978,7 @@ export type Database = {
           page_title?: string | null
           published_at?: string | null
           relative_id?: number
+          settings?: Json
           slug?: string
           state?: Database["public"]["Enums"]["content_state"]
           updated_at?: string
@@ -1034,6 +1037,52 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      checkout_service: {
+        Row: {
+          checkout_id: string
+          created_at: string
+          organization_id: string
+          service_id: string
+          updated_at: string
+        }
+        Insert: {
+          checkout_id: string
+          created_at?: string
+          organization_id: string
+          service_id: string
+          updated_at?: string
+        }
+        Update: {
+          checkout_id?: string
+          created_at?: string
+          organization_id?: string
+          service_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checkout_service_checkout_id_fkey"
+            columns: ["checkout_id"]
+            isOneToOne: false
+            referencedRelation: "checkout"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkout_service_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkout_service_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "service"
             referencedColumns: ["id"]
           },
         ]
@@ -1183,6 +1232,240 @@ export type Database = {
           },
           {
             foreignKeyName: "date_memo_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      google_calendar_binding: {
+        Row: {
+          calendar_id: string
+          created_at: string
+          id: string
+          organization_id: string
+          organization_member_id: string | null
+          scope_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          calendar_id: string
+          created_at?: string
+          id?: string
+          organization_id: string
+          organization_member_id?: string | null
+          scope_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          calendar_id?: string
+          created_at?: string
+          id?: string
+          organization_id?: string
+          organization_member_id?: string | null
+          scope_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "google_calendar_binding_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "google_calendar_binding_organization_member_id_fkey"
+            columns: ["organization_member_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "google_calendar_binding_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      google_calendar_connection: {
+        Row: {
+          access_token_encrypted: string | null
+          created_at: string
+          google_email: string | null
+          google_sub: string | null
+          id: string
+          refresh_token_encrypted: string
+          revoked_at: string | null
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token_encrypted?: string | null
+          created_at?: string
+          google_email?: string | null
+          google_sub?: string | null
+          id?: string
+          refresh_token_encrypted: string
+          revoked_at?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token_encrypted?: string | null
+          created_at?: string
+          google_email?: string | null
+          google_sub?: string | null
+          id?: string
+          refresh_token_encrypted?: string
+          revoked_at?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "google_calendar_connection_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      google_calendar_event_map: {
+        Row: {
+          binding_id: string
+          created_at: string
+          google_event_id: string
+          id: string
+          last_synced_at: string
+          organization_id: string
+          payload_hash: string
+          slot_occurrence_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          binding_id: string
+          created_at?: string
+          google_event_id: string
+          id?: string
+          last_synced_at?: string
+          organization_id: string
+          payload_hash: string
+          slot_occurrence_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          binding_id?: string
+          created_at?: string
+          google_event_id?: string
+          id?: string
+          last_synced_at?: string
+          organization_id?: string
+          payload_hash?: string
+          slot_occurrence_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "google_calendar_event_map_binding_id_fkey"
+            columns: ["binding_id"]
+            isOneToOne: false
+            referencedRelation: "google_calendar_binding"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "google_calendar_event_map_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "google_calendar_event_map_slot_occurrence_id_fkey"
+            columns: ["slot_occurrence_id"]
+            isOneToOne: false
+            referencedRelation: "agenda_slot_day"
+            referencedColumns: ["slot_occurrence_id"]
+          },
+          {
+            foreignKeyName: "google_calendar_event_map_slot_occurrence_id_fkey"
+            columns: ["slot_occurrence_id"]
+            isOneToOne: false
+            referencedRelation: "slot_occurrence"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "google_calendar_event_map_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      google_calendar_sync_job: {
+        Row: {
+          attempts: number
+          created_at: string
+          dedupe_key: string
+          id: string
+          last_error: string | null
+          organization_id: string
+          reason: string
+          run_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          dedupe_key: string
+          id?: string
+          last_error?: string | null
+          organization_id: string
+          reason: string
+          run_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          dedupe_key?: string
+          id?: string
+          last_error?: string | null
+          organization_id?: string
+          reason?: string
+          run_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "google_calendar_sync_job_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "google_calendar_sync_job_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
@@ -2713,13 +2996,13 @@ export type Database = {
     }
     Functions: {
       planoby_align_date_to_weekly_days: {
-        Args: { p_direction?: number; p_days: Json; p_date: string }
+        Args: { p_direction?: number; p_date: string; p_days: Json }
         Returns: string
       }
       planoby_bootstrap_dev_reset_account: {
         Args: {
-          p_user_name?: string
           p_auth_user_id: string
+          p_user_name?: string
           p_user_email?: string
           p_org_name?: string
           p_org_slug?: string
@@ -2743,7 +3026,7 @@ export type Database = {
         Returns: Json
       }
       planoby_org_setting_text: {
-        Args: { p_organization_id: string; p_default?: string; p_name: string }
+        Args: { p_default?: string; p_organization_id: string; p_name: string }
         Returns: string
       }
       planoby_org_timezone_value: {
@@ -2768,9 +3051,9 @@ export type Database = {
       }
       planoby_slot_matches_day_core: {
         Args: {
-          p_day: string
-          p_frequency: string
           p_slot_date: string
+          p_frequency: string
+          p_day: string
           p_meta_frequency: string
         }
         Returns: boolean
@@ -2790,17 +3073,17 @@ export type Database = {
       planoby_sync_slot_occurrences: {
         Args: {
           p_window_end?: string
-          p_slot_id: string
           p_window_start?: string
+          p_slot_id: string
         }
         Returns: undefined
       }
       planoby_timestamp_for_org_day_time: {
-        Args: { p_organization_id: string; p_time: string; p_day: string }
+        Args: { p_time: string; p_organization_id: string; p_day: string }
         Returns: string
       }
       user_org_role_is_higher_than: {
-        Args: { org_id: string; target_user_id: string }
+        Args: { target_user_id: string; org_id: string }
         Returns: boolean
       }
     }
@@ -3119,11 +3402,11 @@ export type Database = {
     }
     Functions: {
       add_prefixes: {
-        Args: { _name: string; _bucket_id: string }
+        Args: { _bucket_id: string; _name: string }
         Returns: undefined
       }
       can_insert_object: {
-        Args: { metadata: Json; bucketid: string; name: string; owner: string }
+        Args: { metadata: Json; owner: string; bucketid: string; name: string }
         Returns: undefined
       }
       delete_prefix: {
@@ -3157,38 +3440,38 @@ export type Database = {
       get_size_by_bucket: {
         Args: Record<PropertyKey, never>
         Returns: {
-          size: number
           bucket_id: string
+          size: number
         }[]
       }
       list_multipart_uploads_with_delimiter: {
         Args: {
+          delimiter_param: string
           bucket_id: string
           prefix_param: string
-          delimiter_param: string
+          next_upload_token?: string
           max_keys?: number
           next_key_token?: string
-          next_upload_token?: string
         }
         Returns: {
+          key: string
           id: string
           created_at: string
-          key: string
         }[]
       }
       list_objects_with_delimiter: {
         Args: {
           max_keys?: number
-          delimiter_param: string
           prefix_param: string
           bucket_id: string
           next_token?: string
           start_after?: string
+          delimiter_param: string
         }
         Returns: {
-          updated_at: string
-          metadata: Json
           id: string
+          metadata: Json
+          updated_at: string
           name: string
         }[]
       }
@@ -3198,42 +3481,42 @@ export type Database = {
       }
       search: {
         Args: {
-          sortorder?: string
-          search?: string
-          offsets?: number
-          limits?: number
-          levels?: number
-          sortcolumn?: string
           prefix: string
           bucketname: string
+          limits?: number
+          levels?: number
+          offsets?: number
+          search?: string
+          sortorder?: string
+          sortcolumn?: string
         }
         Returns: {
+          name: string
           metadata: Json
           last_accessed_at: string
           created_at: string
-          name: string
-          id: string
           updated_at: string
+          id: string
         }[]
       }
       search_legacy_v1: {
         Args: {
           levels?: number
-          limits?: number
-          search?: string
           offsets?: number
+          search?: string
+          sortcolumn?: string
+          sortorder?: string
           prefix: string
           bucketname: string
-          sortorder?: string
-          sortcolumn?: string
+          limits?: number
         }
         Returns: {
           metadata: Json
-          last_accessed_at: string
-          created_at: string
-          updated_at: string
           id: string
           name: string
+          updated_at: string
+          created_at: string
+          last_accessed_at: string
         }[]
       }
       search_v1_optimised: {
@@ -3248,29 +3531,29 @@ export type Database = {
           sortorder?: string
         }
         Returns: {
-          metadata: Json
-          name: string
           id: string
+          name: string
           updated_at: string
           created_at: string
           last_accessed_at: string
+          metadata: Json
         }[]
       }
       search_v2: {
         Args: {
-          levels?: number
-          prefix: string
-          bucket_name: string
           limits?: number
+          bucket_name: string
+          prefix: string
           start_after?: string
+          levels?: number
         }
         Returns: {
           key: string
-          name: string
           id: string
+          updated_at: string
           metadata: Json
           created_at: string
-          updated_at: string
+          name: string
         }[]
       }
     }

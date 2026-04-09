@@ -20,7 +20,6 @@ export type Notification = InferSelectModel<typeof schema.notification>;
 export type ParticipantDataSchema = InferSelectModel<typeof schema.participantDataSchema>;
 export type Slot = InferSelectModel<typeof schema.slot>;
 export type SlotOccurrence = InferSelectModel<typeof schema.slotOccurrence>;
-export type Checkout = InferSelectModel<typeof schema.checkout>;
 export type CheckoutPageView = InferSelectModel<typeof schema.checkoutPageView>;
 export type DateMemo = InferSelectModel<typeof schema.dateMemo>;
 export type BookingSmsReminder = InferSelectModel<typeof schema.bookingSmsReminder>;
@@ -34,13 +33,19 @@ export type Invoice = InferSelectModel<typeof schema.invoice>;
 export type CreditNote = InferSelectModel<typeof schema.creditNote>;
 export type BookingClientAccessChallenge = InferSelectModel<typeof schema.bookingClientAccessChallenge>;
 export type BookingClientAccessSession = InferSelectModel<typeof schema.bookingClientAccessSession>;
+export type Checkout = InferSelectModel<typeof schema.checkout>;
 export type ServicePriceExtra = InferSelectModel<typeof schema.servicePriceExtra>;
 export type BookingCommunicationThread = InferSelectModel<typeof schema.bookingCommunicationThread>;
 export type BookingCommunicationMessage = InferSelectModel<typeof schema.bookingCommunicationMessage>;
 export type BookingCommunicationStatusEvent = InferSelectModel<typeof schema.bookingCommunicationStatusEvent>;
 export type OrganizationDiscountCode = InferSelectModel<typeof schema.organizationDiscountCode>;
 export type OrganizationDiscountCodeRedemption = InferSelectModel<typeof schema.organizationDiscountCodeRedemption>;
+export type GoogleCalendarConnection = InferSelectModel<typeof schema.googleCalendarConnection>;
+export type GoogleCalendarBinding = InferSelectModel<typeof schema.googleCalendarBinding>;
+export type GoogleCalendarEventMap = InferSelectModel<typeof schema.googleCalendarEventMap>;
+export type GoogleCalendarSyncJob = InferSelectModel<typeof schema.googleCalendarSyncJob>;
 export type ServiceParticipantDataSchema = InferSelectModel<typeof schema.serviceParticipantDataSchema>;
+export type CheckoutService = InferSelectModel<typeof schema.checkoutService>;
 export type ServiceTaxAssignment = InferSelectModel<typeof schema.serviceTaxAssignment>;
 export type InvoiceCounter = InferSelectModel<typeof schema.invoiceCounter>;
 export type OrganizationDiscountCodeService = InferSelectModel<typeof schema.organizationDiscountCodeService>;
@@ -84,7 +89,6 @@ export const tableSchemaMap = {
     'participant_data_schema': schema.participantDataSchema,
     'slot': schema.slot,
     'slot_occurrence': schema.slotOccurrence,
-    'checkout': schema.checkout,
     'checkout_page_view': schema.checkoutPageView,
     'date_memo': schema.dateMemo,
     'booking_sms_reminder': schema.bookingSmsReminder,
@@ -98,13 +102,19 @@ export const tableSchemaMap = {
     'credit_note': schema.creditNote,
     'booking_client_access_challenge': schema.bookingClientAccessChallenge,
     'booking_client_access_session': schema.bookingClientAccessSession,
+    'checkout': schema.checkout,
     'service_price_extra': schema.servicePriceExtra,
     'booking_communication_thread': schema.bookingCommunicationThread,
     'booking_communication_message': schema.bookingCommunicationMessage,
     'booking_communication_status_event': schema.bookingCommunicationStatusEvent,
     'organization_discount_code': schema.organizationDiscountCode,
     'organization_discount_code_redemption': schema.organizationDiscountCodeRedemption,
+    'google_calendar_connection': schema.googleCalendarConnection,
+    'google_calendar_binding': schema.googleCalendarBinding,
+    'google_calendar_event_map': schema.googleCalendarEventMap,
+    'google_calendar_sync_job': schema.googleCalendarSyncJob,
     'service_participant_data_schema': schema.serviceParticipantDataSchema,
+    'checkout_service': schema.checkoutService,
     'service_tax_assignment': schema.serviceTaxAssignment,
     'invoice_counter': schema.invoiceCounter,
     'organization_discount_code_service': schema.organizationDiscountCodeService,
