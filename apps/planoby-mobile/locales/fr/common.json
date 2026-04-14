@@ -1,0 +1,230 @@
+{
+    "hello": "Bonjour, le monde!",
+    "welcome_back": "Bon retour sur",
+    "or_continue_with": "Ou continuer avec",
+    "new_here": "Nouveau ici ? Créer un compte",
+    "terms_agreement": "En vous connectant, vous acceptez les",
+    "terms_of_service": "Conditions d'utilisation",
+    "loading": "Chargement...",
+    "tabs": {
+        "home": "Accueil",
+        "agenda": "Agenda",
+        "bookings": "Réservations",
+        "services": "Services",
+        "profile": "Profil",
+        "more": "Plus"
+    },
+    "dashboard": {
+        "title": "Tableau de bord Planoby",
+        "subtitle": "Gérez votre agenda, vos réservations et vos services depuis votre téléphone.",
+        "cards": {
+            "bookings": "Réservations",
+            "services": "Services",
+            "checkouts": "Checkouts",
+            "mailbox": "Messagerie"
+        },
+        "recentBookings": "Réservations récentes",
+        "recentServices": "Services récents",
+        "viewAll": "Voir tout",
+        "emptyBookings": "Aucune réservation trouvée",
+        "emptyServices": "Aucun service trouvé"
+    },
+    "permissions": {
+        "noAccess": "Vous n'avez pas la permission d'accéder à cette page."
+    },
+    "actions": {
+        "create": "Créer",
+        "save": "Enregistrer",
+        "cancel": "Annuler"
+    },
+    "filters": {
+        "all": "Tous",
+        "allServices": "Tous les services",
+        "allMembers": "Tous les membres",
+        "none": "Aucun"
+    },
+    "agenda": {
+        "title": "Agenda",
+        "scheduleWindow": "Planning : {{start}} - {{end}} · {{date}}",
+        "modeSlot": "Mode créneaux",
+        "modeBooking": "Mode réservations",
+        "viewDay": "Vue jour",
+        "viewWeek": "Vue semaine",
+        "empty": "Aucun créneau ou réservation pour cette sélection.",
+        "untitledSlot": "Créneau sans titre",
+        "bookingCount": "{{count}} réservation(s)",
+        "unknownService": "Service inconnu",
+        "participantCount": "{{count}} participant(s)"
+    },
+    "bookings": {
+        "title": "Réservations",
+        "subtitle": "Suivez les réservations clients et mettez à jour les détails.",
+        "new": "Nouvelle réservation",
+        "empty": "Aucune réservation disponible.",
+        "totalFiltered": "{{filteredCount}} / {{totalCount}}",
+        "noService": "Aucun service lié",
+        "details": "Détails de la réservation",
+        "notFound": "Réservation introuvable",
+        "notFoundDescription": "Cette réservation a peut-être été supprimée ou vous n'y avez plus accès.",
+        "created": "Réservation créée avec succès.",
+        "updated": "Réservation mise à jour avec succès.",
+        "createFailed": "Échec de la création de la réservation.",
+        "updateFailed": "Échec de la mise à jour de la réservation.",
+        "fields": {
+            "firstname": "Prénom",
+            "lastname": "Nom",
+            "email": "Email",
+            "phone": "Téléphone",
+            "service": "Service",
+            "state": "Statut",
+            "note": "Note interne",
+            "customerNote": "Note client"
+        },
+        "placeholders": {
+            "selectService": "Sélectionner un service"
+        }
+    },
+    "services": {
+        "title": "Services",
+        "subtitle": "Gérez votre catalogue de services et leur publication.",
+        "new": "Nouveau service",
+        "empty": "Aucun service disponible.",
+        "totalFiltered": "{{filteredCount}} / {{totalCount}}",
+        "details": "Détails du service",
+        "notFound": "Service introuvable",
+        "notFoundDescription": "Ce service a peut-être été supprimé ou vous n'y avez plus accès.",
+        "created": "Service créé avec succès.",
+        "updated": "Service mis à jour avec succès.",
+        "createFailed": "Échec de la création du service.",
+        "updateFailed": "Échec de la mise à jour du service.",
+        "fields": {
+            "name": "Nom",
+            "description": "Description",
+            "duration": "Durée",
+            "minParticipant": "Participants min",
+            "maxParticipant": "Participants max",
+            "location": "Lieu",
+            "featuredImage": "URL image principale",
+            "calendarColor": "Couleur agenda",
+            "state": "Statut",
+            "emailContent": "Contenu email",
+            "smsContent": "Contenu SMS",
+            "confirmationPageMessage": "Message de confirmation"
+        }
+    },
+    "checkouts": {
+        "title": "Checkouts",
+        "subtitle": "Gérez les pages checkout et leurs services associés.",
+        "new": "Nouveau checkout",
+        "empty": "Aucun checkout disponible.",
+        "totalFiltered": "{{filteredCount}} / {{totalCount}}",
+        "details": "Détails du checkout",
+        "notFound": "Checkout introuvable",
+        "notFoundDescription": "Ce checkout a peut-être été supprimé ou vous n'y avez plus accès.",
+        "created": "Checkout créé avec succès.",
+        "updated": "Checkout mis à jour avec succès.",
+        "createFailed": "Échec de la création du checkout.",
+        "updateFailed": "Échec de la mise à jour du checkout.",
+        "fields": {
+            "name": "Nom",
+            "slug": "Slug",
+            "state": "Statut",
+            "pageTitle": "Titre de page",
+            "customHeadContent": "Contenu head personnalisé",
+            "customJavascript": "Javascript personnalisé",
+            "services": "Services associés"
+        }
+    },
+    "analytics": {
+        "title": "Analytique",
+        "subtitle": "Suivez la performance des réservations et checkouts.",
+        "range7d": "7j",
+        "range30d": "30j",
+        "range90d": "90j",
+        "rangeLabel": "Période : {{start}} à {{end}}",
+        "cards": {
+            "bookings": "Réservations",
+            "services": "Services",
+            "checkouts": "Checkouts",
+            "checkoutViews": "Vues checkout",
+            "checkoutUniqueSessions": "Sessions uniques",
+            "requiresAction": "Action requise",
+            "confirmed": "Confirmées",
+            "charged": "Facturées"
+        },
+        "checkoutViewsByDay": "Vues checkout par jour",
+        "noCheckoutViews": "Aucune donnée de vue checkout sur cette période.",
+        "viewsAndSessions": "{{views}} vues · {{sessions}} sessions"
+    },
+    "mailbox": {
+        "title": "Messagerie",
+        "subtitle": "Consultez les conversations liées aux réservations.",
+        "threadTitle": "Conversation",
+        "empty": "Aucun message pour le moment.",
+        "noPreview": "Aucun aperçu disponible.",
+        "channel": {
+            "email": "Email",
+            "sms": "SMS"
+        }
+    },
+    "discounts": {
+        "title": "Réductions",
+        "subtitle": "Créez et gérez vos codes de réduction.",
+        "new": "Nouvelle réduction",
+        "details": "Détails de la réduction",
+        "empty": "Aucune réduction disponible.",
+        "notFound": "Réduction introuvable",
+        "notFoundDescription": "Cette réduction a peut-être été supprimée ou vous n'y avez plus accès.",
+        "noCode": "Aucun code",
+        "active": "Active",
+        "archived": "Archivée",
+        "created": "Réduction créée avec succès.",
+        "updated": "Réduction mise à jour avec succès.",
+        "createFailed": "Échec de la création de la réduction.",
+        "updateFailed": "Échec de la mise à jour de la réduction.",
+        "archivedToast": "Réduction archivée avec succès.",
+        "archiveFailed": "Échec de l'archivage de la réduction.",
+        "archiveAction": "Archiver la réduction",
+        "type": {
+            "percentage": "Pourcentage",
+            "fixed": "Montant fixe"
+        },
+        "fields": {
+            "name": "Nom",
+            "code": "Code",
+            "type": "Type",
+            "percentageAmount": "Montant en pourcentage",
+            "fixedAmount": "Montant fixe",
+            "expiresOn": "Expire le",
+            "maxTotalUses": "Nombre max d'utilisations",
+            "options": "Options",
+            "limitPerEmail": "Limiter par email",
+            "services": "Services associés"
+        },
+        "validation": {
+            "percentage": "Le pourcentage doit être compris entre 0 et 100.",
+            "fixed": "Le montant fixe doit être un nombre positif."
+        }
+    },
+    "settings": {
+        "title": "Paramètres",
+        "subtitle": "Gérez votre compte et les paramètres de l'espace de travail.",
+        "logout": "Se déconnecter",
+        "version": "Version {{version}}"
+    },
+    "notifications": {
+        "title": "Notifications",
+        "subtitle": "Activité récente et rappels."
+    },
+    "more": {
+        "member": "Membre de l'espace",
+        "workspace": "Espace Planoby",
+        "manageSettings": "Gérer les paramètres",
+        "manageSettingsDescription": "Ouvrez la navigation complète des paramètres et modifiez vos préférences."
+    },
+    "search": {
+        "quickActions": "Actions rapides",
+        "results": "{{count}} résultats",
+        "noResults": "Aucun résultat trouvé"
+    }
+}

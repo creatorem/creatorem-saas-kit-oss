@@ -1,0 +1,27 @@
+{
+    "extends": "@kit/tsconfig/base.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "typeRoots": ["./node_modules/@types", "./@types"],
+        "paths": {
+            "~/*": ["./*"],
+            "~/envs": ["./envs.ts"]
+        },
+        "jsx": "react-native",
+        "customConditions": ["react-native"],
+        "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    },
+    "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "./uniwind-types.d.ts", "app.config.ts"],
+    "exclude": [
+        ".cache",
+        "build",
+        "dist",
+        "node_modules",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+        "jest.setup.ts",
+        "jest.config.ts"
+    ]
+}
