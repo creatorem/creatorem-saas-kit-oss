@@ -2625,7 +2625,7 @@ export type Database = {
           },
         ]
       }
-      planoby_stripe_event_log: {
+      stripe_event_log: {
         Row: {
           booking_id: string | null
           event_type: string
@@ -2655,14 +2655,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "planoby_stripe_event_log_booking_id_fkey"
+            foreignKeyName: "stripe_event_log_booking_id_fkey"
             columns: ["booking_id"]
             isOneToOne: false
             referencedRelation: "booking"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "planoby_stripe_event_log_organization_id_fkey"
+            foreignKeyName: "stripe_event_log_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organization"
@@ -4296,4 +4296,3 @@ export const Constants = {
     Enums: {},
   },
 } as const
-

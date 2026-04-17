@@ -153,6 +153,45 @@ export interface FilterList {
         return: SQL | undefined;
         asyncable: true;
     };
+    server_notification_push_should_send: {
+        notificationId: string;
+        notificationUserId: string;
+        notificationType: string | null;
+        notificationTitle: string | null;
+        notificationBody: string | null;
+        notificationData: Record<string, unknown> | null;
+        deviceId: string;
+        deviceUserId: string;
+        devicePlatform: string;
+        deviceProvider: string;
+        return: boolean;
+        asyncable: true;
+    };
+    server_notification_push_map_payload: {
+        notificationId: string;
+        notificationUserId: string;
+        notificationType: string | null;
+        notificationTitle: string | null;
+        notificationBody: string | null;
+        notificationData: Record<string, unknown> | null;
+        iosSubtitle: string | null;
+        iosBadgeCount: number | null;
+        iosSoundName: string | null;
+        androidChannelId: string | null;
+        deviceId: string;
+        devicePlatform: string;
+        deviceProvider: string;
+        return: {
+            title?: string;
+            body?: string;
+            subtitle?: string;
+            badge?: number;
+            sound?: string | null;
+            data?: Record<string, unknown> | null;
+            channelId?: string | null;
+        };
+        asyncable: true;
+    };
     // from content type package
     content_type_get_analytics_fetcher_query_key: {
         return: unknown[];

@@ -21,6 +21,7 @@ export const frequencyType = pgEnum("frequency_type", ['once', 'day', 'week', 'm
 export const invoiceStatus = pgEnum("invoice_status", ['issued', 'partially_refunded', 'refunded'])
 export const matrixAxis = pgEnum("matrix_axis", ['row', 'col'])
 export const notificationType = pgEnum("notification_type", ['info', 'warning', 'error', 'success'])
+export const notificationPushDeliveryStatus = pgEnum("notification_push_delivery_status", ['queued', 'processing', 'sent', 'failed', 'invalid_token'])
 export const orgPermission = pgEnum("org_permission", ['organization.manage', 'member.manage', 'setting.manage', 'media.manage', 'booking.select', 'booking.insert', 'booking.update', 'booking.delete', 'service.select', 'service.insert', 'service.update', 'service.delete', 'checkout.select', 'checkout.insert', 'checkout.update', 'checkout.delete', 'slot.select', 'slot.insert', 'slot.update', 'slot.delete', 'slot_admin.select', 'slot_admin.insert', 'slot_admin.update', 'slot_admin.delete'])
 export const pdpConnectionStatus = pgEnum("pdp_connection_status", ['not_connected', 'connecting', 'connected', 'error'])
 export const serviceTaxMode = pgEnum("service_tax_mode", ['all', 'custom'])
@@ -436,6 +437,62 @@ export const notification = pgTable("notification", {
   WHERE (("user".id = notification.user_id) AND ("user".auth_user_id = auth.uid()))))`  }),
 ]);
 
+export const notificationDevice = pgTable("notification_device", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	userId: uuid("user_id").notNull(),
+	platform: varchar({ length: 32 }).notNull(),
+	provider: varchar({ length: 64 }).notNull(),
+	token: varchar({ length: 512 }).notNull(),
+	enabled: boolean().default(true).notNull(),
+	metadata: jsonb().default({}).notNull(),
+	lastSeenAt: timestamp("last_seen_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_notification_device_user_enabled").using("btree", table.userId.asc().nullsLast().op("uuid_ops"), table.enabled.asc().nullsLast().op("bool_ops")),
+	unique("uq_notification_device_provider_token").on(table.provider, table.token),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "notification_device_user_id_fkey"
+		}).onDelete("cascade"),
+	pgPolicy("notification_device_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(EXISTS ( SELECT 1
+   FROM "user"
+  WHERE (("user".id = notification_device.user_id) AND ("user".auth_user_id = auth.uid()))))`, withCheck: sql`(EXISTS ( SELECT 1
+   FROM "user"
+  WHERE (("user".id = notification_device.user_id) AND ("user".auth_user_id = auth.uid()))))`  }),
+]);
+
+export const notificationPushDelivery = pgTable("notification_push_delivery", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	notificationId: uuid("notification_id").notNull(),
+	deviceId: uuid("device_id").notNull(),
+	status: notificationPushDeliveryStatus().default('queued').notNull(),
+	attempts: integer().default(0).notNull(),
+	nextAttemptAt: timestamp("next_attempt_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	lastAttemptAt: timestamp("last_attempt_at", { withTimezone: true, mode: 'string' }),
+	sentAt: timestamp("sent_at", { withTimezone: true, mode: 'string' }),
+	lastError: text("last_error"),
+	providerMessageId: varchar("provider_message_id", { length: 320 }),
+	providerResponse: jsonb("provider_response").default({}).notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	unique("uq_notification_push_delivery_notification_device").on(table.notificationId, table.deviceId),
+	index("idx_notification_push_delivery_status_next_attempt").using("btree", table.status.asc().nullsLast().op("enum_ops"), table.nextAttemptAt.asc().nullsLast().op("timestamptz_ops")),
+	foreignKey({
+			columns: [table.notificationId],
+			foreignColumns: [notification.id],
+			name: "notification_push_delivery_notification_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.deviceId],
+			foreignColumns: [notificationDevice.id],
+			name: "notification_push_delivery_device_id_fkey"
+		}).onDelete("cascade"),
+	pgPolicy("notification_push_delivery_service_only", { as: "permissive", for: "all", to: ["service_role"], using: sql`true`, withCheck: sql`true`  }),
+]);
+
 export const participantDataSchema = pgTable("participant_data_schema", {
 	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	organizationId: uuid("organization_id").notNull(),
@@ -733,7 +790,7 @@ export const servicePriceMatrixInterval = pgTable("service_price_matrix_interval
 	pgPolicy("service_price_matrix_interval_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
 
-export const planobyStripeEventLog = pgTable("planoby_stripe_event_log", {
+export const planobyStripeEventLog = pgTable("stripe_event_log", {
 	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	stripeEventId: varchar("stripe_event_id", { length: 255 }).notNull(),
 	eventType: varchar("event_type", { length: 255 }).notNull(),
@@ -742,23 +799,23 @@ export const planobyStripeEventLog = pgTable("planoby_stripe_event_log", {
 	payload: jsonb().default({}).notNull(),
 	processedAt: timestamp("processed_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
-	index("idx_planoby_stripe_event_log_booking").using("btree", table.bookingId.asc().nullsLast().op("uuid_ops")),
-	index("idx_planoby_stripe_event_log_org").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
+	index("idx_stripe_event_log_booking").using("btree", table.bookingId.asc().nullsLast().op("uuid_ops")),
+	index("idx_stripe_event_log_org").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
 	foreignKey({
 			columns: [table.bookingId],
 			foreignColumns: [booking.id],
-			name: "planoby_stripe_event_log_booking_id_fkey"
+			name: "stripe_event_log_booking_id_fkey"
 		}).onDelete("set null"),
 	foreignKey({
 			columns: [table.organizationId],
 			foreignColumns: [organization.id],
-			name: "planoby_stripe_event_log_organization_id_fkey"
+			name: "stripe_event_log_organization_id_fkey"
 		}).onDelete("set null"),
-	unique("planoby_stripe_event_log_stripe_event_id_key").on(table.stripeEventId),
-	pgPolicy("planoby_stripe_event_log_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`((organization_id IS NULL) OR (kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission)))` }),
-	pgPolicy("planoby_stripe_event_log_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
-	pgPolicy("planoby_stripe_event_log_update", { as: "permissive", for: "update", to: ["authenticated"] }),
-	pgPolicy("planoby_stripe_event_log_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
+	unique("stripe_event_log_stripe_event_id_key").on(table.stripeEventId),
+	pgPolicy("stripe_event_log_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`((organization_id IS NULL) OR (kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission)))` }),
+	pgPolicy("stripe_event_log_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("stripe_event_log_update", { as: "permissive", for: "update", to: ["authenticated"] }),
+	pgPolicy("stripe_event_log_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
 
 export const service = pgTable("service", {

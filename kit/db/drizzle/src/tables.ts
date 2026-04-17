@@ -17,6 +17,8 @@ export type OrganizationMember = InferSelectModel<typeof schema.organizationMemb
 export type OrganizationInvitation = InferSelectModel<typeof schema.organizationInvitation>;
 export type OrganizationSetting = InferSelectModel<typeof schema.organizationSetting>;
 export type Notification = InferSelectModel<typeof schema.notification>;
+export type NotificationDevice = InferSelectModel<typeof schema.notificationDevice>;
+export type NotificationPushDelivery = InferSelectModel<typeof schema.notificationPushDelivery>;
 export type ParticipantDataSchema = InferSelectModel<typeof schema.participantDataSchema>;
 export type Slot = InferSelectModel<typeof schema.slot>;
 export type SlotOccurrence = InferSelectModel<typeof schema.slotOccurrence>;
@@ -74,6 +76,7 @@ export type FrequencyTypeEnum = typeof schema.frequencyType.enumValues[number];
 export type InvoiceStatusEnum = typeof schema.invoiceStatus.enumValues[number];
 export type MatrixAxisEnum = typeof schema.matrixAxis.enumValues[number];
 export type NotificationTypeEnum = typeof schema.notificationType.enumValues[number];
+export type NotificationPushDeliveryStatusEnum = typeof schema.notificationPushDeliveryStatus.enumValues[number];
 export type OrgPermissionEnum = typeof schema.orgPermission.enumValues[number];
 export type PdpConnectionStatusEnum = typeof schema.pdpConnectionStatus.enumValues[number];
 export type ServiceTaxModeEnum = typeof schema.serviceTaxMode.enumValues[number];
@@ -99,6 +102,8 @@ export const tableSchemaMap = {
     'organization_invitation': schema.organizationInvitation,
     'organization_setting': schema.organizationSetting,
     'notification': schema.notification,
+    'notification_device': schema.notificationDevice,
+    'notification_push_delivery': schema.notificationPushDelivery,
     'participant_data_schema': schema.participantDataSchema,
     'slot': schema.slot,
     'slot_occurrence': schema.slotOccurrence,
@@ -107,7 +112,7 @@ export const tableSchemaMap = {
     'booking_sms_reminder': schema.bookingSmsReminder,
     'service_price_matrix': schema.servicePriceMatrix,
     'service_price_matrix_interval': schema.servicePriceMatrixInterval,
-    'planoby_stripe_event_log': schema.planobyStripeEventLog,
+    'stripe_event_log': schema.planobyStripeEventLog,
     'service': schema.service,
     'organization_tax': schema.organizationTax,
     'invoice': schema.invoice,
