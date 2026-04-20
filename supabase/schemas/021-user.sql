@@ -94,9 +94,22 @@ USING ((( SELECT auth.uid() AS uid) = auth_user_id));
  * User Media Bucket
  * Public bucket for user profile media files (avatars, etc.)
  */
-insert into storage.buckets (id, name, PUBLIC)
-values ('user_media', 'user_media', true)
-ON CONFLICT (id) DO NOTHING;
+do $$
+begin
+    if to_regclass('storage.buckets') is null then
+        raise notice 'Skipping user_media bucket bootstrap: storage.buckets does not exist.';
+    elsif has_table_privilege(current_user, 'storage.buckets', 'INSERT') then
+        insert into storage.buckets (id, name, PUBLIC)
+        values ('user_media', 'user_media', true)
+        on conflict (id) do nothing;
+    else
+        raise notice 'Skipping user_media bucket bootstrap: role % has no INSERT on storage.buckets.', current_user;
+    end if;
+exception
+    when others then
+        raise notice 'Skipping user_media bucket bootstrap due to error: %', SQLERRM;
+end
+$$;
 
 ------------------------------------- STORAGE POLICIES -------------------------------------
 

@@ -11,7 +11,12 @@ export const bookingState = pgEnum("booking_state", ['requires_payment_method', 
 export const contentState = pgEnum("content_state", ['draft', 'published', 'archived'])
 export const creditNoteStatus = pgEnum("credit_note_status", ['issued', 'void'])
 export const discountRedemptionStatus = pgEnum("discount_redemption_status", ['reserved', 'consumed', 'released'])
-export const discountType = pgEnum("discount_type", ['percentage', 'fixed'])
+export const discountType = pgEnum("discount_type", ['percentage', 'fixed', 'free_participant', 'free_extra'])
+export const discountTargetScope = pgEnum("discount_target_scope", ['all', 'participant_base', 'extras'])
+export const discountParticipantOrdering = pgEnum("discount_participant_ordering", ['form_order', 'lowest_price', 'highest_price'])
+export const discountRewardMode = pgEnum("discount_reward_mode", ['single', 'all_eligible'])
+export const discountConditionMode = pgEnum("discount_condition_mode", ['all', 'any'])
+export const discountState = pgEnum("discount_state", ['draft', 'published', 'archived'])
 export const fiscalClassificationMode = pgEnum("fiscal_classification_mode", ['auto', 'force_b2b', 'force_b2c'])
 export const fiscalExportStatus = pgEnum("fiscal_export_status", ['pending', 'completed', 'failed'])
 export const fiscalPartyType = pgEnum("fiscal_party_type", ['b2c', 'b2b_fr', 'b2b_non_fr'])
@@ -1228,15 +1233,24 @@ export const organizationDiscountCode = pgTable("organization_discount_code", {
 	type: discountType().notNull(),
 	percentageAmount: numeric("percentage_amount", { precision: 5, scale:  2 }),
 	fixedAmount: numeric("fixed_amount", { precision: 12, scale:  2 }),
+	targetScope: discountTargetScope("target_scope").default('all').notNull(),
+	participantLimitCount: integer("participant_limit_count"),
+	participantOrdering: discountParticipantOrdering("participant_ordering").default('form_order').notNull(),
+	minParticipantsRequired: integer("min_participants_required"),
+	minSubtotalBeforeDiscountAmount: numeric("min_subtotal_before_discount_amount", { precision: 12, scale:  2 }),
+	conditionMode: discountConditionMode("condition_mode").default('all').notNull(),
+	rewardMode: discountRewardMode("reward_mode").default('single').notNull(),
+	rewardQuantity: integer("reward_quantity"),
 	expiresOn: date("expires_on"),
 	maxTotalUses: integer("max_total_uses"),
 	limitPerEmail: boolean("limit_per_email").default(true).notNull(),
-	active: boolean().default(true).notNull(),
+	state: discountState().default('published').notNull(),
+	conditions: jsonb().default([]).notNull(),
 	metadata: jsonb().default({}).notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
-	index("idx_org_discount_code_org_active_expires").using("btree", table.organizationId.asc().nullsLast().op("date_ops"), table.active.asc().nullsLast().op("uuid_ops"), table.expiresOn.asc().nullsLast().op("uuid_ops")),
+	index("idx_org_discount_code_org_state_expires").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.state.asc().nullsLast().op("enum_ops"), table.expiresOn.asc().nullsLast().op("date_ops")),
 	index("idx_organization_discount_code_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
 	uniqueIndex("uq_org_discount_code_org_code_normalized").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.codeNormalized.asc().nullsLast().op("uuid_ops")),
 	foreignKey({
@@ -1251,8 +1265,14 @@ export const organizationDiscountCode = pgTable("organization_discount_code", {
 	check("chk_discount_code_format", sql`(code_normalized)::text ~ '^[A-Z0-9-]{4,32}$'::text`),
 	check("chk_discount_fixed_amount", sql`(fixed_amount IS NULL) OR (fixed_amount >= (0)::numeric)`),
 	check("chk_discount_max_total_uses", sql`(max_total_uses IS NULL) OR (max_total_uses > 0)`),
+	check("chk_discount_min_participants_required", sql`(min_participants_required IS NULL) OR (min_participants_required > 0)`),
+	check("chk_discount_min_subtotal_before_discount_amount", sql`(min_subtotal_before_discount_amount IS NULL) OR (min_subtotal_before_discount_amount > (0)::numeric)`),
+	check("chk_discount_participant_limit_count", sql`(participant_limit_count IS NULL) OR (participant_limit_count > 0)`),
 	check("chk_discount_percentage_amount", sql`(percentage_amount IS NULL) OR ((percentage_amount > (0)::numeric) AND (percentage_amount <= (100)::numeric))`),
-	check("chk_discount_type_amount", sql`((type = 'percentage'::discount_type) AND (percentage_amount IS NOT NULL) AND (fixed_amount IS NULL)) OR ((type = 'fixed'::discount_type) AND (fixed_amount IS NOT NULL) AND (percentage_amount IS NULL))`),
+	check("chk_discount_reward_mode_quantity", sql`((reward_mode = 'all_eligible'::discount_reward_mode) AND (reward_quantity IS NULL)) OR (reward_mode = 'single'::discount_reward_mode)`),
+	check("chk_discount_reward_quantity", sql`(reward_quantity IS NULL) OR (reward_quantity > 0)`),
+	check("chk_discount_target_scope_effect_compatibility", sql`((type = 'free_extra'::discount_type) AND (target_scope = 'extras'::discount_target_scope)) OR ((type = 'free_participant'::discount_type) AND (target_scope = ANY (ARRAY['all'::discount_target_scope, 'participant_base'::discount_target_scope]))) OR (type = ANY (ARRAY['percentage'::discount_type, 'fixed'::discount_type]))`),
+	check("chk_discount_type_amount", sql`((type = 'percentage'::discount_type) AND (percentage_amount IS NOT NULL) AND (fixed_amount IS NULL)) OR ((type = 'fixed'::discount_type) AND (fixed_amount IS NOT NULL) AND (percentage_amount IS NULL)) OR ((type = ANY (ARRAY['free_participant'::discount_type, 'free_extra'::discount_type])) AND (percentage_amount IS NULL) AND (fixed_amount IS NULL))`),
 ]);
 
 export const organizationDiscountCodeRedemption = pgTable("organization_discount_code_redemption", {
@@ -1474,6 +1494,18 @@ export const booking = pgTable("booking", {
 	paymentDiscountCodeNormalized: varchar("payment_discount_code_normalized", { length: 32 }),
 	paymentDiscountType: discountType("payment_discount_type"),
 	paymentDiscountValue: numeric("payment_discount_value", { precision: 12, scale:  2 }),
+	paymentDiscountTargetScope: discountTargetScope("payment_discount_target_scope"),
+	paymentDiscountParticipantLimitCount: integer("payment_discount_participant_limit_count"),
+	paymentDiscountParticipantOrdering: discountParticipantOrdering("payment_discount_participant_ordering"),
+	paymentDiscountMinParticipantsRequired: integer("payment_discount_min_participants_required"),
+	paymentDiscountMinSubtotalBeforeDiscountAmount: numeric("payment_discount_min_subtotal_before_discount_amount", { precision: 12, scale:  2 }),
+	paymentDiscountConditionMode: discountConditionMode("payment_discount_condition_mode"),
+	paymentDiscountState: discountState("payment_discount_state"),
+	paymentDiscountConditions: jsonb("payment_discount_conditions").default([]).notNull(),
+	paymentDiscountRewardMode: discountRewardMode("payment_discount_reward_mode"),
+	paymentDiscountRewardQuantity: integer("payment_discount_reward_quantity"),
+	paymentDiscountExtraScopeIds: jsonb("payment_discount_extra_scope_ids").default([]).notNull(),
+	paymentDiscountBreakdown: jsonb("payment_discount_breakdown").default({}).notNull(),
 	paymentCurrency: varchar("payment_currency", { length: 10 }),
 	paymentAuthorizedAt: timestamp("payment_authorized_at", { withTimezone: true, mode: 'string' }),
 	paymentCapturedAt: timestamp("payment_captured_at", { withTimezone: true, mode: 'string' }),
@@ -1943,6 +1975,40 @@ export const organizationDiscountCodeService = pgTable("organization_discount_co
 	pgPolicy("organization_discount_code_service_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("organization_discount_code_service_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("organization_discount_code_service_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
+]);
+
+export const organizationDiscountCodeExtraScope = pgTable("organization_discount_code_extra_scope", {
+	organizationId: uuid("organization_id").notNull(),
+	discountCodeId: uuid("discount_code_id").notNull(),
+	participantDataSchemaId: uuid("participant_data_schema_id").notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_org_discount_code_extra_scope_org_discount").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.discountCodeId.asc().nullsLast().op("uuid_ops")),
+	index("idx_org_discount_code_extra_scope_org_schema").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
+	index("idx_organization_discount_code_extra_scope_discount_code_id").using("btree", table.discountCodeId.asc().nullsLast().op("uuid_ops")),
+	index("idx_organization_discount_code_extra_scope_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
+	index("idx_organization_discount_code_extra_scope_participant_data_schema_id").using("btree", table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
+	foreignKey({
+			columns: [table.discountCodeId],
+			foreignColumns: [organizationDiscountCode.id],
+			name: "organization_discount_code_extra_scope_discount_code_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "organization_discount_code_extra_scope_organization_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.participantDataSchemaId],
+			foreignColumns: [participantDataSchema.id],
+			name: "organization_discount_code_extra_scope_participant_data_schema_id_fkey"
+		}).onDelete("cascade"),
+	primaryKey({ columns: [table.discountCodeId, table.participantDataSchemaId], name: "organization_discount_code_extra_scope_pkey"}),
+	pgPolicy("organization_discount_code_extra_scope_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.select'::org_permission))` }),
+	pgPolicy("organization_discount_code_extra_scope_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("organization_discount_code_extra_scope_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
+	pgPolicy("organization_discount_code_extra_scope_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
 
 export const servicePriceMatrixCell = pgTable("service_price_matrix_cell", {

@@ -24,13 +24,9 @@ revoke all on schema public from public;
 
 revoke all PRIVILEGES on database "postgres" from "anon";
 revoke all PRIVILEGES on schema "public" from "anon";
-revoke all PRIVILEGES on schema "storage" from "anon";
 revoke all PRIVILEGES on all SEQUENCES in schema "public" from "anon";
-revoke all PRIVILEGES on all SEQUENCES in schema "storage" from "anon";
 revoke all PRIVILEGES on all FUNCTIONS in schema "public" from "anon";
-revoke all PRIVILEGES on all FUNCTIONS in schema "storage" from "anon";
 revoke all PRIVILEGES on all TABLES in schema "public" from "anon";
-revoke all PRIVILEGES on all TABLES in schema "storage" from "anon";
 
 alter default privileges in schema public
 revoke execute on functions from anon, authenticated;
