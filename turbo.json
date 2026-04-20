@@ -3,6 +3,8 @@
   "globalDependencies": ["**/.env"],
   "ui": "stream",
   "globalEnv": [
+    "PLANOBY_GOOGLE_CLIENT_ID",
+    "PLANOBY_GOOGLE_CLIENT_SECRET",
     "CM_READ_WRITE_TOKEN",
     "BLOB_READ_WRITE_TOKEN",
     "AUTH_WEBHOOK_SECRET",
