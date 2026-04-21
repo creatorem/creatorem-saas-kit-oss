@@ -6,6 +6,8 @@ import { initReactI18next } from 'react-i18next/initReactI18next';
 import type { I18nConfig } from '../config';
 import { I18N_COOKIE_NAME } from './constants';
 
+export type I18nInitialResources = Record<string, Record<string, Record<string, unknown>>>;
+
 /**
  * Check if the i18n instance is ready and handle infinite loop prevention.
  * @param i18next - the i18next instance
@@ -14,6 +16,19 @@ import { I18N_COOKIE_NAME } from './constants';
  * @returns the i18next instance if ready, or throws an error
  */
 function checkI18nInstance(i18next: I18nInstance, loadedLanguages: string[], loadedNamespaces: string[]): I18nInstance {
+    const storeData = i18next.services.resourceStore.data as Record<string, Record<string, unknown>> | undefined;
+
+    if (loadedLanguages.length === 0 && storeData) {
+        loadedLanguages.push(...Object.keys(storeData));
+    }
+
+    if (loadedNamespaces.length === 0 && storeData) {
+        const firstLanguageResources = Object.values(storeData)[0];
+        if (firstLanguageResources) {
+            loadedNamespaces.push(...Object.keys(firstLanguageResources));
+        }
+    }
+
     if (loadedLanguages.length === 0 || loadedNamespaces.length === 0) {
         console.log('Keeping component from rendering if no languages or namespaces are loaded.');
         throw new Error('No languages or namespaces loaded.');
@@ -22,10 +37,29 @@ function checkI18nInstance(i18next: I18nInstance, loadedLanguages: string[], loa
     return i18next;
 }
 
-export const createI18nInstance = async ({ resolver, ...config }: I18nConfig, lang?: string) => {
+export const createI18nInstance = async (
+    { resolver, ...config }: I18nConfig,
+    lang?: string,
+    options?: { initialResources?: I18nInitialResources },
+) => {
     const runsOnServerSide = typeof window === 'undefined';
     const loadedLanguages: string[] = [];
     const loadedNamespaces: string[] = [];
+    const initialResources = options?.initialResources;
+
+    if (initialResources) {
+        for (const [resourceLanguage, namespaces] of Object.entries(initialResources)) {
+            if (!loadedLanguages.includes(resourceLanguage)) {
+                loadedLanguages.push(resourceLanguage);
+            }
+
+            for (const namespace of Object.keys(namespaces)) {
+                if (!loadedNamespaces.includes(namespace)) {
+                    loadedNamespaces.push(namespace);
+                }
+            }
+        }
+    }
 
     // const finalLang = await getActiveLang(lang, { resolver, ...config });
 
@@ -83,6 +117,8 @@ export const createI18nInstance = async ({ resolver, ...config }: I18nConfig, la
                     escapeValue: false,
                 },
                 preload: runsOnServerSide ? config.languages : false,
+                resources: initialResources,
+                partialBundledLanguages: Boolean(initialResources),
             },
             (err: any) => {
                 if (err) {

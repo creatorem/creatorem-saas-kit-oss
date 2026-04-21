@@ -28,6 +28,17 @@ const getLanguageFromUrl = (req: NextRequest, config: I18nConfig): string | null
     return null;
 };
 
+const getLanguageFromQuery = (req: NextRequest, config: I18nConfig): string | null => {
+    const langParam = req.nextUrl.searchParams.get('lang');
+    const localeParam = req.nextUrl.searchParams.get('locale');
+    const candidate = (langParam ?? localeParam)?.trim().toLowerCase();
+    if (!candidate) {
+        return null;
+    }
+
+    return config.languages.includes(candidate) ? candidate : null;
+};
+
 export const i18nProxy = (config: I18nConfig) => (req: NextRequest, res: NextResponse):NextResponse => {
     acceptLanguage.languages(config.languages);
 
@@ -37,8 +48,15 @@ export const i18nProxy = (config: I18nConfig) => (req: NextRequest, res: NextRes
             res.headers.set(I18N_HEADER_NAME, lng);
         }
     } else {
-        const lng = getLanguageFromCookies(req) ?? config.defaultLanguage;
-        res.headers.set(I18N_HEADER_NAME, lng);
+        const lng =
+            getLanguageFromQuery(req, config) ??
+            getLanguageFromCookies(req);
+
+        if (lng) {
+            res.headers.set(I18N_HEADER_NAME, lng);
+        } else {
+            res.headers.delete(I18N_HEADER_NAME);
+        }
     }
 
     return res;

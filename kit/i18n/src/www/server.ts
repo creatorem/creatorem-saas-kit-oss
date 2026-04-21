@@ -49,11 +49,17 @@ export const getWithI18nHOC =
     (getServerI18n: (lang?: string) => Promise<I18nInstance>, config: I18nConfig) =>
         <P = unknown>(Component: (props: P) => Promise<unknown> | unknown) => {
             return async function WithI18nWrapper(props: P) {
-                const awaitedParams = await (props as { params: Promise<{ lang: string }> }).params;
-                // await getServerI18n(awaitedParams?.lang ?? config.defaultLanguage);
-                const routeLang = awaitedParams?.lang;
-                const safeLang = routeLang && config.languages.includes(routeLang) ? routeLang : config.defaultLanguage;
-                await getServerI18n(safeLang);
+                if (config.useRouting) {
+                    const awaitedParams = await (props as { params: Promise<{ lang: string }> }).params;
+                    const routeLang = awaitedParams?.lang;
+                    const safeLang =
+                        routeLang && config.languages.includes(routeLang)
+                            ? routeLang
+                            : config.defaultLanguage;
+                    await getServerI18n(safeLang);
+                } else {
+                    await getServerI18n();
+                }
 
                 return await Component(props);
             };
