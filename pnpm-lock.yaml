@@ -1375,6 +1375,12 @@ importers:
       '@planoby/utils':
         specifier: workspace:*
         version: link:../../packages/planoby/utils
+      '@stripe/connect-js':
+        specifier: 3.3.52-preview-1
+        version: 3.3.52-preview-1
+      '@stripe/react-connect-js':
+        specifier: 3.3.50-preview-1
+        version: 3.3.50-preview-1(@stripe/connect-js@3.3.52-preview-1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@t3-oss/env-nextjs':
         specifier: 0.13.8
         version: 0.13.8(typescript@5.9.3)(zod@3.25.76)
@@ -1655,6 +1661,9 @@ importers:
       '@planoby/shared':
         specifier: workspace:*
         version: link:../../packages/planoby/shared
+      '@planoby/utils':
+        specifier: workspace:*
+        version: link:../../packages/planoby/utils
       '@react-native-async-storage/async-storage':
         specifier: ^2.2.0
         version: 2.2.0(react-native@0.83.4(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.2.14)(react@19.1.0))
@@ -10969,6 +10978,16 @@ packages:
   '@strapi/typescript-utils@5.8.0':
     resolution: {integrity: sha512-yns+n/Cl9AF12qnnhVrCBhBXgZTK2HwoOqog6hrVtkh/fWzPs3mrBw4jm4FSxWvhmZ71HUrdERymuBm9c1mK8g==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+
+  '@stripe/connect-js@3.3.52-preview-1':
+    resolution: {integrity: sha512-k0lor2Ei5/suN6L407I3TSFqCvcFyMsKUS7hYuKEaIj2hcVGnTdOFpADa5IPvOSMLSos/yGMd7u7dfA1uy8Aww==}
+
+  '@stripe/react-connect-js@3.3.50-preview-1':
+    resolution: {integrity: sha512-FdJ3GulTEGEtgWap/hHDTETs0fMvJSzar+bKrFWQHaVHYVKFSdcbEHh57WynRAJ8RKMwYVZJZHaNXNvo7Wt2Uw==}
+    peerDependencies:
+      '@stripe/connect-js': '>=3.3.52-preview-1'
+      react: 19.1.0
+      react-dom: 19.1.0
 
   '@stripe/react-stripe-js@3.10.0':
     resolution: {integrity: sha512-UPqHZwMwDzGSax0ZI7XlxR3tZSpgIiZdk3CiwjbTK978phwR/fFXeAXQcN/h8wTAjR4ZIAzdlI9DbOqJhuJdeg==}
@@ -29527,6 +29546,14 @@ snapshots:
       lodash: 4.17.21
       prettier: 3.3.3
       typescript: 5.3.2
+
+  '@stripe/connect-js@3.3.52-preview-1': {}
+
+  '@stripe/react-connect-js@3.3.50-preview-1(@stripe/connect-js@3.3.52-preview-1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@stripe/connect-js': 3.3.52-preview-1
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   '@stripe/react-stripe-js@3.10.0(@stripe/stripe-js@5.10.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:

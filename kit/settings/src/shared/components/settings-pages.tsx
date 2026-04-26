@@ -16,8 +16,22 @@ import {
     isQuickFormWrapperConfig,
     SettingModel,
 } from '../../shared/setting-model';
-import { isGroupConfig, isPageConfig, PageConfig, UIConfig } from '../../shared/type';
+import { isGroupConfig, isPageConfig, isTabsConfig, PageConfig, PageSettingConfig, UIConfig } from '../../shared/type';
 import { SettingFormComponent, type SettingFormComponentProps } from './setting-form-component';
+
+export interface SettingsTabsRendererProps {
+    tabsId: string;
+    defaultValue: string;
+    pageHasTitle?: boolean;
+    className?: string;
+    tabsListClassName?: string;
+    tabsContentClassName?: string;
+    tabs: {
+        value: string;
+        label: React.ReactNode | string;
+        content: React.ReactNode;
+    }[];
+}
 
 export interface SettingsPagesProps extends Pick<SettingFormComponentProps, 'inputs' | 'QuickForm' | 'FormWrapper'> {
     params: {
@@ -29,6 +43,7 @@ export interface SettingsPagesProps extends Pick<SettingFormComponentProps, 'inp
     SkeletonComponent: React.FC;
     settingsSchemas: SettingsSchema;
     settingsUI: ReturnType<typeof parseUISettingConfig>;
+    TabsRenderer?: React.ComponentType<SettingsTabsRendererProps>;
 }
 
 const getLocalSettingConfig = (
@@ -87,7 +102,7 @@ type CurrentSettingsContextType = {
 
 const CurrentSettings = React.createContext<CurrentSettingsContextType>({
     config: null,
-    setConfig: () => {},
+    setConfig: () => { },
 });
 
 // no error if not defined
@@ -127,7 +142,7 @@ export function SettingsPages({ params, onNotFound, settingsSchemas, settingsUI,
 interface SettingsPageRendererProps
     extends Pick<
         SettingsPagesProps,
-        'Wrapper' | 'clientTrpc' | 'inputs' | 'QuickForm' | 'FormWrapper' | 'SkeletonComponent'
+        'Wrapper' | 'clientTrpc' | 'inputs' | 'QuickForm' | 'FormWrapper' | 'SkeletonComponent' | 'TabsRenderer'
     > {
     pageConfig: PageConfig<Record<string, any>, SettingsInputsBase>;
     model: SettingModel<Record<string, any>, SettingsInputsBase>;
@@ -135,54 +150,144 @@ interface SettingsPageRendererProps
 
 function SettingsPageRenderer({ pageConfig, ...props }: SettingsPageRendererProps) {
     const { setConfig } = useCurrentSettings();
+    const hasTabs = useMemo(() => {
+        return pageConfig.settings.some((setting) => isTabsConfig(setting));
+    }, [pageConfig.settings]);
 
     useEffect(() => {
         setConfig(pageConfig);
-    }, [setConfig]);
+    }, [setConfig, pageConfig]);
 
-    return <>{pageConfig.settings.map((setting, index) => renderSetting({ setting, index, ...props }))}</>;
+    const pageTitle = pageConfig.title?.trim();
+
+    return (
+        <>
+            {/* {hasTabs && pageTitle ? (
+                <div className="px-4 pt-8 sm:px-8">
+                    <h1 className="text-3xl font-bold tracking-tight">{pageTitle}</h1>
+                </div>
+            ) : null} */}
+
+            {pageConfig.settings.map((setting, index) =>
+                renderSetting({
+                    setting,
+                    index,
+                    keyPrefix: 'setting',
+                    // pageHasTitle: Boolean(hasTabs && pageTitle),
+                    ...props,
+                }),
+            )}
+        </>
+    );
 }
 
 // Helper function to render individual settings
 function renderSetting({
     setting,
     index,
+    keyPrefix,
+    // pageHasTitle,
     Wrapper,
+    TabsRenderer,
     ...props
 }: {
     model: SettingModel<Record<string, any>, SettingsInputsBase>;
-    setting: any;
+    setting: PageSettingConfig<Record<string, any>, SettingsInputsBase>;
     index: number;
+    keyPrefix: string;
+    // pageHasTitle: boolean;
 } & Pick<
     SettingsPagesProps,
-    'Wrapper' | 'clientTrpc' | 'inputs' | 'QuickForm' | 'FormWrapper' | 'SkeletonComponent'
+    'Wrapper' | 'clientTrpc' | 'inputs' | 'QuickForm' | 'FormWrapper' | 'SkeletonComponent' | 'TabsRenderer'
 >): React.ReactNode {
-    const key = `setting-${index}`;
+    const key = `${keyPrefix}-${index}`;
+
+    if (isTabsConfig(setting)) {
+        if (setting.tabs.length === 0) {
+            return null;
+        }
+
+        const resolvedDefaultValue = setting.tabs.some((tab) => tab.value === setting.defaultValue)
+            ? (setting.defaultValue as string)
+            : setting.tabs[0]!.value;
+
+        const renderedTabs = setting.tabs.map((tab, tabIndex) => ({
+            value: tab.value,
+            label: tab.label,
+            content: (
+                <React.Fragment key={`${key}-tab-content-${tab.value}`}>
+                    {tab.settings.map((tabSetting, nestedIndex) =>
+                        renderSetting({
+                            setting: tabSetting,
+                            index: nestedIndex,
+                            keyPrefix: `${key}-tab-${tabIndex}`,
+                            // pageHasTitle,
+                            Wrapper,
+                            TabsRenderer,
+                            ...props,
+                        }),
+                    )}
+                </React.Fragment>
+            ),
+        }));
+
+        if (TabsRenderer) {
+            return (
+                <TabsRenderer
+                    key={key}
+                    tabsId={setting.id}
+                    defaultValue={resolvedDefaultValue}
+                    // pageHasTitle={pageHasTitle}
+                    className={setting.className}
+                    tabsListClassName={setting.tabsListClassName}
+                    tabsContentClassName={setting.tabsContentClassName}
+                    tabs={renderedTabs}
+                />
+            );
+        }
+
+        const fallbackContent = renderedTabs.map((tab) => <React.Fragment key={`${key}-fallback-${tab.value}`}>{tab.content}</React.Fragment>);
+
+        if (setting.className) {
+            return (
+                <div key={key} className={setting.className}>
+                    {fallbackContent}
+                </div>
+            );
+        }
+
+        return <React.Fragment key={key}>{fallbackContent}</React.Fragment>;
+    }
+
+    const quickFormSetting = setting as any;
 
     // Handle UI components
-    if (isQuickFormUIComponent(setting)) {
-        return <React.Fragment key={key}>{setting.render}</React.Fragment>;
+    if (isQuickFormUIComponent(quickFormSetting)) {
+        return <React.Fragment key={key}>{quickFormSetting.render}</React.Fragment>;
     }
 
     // Handle form configurations
-    if (isFormConfig(setting)) {
+    if (isFormConfig(quickFormSetting)) {
         return (
             <React.Fragment key={key}>
-                <SettingsFormInitializer {...props} formId={setting.id} Wrapper={Wrapper} />
+                <SettingsFormInitializer {...props} formId={quickFormSetting.id} Wrapper={Wrapper} />
             </React.Fragment>
         );
     }
 
     // Handle wrapper configurations
-    if (isQuickFormWrapperConfig(setting)) {
+    if (isQuickFormWrapperConfig(quickFormSetting)) {
         return (
             <React.Fragment key={key}>
-                <Wrapper header={setting.header} className={setting.className}>
-                    {setting.settings.map((nestedSetting, nestedIndex) =>
+                <Wrapper header={quickFormSetting.header} className={quickFormSetting.className}>
+                    {quickFormSetting.settings.map((nestedSetting: any, nestedIndex: number) =>
                         renderSetting({
                             setting: nestedSetting,
                             index: nestedIndex,
+                            keyPrefix: `${key}-nested`,
+                            // pageHasTitle,
                             Wrapper,
+                            TabsRenderer,
                             ...props,
                         }),
                     )}
@@ -192,19 +297,19 @@ function renderSetting({
     }
 
     // Handle regular input settings - these need to be wrapped in a form
-    if (isQuickFormInputConfig(setting)) {
+    if (isQuickFormInputConfig(quickFormSetting)) {
         console.warn(
-            `Setting '${setting.slug}' found outside of form context. ` +
-                'Consider wrapping individual settings in a form configuration.',
+            `Setting '${quickFormSetting.slug}' found outside of form context. ` +
+            'Consider wrapping individual settings in a form configuration.',
         );
         return null;
     }
 
     // Handle confirmation input settings - these also need to be wrapped in a form
-    if (isLogicInputConfig(setting)) {
+    if (isLogicInputConfig(quickFormSetting)) {
         console.warn(
-            `Confirmation input '${setting.name}' found outside of form context. ` +
-                'Consider wrapping individual settings in a form configuration.',
+            `Confirmation input '${quickFormSetting.name}' found outside of form context. ` +
+            'Consider wrapping individual settings in a form configuration.',
         );
         return null;
     }

@@ -13,7 +13,9 @@ import {
     isGroupConfig,
     isPageConfig,
     isSettingDefinition,
+    isTabsConfig,
     PageConfig,
+    PageSettingConfig,
     SettingInputConfig,
     SettingSchemaMap,
     UIConfig,
@@ -51,15 +53,24 @@ export class SettingModel<T extends SettingSchemaMap, Inputs extends SettingsInp
      * Extract logic input schemas from UI config and store them
      */
     private extractLogicSchemas(): void {
-        const extractFromSettings = (settings: QuickFormUIConfig<T, Inputs>[]): void => {
+        const extractFromSettings = (settings: PageSettingConfig<T, Inputs>[]): void => {
             for (const setting of settings) {
-                if (isLogicInputConfig(setting)) {
+                if (isTabsConfig(setting)) {
+                    for (const tab of setting.tabs) {
+                        extractFromSettings(tab.settings);
+                    }
+                    continue;
+                }
+
+                const quickFormSetting = setting as QuickFormUIConfig<T, Inputs>;
+
+                if (isLogicInputConfig(quickFormSetting)) {
                     // Store the raw schema for server-side operations
-                    this.logicSchemas.set(setting.name, setting.schema);
-                } else if (isQuickFormWrapperConfig(setting)) {
-                    extractFromSettings(setting.settings);
-                } else if (isFormConfig(setting)) {
-                    extractFromSettings(setting.settings);
+                    this.logicSchemas.set(quickFormSetting.name, quickFormSetting.schema);
+                } else if (isQuickFormWrapperConfig(quickFormSetting)) {
+                    extractFromSettings(quickFormSetting.settings);
+                } else if (isFormConfig(quickFormSetting)) {
+                    extractFromSettings(quickFormSetting.settings);
                 }
             }
         };
@@ -321,24 +332,45 @@ export class SettingModel<T extends SettingSchemaMap, Inputs extends SettingsInp
     getSettingUIConfig(key: keyof T): SettingInputConfig<T, Inputs> | undefined {
         // Recursive function to search through settings
         const findInSettings = (configs: UIConfig<T, Inputs>): SettingInputConfig<T, Inputs> | undefined => {
+            const findInQuickFormSettings = (
+                settings: QuickFormUIConfig<T, Inputs>[],
+            ): SettingInputConfig<T, Inputs> | undefined => {
+                for (const setting of settings) {
+                    if (isQuickFormInputConfig(setting) && setting.slug === key) {
+                        return setting as SettingInputConfig<T, Inputs>;
+                    }
+
+                    if (isQuickFormWrapperConfig(setting) || isFormConfig(setting)) {
+                        const found = findInQuickFormSettings(setting.settings);
+                        if (found) return found;
+                    }
+                }
+                return undefined;
+            };
+
+            const findInPageSettings = (
+                settings: PageSettingConfig<T, Inputs>[],
+            ): SettingInputConfig<T, Inputs> | undefined => {
+                for (const setting of settings) {
+                    if (isTabsConfig(setting)) {
+                        for (const tab of setting.tabs) {
+                            const found = findInQuickFormSettings(tab.settings);
+                            if (found) return found;
+                        }
+                        continue;
+                    }
+
+                    const found = findInQuickFormSettings([setting as QuickFormUIConfig<T, Inputs>]);
+                    if (found) return found;
+                }
+
+                return undefined;
+            };
+
             for (const config of configs) {
                 if (isPageConfig(config)) {
-                    for (const setting of config.settings) {
-                        // Check if it's an input setting with a slug property
-                        if ('slug' in setting && setting.slug === key) {
-                            return setting as SettingInputConfig<T, Inputs>;
-                        } else if (
-                            setting.type === 'wrapper' &&
-                            'settings' in setting &&
-                            Array.isArray(setting.settings)
-                        ) {
-                            for (const nestedSetting of setting.settings) {
-                                if ('slug' in nestedSetting && nestedSetting.slug === key) {
-                                    return nestedSetting as SettingInputConfig<T, Inputs>;
-                                }
-                            }
-                        }
-                    }
+                    const found = findInPageSettings(config.settings);
+                    if (found) return found;
                 } else if (isGroupConfig(config)) {
                     // @ts-expect-error - TODO: Fix UIConfig type - TypeScript has issues with union type discrimination in recursive contexts
                     const found = findInSettings(config.settingsPages);
@@ -356,7 +388,7 @@ export class SettingModel<T extends SettingSchemaMap, Inputs extends SettingsInp
      * @param settings Array of setting UI configs
      * @returns Object with arrays of setting keys (slugs) and logic names
      */
-    collectSettingKeysFromConfig(settings: QuickFormUIConfig<T, Inputs>[]): {
+    collectSettingKeysFromConfig(settings: PageSettingConfig<T, Inputs>[]): {
         settingKeys: string[];
         logicNames: string[];
     } {
@@ -364,16 +396,27 @@ export class SettingModel<T extends SettingSchemaMap, Inputs extends SettingsInp
         const logicNames: string[] = [];
 
         for (const setting of settings) {
-            if (isQuickFormInputConfig(setting)) {
-                settingKeys.push(setting.slug as string);
-            } else if (isLogicInputConfig(setting)) {
-                logicNames.push(setting.name);
-            } else if (isQuickFormWrapperConfig(setting)) {
-                const nested = this.collectSettingKeysFromConfig(setting.settings);
+            if (isTabsConfig(setting)) {
+                for (const tab of setting.tabs) {
+                    const nested = this.collectSettingKeysFromConfig(tab.settings);
+                    settingKeys.push(...nested.settingKeys);
+                    logicNames.push(...nested.logicNames);
+                }
+                continue;
+            }
+
+            const quickFormSetting = setting as QuickFormUIConfig<T, Inputs>;
+
+            if (isQuickFormInputConfig(quickFormSetting)) {
+                settingKeys.push(quickFormSetting.slug as string);
+            } else if (isLogicInputConfig(quickFormSetting)) {
+                logicNames.push(quickFormSetting.name);
+            } else if (isQuickFormWrapperConfig(quickFormSetting)) {
+                const nested = this.collectSettingKeysFromConfig(quickFormSetting.settings);
                 settingKeys.push(...nested.settingKeys);
                 logicNames.push(...nested.logicNames);
-            } else if (isFormConfig(setting)) {
-                const nested = this.collectSettingKeysFromConfig(setting.settings);
+            } else if (isFormConfig(quickFormSetting)) {
+                const nested = this.collectSettingKeysFromConfig(quickFormSetting.settings);
                 settingKeys.push(...nested.settingKeys);
                 logicNames.push(...nested.logicNames);
             }
@@ -406,36 +449,47 @@ export class SettingModel<T extends SettingSchemaMap, Inputs extends SettingsInp
         }
 
         // Recursively collect settings from the config
-        const collectSettings = (settings: any[]): Record<string, z.ZodType<any>> => {
+        const collectSettings = (settings: PageSettingConfig<T, Inputs>[]): Record<string, z.ZodType<any>> => {
             const schemaShape: Record<string, z.ZodType<any>> = {};
 
             for (const setting of settings) {
+                if (isTabsConfig(setting)) {
+                    for (const tab of setting.tabs) {
+                        const nestedSettings = collectSettings(tab.settings);
+                        Object.assign(schemaShape, nestedSettings);
+                    }
+                    continue;
+                }
+
+                const quickFormSetting = setting as QuickFormUIConfig<T, Inputs>;
+
                 // For normal settings with slug
-                if (isQuickFormInputConfig(setting)) {
+                if (isQuickFormInputConfig(quickFormSetting)) {
                     try {
+                        const settingSlug = String(quickFormSetting.slug);
                         // Try to get the schema for this setting
-                        schemaShape[setting.slug as string] = this.getZodSchema(setting.slug as keyof T);
+                        schemaShape[settingSlug] = this.getZodSchema(quickFormSetting.slug as keyof T);
                     } catch (error) {
-                        console.warn(`Warning: Schema not found for setting '${setting.slug}', skipping`);
+                        console.warn(`Warning: Schema not found for setting '${String(quickFormSetting.slug)}', skipping`);
                     }
                 }
                 // For logic inputs with name
-                else if (isLogicInputConfig(setting)) {
-                    const logicSchema = this.getLogicSchema(setting.name);
+                else if (isLogicInputConfig(quickFormSetting)) {
+                    const logicSchema = this.getLogicSchema(quickFormSetting.name);
                     if (logicSchema) {
-                        schemaShape[setting.name] = logicSchema;
+                        schemaShape[quickFormSetting.name] = logicSchema;
                     } else {
-                        console.warn(`Warning: Schema not found for logic input '${setting.name}', skipping`);
+                        console.warn(`Warning: Schema not found for logic input '${quickFormSetting.name}', skipping`);
                     }
                 }
                 // For parent containers with nested settings
-                else if (isQuickFormWrapperConfig(setting) && setting.settings) {
-                    const nestedSettings = collectSettings(setting.settings);
+                else if (isQuickFormWrapperConfig(quickFormSetting) && quickFormSetting.settings) {
+                    const nestedSettings = collectSettings(quickFormSetting.settings);
                     Object.assign(schemaShape, nestedSettings);
                 }
                 // For form containers with nested settings
-                else if (isFormConfig(setting) && setting.settings) {
-                    const nestedSettings = collectSettings(setting.settings);
+                else if (isFormConfig(quickFormSetting) && quickFormSetting.settings) {
+                    const nestedSettings = collectSettings(quickFormSetting.settings);
                     Object.assign(schemaShape, nestedSettings);
                 }
                 // 'ui' type components don't need schema entries
@@ -465,7 +519,7 @@ export class SettingModel<T extends SettingSchemaMap, Inputs extends SettingsInp
 
         // Add setting schemas
         for (const key of keys) {
-            schemaShape[key as string] = this.getZodSchema(key);
+            schemaShape[String(key)] = this.getZodSchema(key);
         }
 
         // Add logic schemas
@@ -549,14 +603,24 @@ export class SettingModel<T extends SettingSchemaMap, Inputs extends SettingsInp
      * @returns The form config if found, undefined otherwise
      */
     private findFormInSettings(
-        settings: QuickFormUIConfig<T, Inputs>[],
+        settings: PageSettingConfig<T, Inputs>[],
         formId: string,
     ): FormConfig<T, Inputs> | undefined {
         for (const setting of settings) {
-            if (isFormConfig(setting) && setting.id === formId) {
-                return setting;
-            } else if (isQuickFormWrapperConfig(setting)) {
-                const found = this.findFormInSettings(setting.settings, formId);
+            if (isTabsConfig(setting)) {
+                for (const tab of setting.tabs) {
+                    const found = this.findFormInSettings(tab.settings, formId);
+                    if (found) return found;
+                }
+                continue;
+            }
+
+            const quickFormSetting = setting as QuickFormUIConfig<T, Inputs>;
+
+            if (isFormConfig(quickFormSetting) && quickFormSetting.id === formId) {
+                return quickFormSetting;
+            } else if (isQuickFormWrapperConfig(quickFormSetting)) {
+                const found = this.findFormInSettings(quickFormSetting.settings, formId);
                 if (found) return found;
             }
         }
@@ -640,16 +704,25 @@ export class SettingModel<T extends SettingSchemaMap, Inputs extends SettingsInp
      * @param values The form values
      */
     private async executeLogicCallbacks(
-        settings: QuickFormUIConfig<T, Inputs>[],
+        settings: PageSettingConfig<T, Inputs>[],
         values: Record<string, any>,
     ): Promise<void> {
         for (const setting of settings) {
-            if (isLogicInputConfig(setting) && setting.onSubmit) {
-                await setting.onSubmit(values);
-            } else if (isQuickFormWrapperConfig(setting)) {
-                await this.executeLogicCallbacks(setting.settings, values);
-            } else if (isFormConfig(setting)) {
-                await this.executeLogicCallbacks(setting.settings, values);
+            if (isTabsConfig(setting)) {
+                for (const tab of setting.tabs) {
+                    await this.executeLogicCallbacks(tab.settings, values);
+                }
+                continue;
+            }
+
+            const quickFormSetting = setting as QuickFormUIConfig<T, Inputs>;
+
+            if (isLogicInputConfig(quickFormSetting) && quickFormSetting.onSubmit) {
+                await quickFormSetting.onSubmit(values);
+            } else if (isQuickFormWrapperConfig(quickFormSetting)) {
+                await this.executeLogicCallbacks(quickFormSetting.settings, values);
+            } else if (isFormConfig(quickFormSetting)) {
+                await this.executeLogicCallbacks(quickFormSetting.settings, values);
             }
         }
     }

@@ -62,6 +62,33 @@ export type SettingInputConfig<
     Inputs extends SettingsInputsBase = SettingsInputsBase,
 > = SettingInputConfigUnion<Sch, Inputs>;
 
+export type TabItemConfig<
+    Sch extends SettingSchemaMap = SettingSchemaMap,
+    Inputs extends SettingsInputsBase = SettingsInputsBase,
+> = {
+    value: string;
+    label: React.ReactNode | string;
+    settings: QuickFormUIConfig<Sch, Inputs>[];
+};
+
+export type TabsConfig<
+    Sch extends SettingSchemaMap = SettingSchemaMap,
+    Inputs extends SettingsInputsBase = SettingsInputsBase,
+> = {
+    type: 'tabs';
+    id: string;
+    defaultValue?: string;
+    className?: string;
+    tabsListClassName?: string;
+    tabsContentClassName?: string;
+    tabs: TabItemConfig<Sch, Inputs>[];
+};
+
+export type PageSettingConfig<
+    Sch extends SettingSchemaMap = SettingSchemaMap,
+    Inputs extends SettingsInputsBase = SettingsInputsBase,
+> = QuickFormUIConfig<Sch, Inputs> | TabsConfig<Sch, Inputs>;
+
 // Enhanced page configuration for settings pages
 export type PageConfig<Sch extends SettingSchemaMap, Inputs extends SettingsInputsBase> = {
     /**
@@ -90,7 +117,7 @@ export type PageConfig<Sch extends SettingSchemaMap, Inputs extends SettingsInpu
      * The settings for this page
      * Array of setting configurations.
      */
-    settings: QuickFormUIConfig<Sch, Inputs>[];
+    settings: PageSettingConfig<Sch, Inputs>[];
 };
 
 // Enhanced group configuration for grouping settings pages
@@ -133,4 +160,11 @@ export function isGroupConfig<Sch extends SettingSchemaMap, Inputs extends Setti
     config: PageConfig<Sch, Inputs> | GroupConfig<Sch, Inputs>,
 ): config is GroupConfig<Sch, Inputs> {
     return 'group' in config && 'settingsPages' in config;
+}
+
+export function isTabsConfig<
+    Sch extends SettingSchemaMap = SettingSchemaMap,
+    Inputs extends SettingsInputsBase = SettingsInputsBase,
+>(config: PageSettingConfig<Sch, Inputs>): config is TabsConfig<Sch, Inputs> {
+    return config.type === 'tabs' && 'tabs' in config && Array.isArray(config.tabs);
 }
