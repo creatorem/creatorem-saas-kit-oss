@@ -4,9 +4,8 @@ import { QuickForm } from '@kit/ui/quick-form';
 import { Skeleton } from '@kit/ui/skeleton';
 import { Tabs, UnderlinedTabsContent, UnderlinedTabsList, UnderlinedTabsTrigger } from '@kit/ui/tabs';
 import { cn } from '@kit/utils';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { FC } from 'react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FormWrapperComponent } from '../../shared/components/setting-form-component';
 import {
     type SettingsPagesProps,
@@ -33,58 +32,65 @@ const SettingsTabsRenderer: FC<SettingsTabsRendererProps> = ({
     tabsContentClassName,
     tabs,
 }) => {
-    const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const queryParamKey = 'tab';
-
-    const currentTab = useMemo(() => {
-        const valueFromQuery = searchParams.get(queryParamKey);
-
-        if (valueFromQuery && tabs.some((tab) => tab.value === valueFromQuery)) {
-            return valueFromQuery;
+    const currentDefault = useMemo(() => {
+        if (tabs.some((tab) => tab.value === defaultValue)) {
+            return defaultValue;
         }
+        return tabs[0]?.value ?? defaultValue;
+    }, [tabs, defaultValue]);
 
-        return defaultValue;
-    }, [searchParams, tabs, queryParamKey, defaultValue]);
+    const [activeTab, setActiveTab] = useState(currentDefault);
+    const [visitedTabs, setVisitedTabs] = useState<Set<string>>(() => new Set([currentDefault]));
 
-    const handleTabChange = (nextValue: string) => {
-        if (nextValue === currentTab) {
-            return;
+    useEffect(() => {
+        if (!tabs.some((tab) => tab.value === activeTab)) {
+            setActiveTab(currentDefault);
         }
+    }, [tabs, activeTab, currentDefault]);
 
-        const params = new URLSearchParams(searchParams.toString());
-        params.set(queryParamKey, nextValue);
+    useEffect(() => {
+        setVisitedTabs((previous) => {
+            if (previous.has(activeTab)) {
+                return previous;
+            }
 
-        const nextQuery = params.toString();
-        const nextUrl = nextQuery ? `${pathname}?${nextQuery}` : pathname;
-        router.replace(nextUrl, { scroll: false });
-    };
+            const next = new Set(previous);
+            next.add(activeTab);
+            return next;
+        });
+    }, [activeTab]);
 
     return (
         // <div className={cn('', pageHasTitle ? 'pt-2' : 'pt-8')}>
         <div className={cn('pt-1')}>
-            <Tabs value={currentTab} onValueChange={handleTabChange} className={cn('w-full gap-0', className)}>
+            <Tabs value={activeTab} onValueChange={setActiveTab} className={cn('w-full gap-0', className)}>
                 {/* <UnderlinedTabsList className={cn('border-border mb-6 w-full justify-start border-b', tabsListClassName)}> */}
                 <div className="px-4 sm:px-8 border-border w-full justify-start border-b">
-                <UnderlinedTabsList className={cn(tabsListClassName)}>
-                    {tabs.map((tab) => (
-                        <UnderlinedTabsTrigger key={`${tabsId}-${tab.value}`} value={tab.value}>
-                            {tab.label}
-                        </UnderlinedTabsTrigger>
-                    ))}
-                </UnderlinedTabsList>
+                    <UnderlinedTabsList className={cn(tabsListClassName)}>
+                        {tabs.map((tab) => (
+                            <UnderlinedTabsTrigger key={`${tabsId}-${tab.value}`} value={tab.value}>
+                                {tab.label}
+                            </UnderlinedTabsTrigger>
+                        ))}
+                    </UnderlinedTabsList>
                 </div>
 
-                {tabs.map((tab) => (
-                    <UnderlinedTabsContent
-                        key={`${tabsId}-${tab.value}-content`}
-                        value={tab.value}
-                        className={cn('mt-0 outline-none space-y-4 px-4 py-8 sm:px-8', tabsContentClassName)}
-                    >
-                        {tab.content}
-                    </UnderlinedTabsContent>
-                ))}
+                {tabs.map((tab) =>
+                    visitedTabs.has(tab.value) ? (
+                        <UnderlinedTabsContent
+                            key={`${tabsId}-${tab.value}-content`}
+                            forceMount
+                            value={tab.value}
+                            className={cn(
+                                'mt-0 space-y-4 px-4 py-8 outline-none sm:px-8',
+                                activeTab !== tab.value && 'hidden',
+                                tabsContentClassName,
+                            )}
+                        >
+                            {tab.content}
+                        </UnderlinedTabsContent>
+                    ) : null,
+                )}
             </Tabs>
         </div>
     );
