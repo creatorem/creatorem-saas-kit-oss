@@ -521,7 +521,7 @@ export const participantDataSchema = pgTable("participant_data_schema", {
 			foreignColumns: [organization.id],
 			name: "participant_data_schema_organization_id_fkey"
 		}).onDelete("cascade"),
-	unique("participant_data_schema_slug_key").on(table.slug),
+	unique("participant_data_schema_organization_id_slug_key").on(table.organizationId, table.slug),
 	pgPolicy("participant_data_schema_update_2", { as: "permissive", for: "update", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.update'::org_permission))` }),
 	pgPolicy("participant_data_schema_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("participant_data_schema_select", { as: "permissive", for: "select", to: ["authenticated"] }),
@@ -1828,11 +1828,13 @@ export const serviceParticipantDataSchema = pgTable("service_participant_data_sc
 	organizationId: uuid("organization_id").notNull(),
 	serviceId: uuid("service_id").notNull(),
 	participantDataSchemaId: uuid("participant_data_schema_id").notNull(),
+	orderPosition: integer("order_position").default(0).notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
 	index("idx_service_participant_data_schema_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
 	index("idx_service_participant_data_schema_participant_data_schema_id").using("btree", table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
+	index("idx_service_participant_data_schema_service_order_position").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops"), table.orderPosition.asc().nullsLast().op("int4_ops")),
 	index("idx_service_participant_data_schema_service_id").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops")),
 	foreignKey({
 			columns: [table.organizationId],
