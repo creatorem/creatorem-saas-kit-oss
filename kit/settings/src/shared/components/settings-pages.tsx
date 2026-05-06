@@ -279,7 +279,11 @@ function renderSetting({
     if (isQuickFormWrapperConfig(quickFormSetting)) {
         return (
             <React.Fragment key={key}>
-                <Wrapper header={quickFormSetting.header} className={quickFormSetting.className}>
+                <Wrapper
+                    header={quickFormSetting.header}
+                    footer={quickFormSetting.footer}
+                    className={quickFormSetting.className}
+                >
                     {quickFormSetting.settings.map((nestedSetting: any, nestedIndex: number) =>
                         renderSetting({
                             setting: nestedSetting,
@@ -365,18 +369,18 @@ function SettingsFormInitializer({
         });
     };
 
-    if (valuesRes.isPending || !valuesRes.data) {
+    if (valuesRes.isPending) {
         // if (true) {
         return <SkeletonComponent />;
     }
 
     return (
         <SettingFormComponent
-            key={`${formId}:${formValuesKey}`}
+            key={`${formId}:${formValuesKey}:${valuesRes.error ? 'with-error' : 'ok'}`}
             {...props}
             model={model}
             formId={formId}
-            defaultValues={valuesRes.data}
+            defaultValues={valuesRes.data ?? {}}
             onSubmit={submitHandler}
         />
     );

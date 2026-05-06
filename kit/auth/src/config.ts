@@ -29,6 +29,20 @@ const providers: z.ZodType<Provider> = z.enum([
     'zoom',
 ]);
 
+const devAuthDefaultsSchema = z
+    .object({
+        /**
+         * Optional sign-in prefill defaults (mainly useful in development environments).
+         */
+        signInDefaults: z
+            .object({
+                email: z.string().email(),
+                password: z.string(),
+            })
+            .optional(),
+    })
+    .optional();
+
 const wwwAuthSchema = z.object({
     /**
      * The environment for the auth configuration.
@@ -157,6 +171,7 @@ const wwwAuthSchema = z.object({
             }),
         ])
         .optional(),
+    dev: devAuthDefaultsSchema,
 })
 
 const nativeAuthSchema = z.object({
@@ -247,6 +262,7 @@ const nativeAuthSchema = z.object({
             }),
         })
         .optional(),
+    dev: devAuthDefaultsSchema,
 })
 
 const schema = z.discriminatedUnion('environment', [

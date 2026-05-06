@@ -6,6 +6,7 @@ import { SettingModel } from '../../shared/setting-model';
 
 export type FormWrapperComponent = React.FC<{
     header?: React.ReactNode;
+    footer?: React.ReactNode;
     children: React.ReactNode;
 }>;
 
@@ -54,6 +55,7 @@ export function SettingFormComponent({
                         type: 'wrapper',
                         className: setting.className,
                         header: setting.header,
+                        footer: setting.footer,
                         settings: convertSettings(setting.settings || []),
                     };
                 } else if (setting.type === 'wrapper' && Array.isArray(setting.settings)) {
@@ -70,7 +72,7 @@ export function SettingFormComponent({
 
         return {
             id: formConfig.id || 'settings-form',
-            title: formConfig.header ? undefined : 'Settings', // Don't set title if header is provided
+            title: undefined,
             className: formConfig.className,
             schema: schema,
             settings: convertSettings(formConfig.settings),
@@ -86,7 +88,7 @@ export function SettingFormComponent({
     // }
 
     return (
-        <FormWrapper header={formConfig.header}>
+        <FormWrapper header={formConfig.header} footer={formConfig.footer}>
             <QuickForm
                 config={quickFormConfig}
                 defaultValues={defaultValues}

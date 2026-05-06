@@ -108,6 +108,7 @@ export type QuickFormWrapperConfig<
     type: 'wrapper';
     className?: string;
     header?: React.ReactNode;
+    footer?: React.ReactNode;
     settings: QuickFormUIConfig<T, Inputs>[];
 };
 
@@ -172,6 +173,7 @@ export type FormConfig<
     id: string; // Unique identifier for the form
     className?: string;
     header?: React.ReactNode;
+    footer?: React.ReactNode;
     submitButton?: {
         text?: string;
         className?: string;
@@ -276,6 +278,7 @@ export function isFormConfig<T extends QuickFormSchemaMap, I extends SettingsInp
 export type SettingWrapperComponent = React.FC<{
     className?: string;
     header?: React.ReactNode;
+    footer?: React.ReactNode;
     children: React.ReactNode;
 }>;
 

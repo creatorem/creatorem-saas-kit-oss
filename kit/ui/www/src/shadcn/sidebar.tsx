@@ -211,13 +211,15 @@ function Sidebar({
                     {...props}
                     data-sidebar="sidebar"
                     data-mobile="true"
-                    className="bg-sidebar text-sidebar-foreground w-[--sidebar-width] p-0 [&>button]:hidden"
+                    className="bg-sidebar text-sidebar-foreground h-[90vh] max-h-[90dvh] w-[--sidebar-width] overflow-hidden p-0 [&>button]:hidden"
                 >
                     <DrawerHeader className="sr-only">
                         <DrawerTitle>Sidebar</DrawerTitle>
                         <DrawerDescription>Displays the mobile sidebar.</DrawerDescription>
                     </DrawerHeader>
-                    <div className="flex h-full w-full flex-col">{children}</div>
+                    <div className="flex h-full min-h-0 w-full flex-col overflow-y-auto overscroll-contain">
+                        {children}
+                    </div>
                 </DrawerContent>
             </Drawer>
         );

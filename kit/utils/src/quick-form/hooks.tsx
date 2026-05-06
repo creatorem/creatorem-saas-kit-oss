@@ -73,6 +73,7 @@ export function useSettingsContent<
     QuickFormStepper,
     QuickFormField,
     inputs,
+    WrapUIComponent,
     // submitButton,
 }: {
     config: QuickFormConfig<T, I>;
@@ -89,6 +90,7 @@ export function useSettingsContent<
     form: UseFormReturn<any, any, any>;
     QuickFormStepper: QuickFormStepperComponent;
     QuickFormField: QuickFormFieldComponent<T, I>;
+    WrapUIComponent?: (content: React.ReactNode) => React.ReactNode;
     // submitButton: React.ReactNode;
 }) {
     const zodSchema = useQuickFormZodSchema(config);
@@ -98,7 +100,8 @@ export function useSettingsContent<
             .map((setting, index) => {
                 // Handle UI component type
                 if (isQuickFormUIComponent(setting)) {
-                    return <React.Fragment key={`ui-${index}`}>{setting.render}</React.Fragment>;
+                    const content = WrapUIComponent ? WrapUIComponent(setting.render) : setting.render;
+                    return <React.Fragment key={`ui-${index}`}>{content}</React.Fragment>;
                 }
 
                 // Handle wrapper type with nested settings
@@ -122,7 +125,12 @@ export function useSettingsContent<
                 // Handle wrapper type with nested settings
                 if (isQuickFormWrapperConfig(setting)) {
                     return (
-                        <Wrapper key={`wrapper-${index}`} header={setting.header} className={setting.className}>
+                        <Wrapper
+                            key={`wrapper-${index}`}
+                            header={setting.header}
+                            footer={setting.footer}
+                            className={setting.className}
+                        >
                             {renderSettings(setting.settings)}
                         </Wrapper>
                     );

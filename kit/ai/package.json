@@ -48,7 +48,7 @@
   },
   "peerDependencies": {
     "@kit/ui": "workspace:*",
-    "expo-router": "6.0.21",
+    "expo-router": "^55.0.0",
     "lucide-react": "^0.543.0"
   },
   "peerDependenciesMeta": {
