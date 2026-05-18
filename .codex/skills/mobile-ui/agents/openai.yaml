@@ -1,0 +1,7 @@
+interface:
+  display_name: "Mobile UI"
+  short_description: "iOS-first Expo UI with strict fallback rules"
+  default_prompt: "Use $mobile-ui to design or refactor this Planoby mobile UI flow with iOS-first native UX and robust Android fallbacks."
+
+policy:
+  allow_implicit_invocation: true

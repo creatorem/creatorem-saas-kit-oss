@@ -1,0 +1,47 @@
+- generic [active] [ref=e1]:
+  - main [ref=e67]:
+    - generic [ref=e71]:
+      - generic [ref=e73]:
+        - button "Toggle sidebar" [ref=e74] [cursor=pointer]:
+          - img
+          - generic [ref=e75]: Toggle Sidebar
+        - generic [ref=e77]:
+          - generic [ref=e78]:
+            - button "Today" [ref=e79] [cursor=pointer]:
+              - img
+            - button "Previous period" [ref=e80] [cursor=pointer]:
+              - img
+            - button "Next period" [ref=e81] [cursor=pointer]:
+              - img
+            - heading "May 2026" [level=2] [ref=e82]
+          - generic [ref=e84]:
+            - button "Edit slots" [disabled]:
+              - generic: Booking mode
+              - img
+            - img [ref=e87]
+          - button "1 Day" [ref=e97] [cursor=pointer]:
+            - text: 1 Day
+            - img
+      - generic [ref=e102]:
+        - generic [ref=e109]:
+          - button "Sat 16" [ref=e110]:
+            - generic [ref=e111]: Sat
+            - generic [ref=e112]: "16"
+          - button "Add memo for 2026-05-16" [ref=e113] [cursor=pointer]: Add memo
+        - generic [ref=e117]:
+          - generic [ref=e119]: 08:00
+          - generic [ref=e122]: 09:00
+          - generic [ref=e125]: 10:00
+          - generic [ref=e128]: 11:00
+          - generic [ref=e131]: 12:00
+          - generic [ref=e134]: 13:00
+          - generic [ref=e137]: 14:00
+          - generic [ref=e140]: 15:00
+          - generic [ref=e143]: 16:00
+          - generic [ref=e146]: 17:00
+          - generic [ref=e149]: 18:00
+          - generic [ref=e152]: 19:00
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e59] [cursor=pointer]:
+    - img [ref=e60]
+  - alert [ref=e63]

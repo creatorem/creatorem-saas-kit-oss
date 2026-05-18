@@ -95,7 +95,45 @@ export function useSettingsContent<
 }) {
     const zodSchema = useQuickFormZodSchema(config);
 
-    const renderSettings = (settings: QuickFormUIConfig<T, I>[]) => {
+    const applySectionSeparatorRules = (settings: QuickFormUIConfig<T, I>[]) => {
+        const leafInputIndexes = settings.reduce<number[]>((accumulator, nestedSetting, nestedIndex) => {
+            if (isQuickFormInputConfig(nestedSetting) || isLogicInputConfig(nestedSetting)) {
+                accumulator.push(nestedIndex);
+            }
+
+            return accumulator;
+        }, []);
+
+        if (leafInputIndexes.length === 0) {
+            return settings;
+        }
+
+        const lastLeafInputIndex = leafInputIndexes[leafInputIndexes.length - 1];
+
+        return settings.map((nestedSetting, nestedIndex) => {
+            if (isQuickFormInputConfig(nestedSetting) || isLogicInputConfig(nestedSetting)) {
+                if (nestedIndex === lastLeafInputIndex) {
+                    return {
+                        ...nestedSetting,
+                        hideSeparator: true,
+                    };
+                }
+
+                if (typeof nestedSetting.hideSeparator !== 'undefined') {
+                    return nestedSetting;
+                }
+
+                return {
+                    ...nestedSetting,
+                    hideSeparator: false,
+                };
+            }
+
+            return nestedSetting;
+        });
+    };
+
+    const renderSettings = (settings: QuickFormUIConfig<T, I>[], depth = 0) => {
         return settings
             .map((setting, index) => {
                 // Handle UI component type
@@ -115,7 +153,7 @@ export function useSettingsContent<
                             // submitButton={submitButton}
                             onSubmit={form.handleSubmit(handleSubmit)}
                             rawSteps={rawSteps}
-                            steps={rawSteps.map((s) => renderSettings(s.settings))}
+                            steps={rawSteps.map((s) => renderSettings(s.settings, depth + 1))}
                         >
                             {/* {renderSettings(setting.steps)} */}
                         </QuickFormStepper>
@@ -124,14 +162,23 @@ export function useSettingsContent<
 
                 // Handle wrapper type with nested settings
                 if (isQuickFormWrapperConfig(setting)) {
+                    const nestedSettings =
+                        setting.wrapperType === 'section'
+                            ? applySectionSeparatorRules(setting.settings)
+                            : setting.settings;
+
                     return (
                         <Wrapper
                             key={`wrapper-${index}`}
+                            wrapperType={setting.wrapperType}
                             header={setting.header}
                             footer={setting.footer}
                             className={setting.className}
+                            sectionClassName={setting.sectionClassName}
+                            sectionInnerClassName={setting.sectionInnerClassName}
+                            depth={depth}
                         >
-                            {renderSettings(setting.settings)}
+                            {renderSettings(nestedSettings, depth + 1)}
                         </Wrapper>
                     );
                 }
@@ -162,5 +209,5 @@ export function useSettingsContent<
             .filter((c) => c);
     };
 
-    return <>{renderSettings(config.settings)}</>;
+    return <>{renderSettings(config.settings, 0)}</>;
 }

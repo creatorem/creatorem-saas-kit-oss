@@ -17,7 +17,7 @@ const SheetClose = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <SheetPrimitive.Close
         className={cn(
-            'ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none',
+            'ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 z-[300400] rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none pointer-events-auto',
             className,
         )}
         {...props}

@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { usersInAuth, user, userSetting, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, notification, participantDataSchema, slot, service, slotOccurrence, checkout, checkoutPageView, dateMemo, booking, bookingSmsReminder, servicePriceMatrix, servicePriceMatrixInterval, planobyStripeEventLog, organizationTax, invoice, creditNote, bookingClientAccessChallenge, bookingClientAccessSession, servicePriceExtra, bookingCommunicationThread, bookingCommunicationMessage, bookingCommunicationStatusEvent, organizationDiscountCode, organizationDiscountCodeRedemption, googleCalendarConnection, googleCalendarBinding, googleCalendarEventMap, googleCalendarSyncJob, fiscalPdpConnection, fiscalTransmission, fiscalTransactionReportItem, fiscalPaymentReportItem, vatValidationLog, fiscalExportJob, serviceParticipantDataSchema, checkoutService, serviceTaxAssignment, invoiceCounter, organizationDiscountCodeService, servicePriceMatrixCell } from "./schema";
+import { usersInAuth, user, userSetting, notificationDevice, notificationPushDelivery, notification, subscription, aiThread, aiMessage, usageRecord, aiUsage, aiWallet, aiWalletTransaction, organization, organizationRole, organizationRolePermission, organizationMember, organizationInvitation, organizationSetting, participantDataSchema, slot, service, slotOccurrence, checkout, checkoutPageView, dateMemo, booking, bookingSmsReminder, servicePriceMatrix, servicePriceMatrixInterval, stripeEventLog, organizationTax, invoice, creditNote, bookingClientAccessChallenge, bookingClientAccessSession, bookingPaymentRetryToken, servicePriceExtra, bookingCommunicationThread, bookingCommunicationMessage, bookingCommunicationStatusEvent, organizationDiscountCode, organizationDiscountCodeRedemption, googleCalendarConnection, googleCalendarBinding, googleCalendarEventMap, googleCalendarSyncJob, fiscalPdpConnection, fiscalTransmission, fiscalTransactionReportItem, fiscalPaymentReportItem, vatValidationLog, fiscalExportJob, checkoutService, serviceTaxAssignment, invoiceCounter, organizationDiscountCodeService, organizationDiscountCodeExtraScope, serviceParticipantDataSchema, servicePriceMatrixCell } from "./schema";
 
 export const userRelations = relations(user, ({one, many}) => ({
 	usersInAuth: one(usersInAuth, {
@@ -7,6 +7,7 @@ export const userRelations = relations(user, ({one, many}) => ({
 		references: [usersInAuth.id]
 	}),
 	userSettings: many(userSetting),
+	notificationDevices: many(notificationDevice),
 	subscriptions: many(subscription),
 	aiThreads: many(aiThread),
 	aiMessages: many(aiMessage),
@@ -39,6 +40,37 @@ export const usersInAuthRelations = relations(usersInAuth, ({many}) => ({
 export const userSettingRelations = relations(userSetting, ({one}) => ({
 	user: one(user, {
 		fields: [userSetting.userId],
+		references: [user.id]
+	}),
+}));
+
+export const notificationDeviceRelations = relations(notificationDevice, ({one, many}) => ({
+	user: one(user, {
+		fields: [notificationDevice.userId],
+		references: [user.id]
+	}),
+	notificationPushDeliveries: many(notificationPushDelivery),
+}));
+
+export const notificationPushDeliveryRelations = relations(notificationPushDelivery, ({one}) => ({
+	notificationDevice: one(notificationDevice, {
+		fields: [notificationPushDelivery.deviceId],
+		references: [notificationDevice.id]
+	}),
+	notification: one(notification, {
+		fields: [notificationPushDelivery.notificationId],
+		references: [notification.id]
+	}),
+}));
+
+export const notificationRelations = relations(notification, ({one, many}) => ({
+	notificationPushDeliveries: many(notificationPushDelivery),
+	organization: one(organization, {
+		fields: [notification.organizationId],
+		references: [organization.id]
+	}),
+	user: one(user, {
+		fields: [notification.userId],
 		references: [user.id]
 	}),
 }));
@@ -133,7 +165,7 @@ export const organizationRelations = relations(organization, ({many}) => ({
 	bookingSmsReminders: many(bookingSmsReminder),
 	servicePriceMatrices: many(servicePriceMatrix),
 	servicePriceMatrixIntervals: many(servicePriceMatrixInterval),
-	planobyStripeEventLogs: many(planobyStripeEventLog),
+	stripeEventLogs: many(stripeEventLog),
 	services: many(service),
 	organizationTaxes: many(organizationTax),
 	invoices: many(invoice),
@@ -141,6 +173,7 @@ export const organizationRelations = relations(organization, ({many}) => ({
 	bookingClientAccessChallenges: many(bookingClientAccessChallenge),
 	bookingClientAccessSessions: many(bookingClientAccessSession),
 	checkouts: many(checkout),
+	bookingPaymentRetryTokens: many(bookingPaymentRetryToken),
 	servicePriceExtras: many(servicePriceExtra),
 	bookingCommunicationThreads: many(bookingCommunicationThread),
 	bookingCommunicationMessages: many(bookingCommunicationMessage),
@@ -157,11 +190,12 @@ export const organizationRelations = relations(organization, ({many}) => ({
 	fiscalPaymentReportItems: many(fiscalPaymentReportItem),
 	vatValidationLogs: many(vatValidationLog),
 	fiscalExportJobs: many(fiscalExportJob),
-	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 	checkoutServices: many(checkoutService),
 	serviceTaxAssignments: many(serviceTaxAssignment),
 	invoiceCounters: many(invoiceCounter),
 	organizationDiscountCodeServices: many(organizationDiscountCodeService),
+	organizationDiscountCodeExtraScopes: many(organizationDiscountCodeExtraScope),
+	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 	servicePriceMatrixCells: many(servicePriceMatrixCell),
 }));
 
@@ -213,17 +247,6 @@ export const organizationSettingRelations = relations(organizationSetting, ({one
 	}),
 }));
 
-export const notificationRelations = relations(notification, ({one}) => ({
-	organization: one(organization, {
-		fields: [notification.organizationId],
-		references: [organization.id]
-	}),
-	user: one(user, {
-		fields: [notification.userId],
-		references: [user.id]
-	}),
-}));
-
 export const participantDataSchemaRelations = relations(participantDataSchema, ({one, many}) => ({
 	participantDataSchema: one(participantDataSchema, {
 		fields: [participantDataSchema.displayAccordingToId],
@@ -243,6 +266,7 @@ export const participantDataSchemaRelations = relations(participantDataSchema, (
 	servicePriceMatrices_rowSchemaId: many(servicePriceMatrix, {
 		relationName: "servicePriceMatrix_rowSchemaId_participantDataSchema_id"
 	}),
+	organizationDiscountCodeExtraScopes: many(organizationDiscountCodeExtraScope),
 	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 }));
 
@@ -273,10 +297,10 @@ export const serviceRelations = relations(service, ({one, many}) => ({
 	}),
 	servicePriceExtras: many(servicePriceExtra),
 	bookings: many(booking),
-	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 	checkoutServices: many(checkoutService),
 	serviceTaxAssignments: many(serviceTaxAssignment),
 	organizationDiscountCodeServices: many(organizationDiscountCodeService),
+	serviceParticipantDataSchemas: many(serviceParticipantDataSchema),
 }));
 
 export const slotOccurrenceRelations = relations(slotOccurrence, ({one, many}) => ({
@@ -348,9 +372,10 @@ export const bookingSmsReminderRelations = relations(bookingSmsReminder, ({one})
 
 export const bookingRelations = relations(booking, ({one, many}) => ({
 	bookingSmsReminders: many(bookingSmsReminder),
-	planobyStripeEventLogs: many(planobyStripeEventLog),
+	stripeEventLogs: many(stripeEventLog),
 	invoices: many(invoice),
 	creditNotes: many(creditNote),
+	bookingPaymentRetryTokens: many(bookingPaymentRetryToken),
 	bookingCommunicationThreads: many(bookingCommunicationThread),
 	bookingCommunicationMessages: many(bookingCommunicationMessage),
 	bookingCommunicationStatusEvents: many(bookingCommunicationStatusEvent),
@@ -415,13 +440,13 @@ export const servicePriceMatrixIntervalRelations = relations(servicePriceMatrixI
 	}),
 }));
 
-export const planobyStripeEventLogRelations = relations(planobyStripeEventLog, ({one}) => ({
+export const stripeEventLogRelations = relations(stripeEventLog, ({one}) => ({
 	booking: one(booking, {
-		fields: [planobyStripeEventLog.bookingId],
+		fields: [stripeEventLog.bookingId],
 		references: [booking.id]
 	}),
 	organization: one(organization, {
-		fields: [planobyStripeEventLog.organizationId],
+		fields: [stripeEventLog.organizationId],
 		references: [organization.id]
 	}),
 }));
@@ -474,6 +499,17 @@ export const bookingClientAccessChallengeRelations = relations(bookingClientAcce
 export const bookingClientAccessSessionRelations = relations(bookingClientAccessSession, ({one}) => ({
 	organization: one(organization, {
 		fields: [bookingClientAccessSession.organizationId],
+		references: [organization.id]
+	}),
+}));
+
+export const bookingPaymentRetryTokenRelations = relations(bookingPaymentRetryToken, ({one}) => ({
+	booking: one(booking, {
+		fields: [bookingPaymentRetryToken.bookingId],
+		references: [booking.id]
+	}),
+	organization: one(organization, {
+		fields: [bookingPaymentRetryToken.organizationId],
 		references: [organization.id]
 	}),
 }));
@@ -539,6 +575,7 @@ export const organizationDiscountCodeRelations = relations(organizationDiscountC
 	}),
 	organizationDiscountCodeRedemptions: many(organizationDiscountCodeRedemption),
 	organizationDiscountCodeServices: many(organizationDiscountCodeService),
+	organizationDiscountCodeExtraScopes: many(organizationDiscountCodeExtraScope),
 }));
 
 export const organizationDiscountCodeRedemptionRelations = relations(organizationDiscountCodeRedemption, ({one}) => ({
@@ -696,21 +733,6 @@ export const fiscalExportJobRelations = relations(fiscalExportJob, ({one}) => ({
 	}),
 }));
 
-export const serviceParticipantDataSchemaRelations = relations(serviceParticipantDataSchema, ({one}) => ({
-	organization: one(organization, {
-		fields: [serviceParticipantDataSchema.organizationId],
-		references: [organization.id]
-	}),
-	participantDataSchema: one(participantDataSchema, {
-		fields: [serviceParticipantDataSchema.participantDataSchemaId],
-		references: [participantDataSchema.id]
-	}),
-	service: one(service, {
-		fields: [serviceParticipantDataSchema.serviceId],
-		references: [service.id]
-	}),
-}));
-
 export const checkoutServiceRelations = relations(checkoutService, ({one}) => ({
 	checkout: one(checkout, {
 		fields: [checkoutService.checkoutId],
@@ -759,6 +781,36 @@ export const organizationDiscountCodeServiceRelations = relations(organizationDi
 	}),
 	service: one(service, {
 		fields: [organizationDiscountCodeService.serviceId],
+		references: [service.id]
+	}),
+}));
+
+export const organizationDiscountCodeExtraScopeRelations = relations(organizationDiscountCodeExtraScope, ({one}) => ({
+	participantDataSchema: one(participantDataSchema, {
+		fields: [organizationDiscountCodeExtraScope.participantDataSchemaId],
+		references: [participantDataSchema.id]
+	}),
+	organizationDiscountCode: one(organizationDiscountCode, {
+		fields: [organizationDiscountCodeExtraScope.discountCodeId],
+		references: [organizationDiscountCode.id]
+	}),
+	organization: one(organization, {
+		fields: [organizationDiscountCodeExtraScope.organizationId],
+		references: [organization.id]
+	}),
+}));
+
+export const serviceParticipantDataSchemaRelations = relations(serviceParticipantDataSchema, ({one}) => ({
+	organization: one(organization, {
+		fields: [serviceParticipantDataSchema.organizationId],
+		references: [organization.id]
+	}),
+	participantDataSchema: one(participantDataSchema, {
+		fields: [serviceParticipantDataSchema.participantDataSchemaId],
+		references: [participantDataSchema.id]
+	}),
+	service: one(service, {
+		fields: [serviceParticipantDataSchema.serviceId],
 		references: [service.id]
 	}),
 }));

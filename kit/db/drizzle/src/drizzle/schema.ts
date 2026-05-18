@@ -1,4 +1,4 @@
-import { pgTable, foreignKey, pgPolicy, uuid, varchar, boolean, timestamp, json, unique, text, jsonb, check, integer, numeric, index, uniqueIndex, date, time, primaryKey, pgView, pgEnum } from "drizzle-orm/pg-core"
+import { pgTable, foreignKey, pgPolicy, uuid, varchar, boolean, timestamp, json, index, uniqueIndex, jsonb, integer, text, unique, check, numeric, date, time, primaryKey, pgView, pgEnum } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -10,13 +10,13 @@ export const bookingPaymentStatus = pgEnum("booking_payment_status", ['none', 's
 export const bookingState = pgEnum("booking_state", ['requires_payment_method', 'requires_slot_confirmation', 'canceled', 'confirmed', 'charged', 'confirmation_failed', 'partially_refunded', 'refunded'])
 export const contentState = pgEnum("content_state", ['draft', 'published', 'archived'])
 export const creditNoteStatus = pgEnum("credit_note_status", ['issued', 'void'])
-export const discountRedemptionStatus = pgEnum("discount_redemption_status", ['reserved', 'consumed', 'released'])
-export const discountType = pgEnum("discount_type", ['percentage', 'fixed', 'free_participant', 'free_extra'])
-export const discountTargetScope = pgEnum("discount_target_scope", ['all', 'participant_base', 'extras'])
-export const discountParticipantOrdering = pgEnum("discount_participant_ordering", ['form_order', 'lowest_price', 'highest_price'])
-export const discountRewardMode = pgEnum("discount_reward_mode", ['single', 'all_eligible'])
 export const discountConditionMode = pgEnum("discount_condition_mode", ['all', 'any'])
+export const discountParticipantOrdering = pgEnum("discount_participant_ordering", ['form_order', 'lowest_price', 'highest_price'])
+export const discountRedemptionStatus = pgEnum("discount_redemption_status", ['reserved', 'consumed', 'released'])
+export const discountRewardMode = pgEnum("discount_reward_mode", ['single', 'all_eligible'])
 export const discountState = pgEnum("discount_state", ['draft', 'published', 'archived'])
+export const discountTargetScope = pgEnum("discount_target_scope", ['all', 'participant_base', 'extras'])
+export const discountType = pgEnum("discount_type", ['percentage', 'fixed', 'free_participant', 'free_extra'])
 export const fiscalClassificationMode = pgEnum("fiscal_classification_mode", ['auto', 'force_b2b', 'force_b2c'])
 export const fiscalExportStatus = pgEnum("fiscal_export_status", ['pending', 'completed', 'failed'])
 export const fiscalPartyType = pgEnum("fiscal_party_type", ['b2c', 'b2b_fr', 'b2b_non_fr'])
@@ -25,9 +25,9 @@ export const fiscalTransmissionType = pgEnum("fiscal_transmission_type", ['einvo
 export const frequencyType = pgEnum("frequency_type", ['once', 'day', 'week', 'month', 'year'])
 export const invoiceStatus = pgEnum("invoice_status", ['issued', 'partially_refunded', 'refunded'])
 export const matrixAxis = pgEnum("matrix_axis", ['row', 'col'])
-export const notificationType = pgEnum("notification_type", ['info', 'warning', 'error', 'success'])
 export const notificationPushDeliveryStatus = pgEnum("notification_push_delivery_status", ['queued', 'processing', 'sent', 'failed', 'invalid_token'])
-export const orgPermission = pgEnum("org_permission", ['organization.manage', 'member.manage', 'setting.manage', 'media.manage', 'booking.select', 'booking.insert', 'booking.update', 'booking.delete', 'service.select', 'service.insert', 'service.update', 'service.delete', 'checkout.select', 'checkout.insert', 'checkout.update', 'checkout.delete', 'slot.select', 'slot.insert', 'slot.update', 'slot.delete', 'slot_admin.select', 'slot_admin.insert', 'slot_admin.update', 'slot_admin.delete'])
+export const notificationType = pgEnum("notification_type", ['info', 'warning', 'error', 'success'])
+export const orgPermission = pgEnum("org_permission", ['organization.manage', 'member.manage', 'setting.manage', 'media.manage', 'booking.me.select', 'booking.me.insert', 'booking.me.update', 'booking.me.delete', 'booking.all.select', 'booking.all.insert', 'booking.all.update', 'booking.all.delete', 'service.select', 'service.insert', 'service.update', 'service.delete', 'checkout.select', 'checkout.insert', 'checkout.update', 'checkout.delete', 'slot.me.select', 'slot.me.insert', 'slot.me.update', 'slot.me.delete', 'slot.all.select', 'slot.all.insert', 'slot.all.update', 'slot.all.delete'])
 export const pdpConnectionStatus = pgEnum("pdp_connection_status", ['not_connected', 'connecting', 'connected', 'error'])
 export const serviceTaxMode = pgEnum("service_tax_mode", ['all', 'custom'])
 export const slotState = pgEnum("slot_state", ['confirmed', 'requested'])
@@ -75,6 +75,62 @@ export const userSetting = pgTable("user_setting", {
   WHERE (("user".id = user_setting.user_id) AND ("user".auth_user_id = auth.uid()))))`, withCheck: sql`(EXISTS ( SELECT 1
    FROM "user"
   WHERE (("user".id = user_setting.user_id) AND ("user".auth_user_id = auth.uid()))))`  }),
+]);
+
+export const notificationDevice = pgTable("notification_device", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	userId: uuid("user_id").notNull(),
+	platform: varchar({ length: 32 }).notNull(),
+	provider: varchar({ length: 64 }).notNull(),
+	token: varchar({ length: 512 }).notNull(),
+	enabled: boolean().default(true).notNull(),
+	metadata: jsonb().default({}).notNull(),
+	lastSeenAt: timestamp("last_seen_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_notification_device_user_enabled").using("btree", table.userId.asc().nullsLast().op("bool_ops"), table.enabled.asc().nullsLast().op("uuid_ops")),
+	uniqueIndex("uq_notification_device_provider_token").using("btree", table.provider.asc().nullsLast().op("text_ops"), table.token.asc().nullsLast().op("text_ops")),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "notification_device_user_id_fkey"
+		}).onDelete("cascade"),
+	pgPolicy("notification_device_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(EXISTS ( SELECT 1
+   FROM "user"
+  WHERE (("user".id = notification_device.user_id) AND ("user".auth_user_id = auth.uid()))))`, withCheck: sql`(EXISTS ( SELECT 1
+   FROM "user"
+  WHERE (("user".id = notification_device.user_id) AND ("user".auth_user_id = auth.uid()))))`  }),
+]);
+
+export const notificationPushDelivery = pgTable("notification_push_delivery", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	notificationId: uuid("notification_id").notNull(),
+	deviceId: uuid("device_id").notNull(),
+	status: notificationPushDeliveryStatus().default('queued').notNull(),
+	attempts: integer().default(0).notNull(),
+	nextAttemptAt: timestamp("next_attempt_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	lastAttemptAt: timestamp("last_attempt_at", { withTimezone: true, mode: 'string' }),
+	sentAt: timestamp("sent_at", { withTimezone: true, mode: 'string' }),
+	lastError: text("last_error"),
+	providerMessageId: varchar("provider_message_id", { length: 320 }),
+	providerResponse: jsonb("provider_response").default({}).notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_notification_push_delivery_status_next_attempt").using("btree", table.status.asc().nullsLast().op("timestamptz_ops"), table.nextAttemptAt.asc().nullsLast().op("enum_ops")),
+	uniqueIndex("uq_notification_push_delivery_notification_device").using("btree", table.notificationId.asc().nullsLast().op("uuid_ops"), table.deviceId.asc().nullsLast().op("uuid_ops")),
+	foreignKey({
+			columns: [table.deviceId],
+			foreignColumns: [notificationDevice.id],
+			name: "notification_push_delivery_device_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.notificationId],
+			foreignColumns: [notification.id],
+			name: "notification_push_delivery_notification_id_fkey"
+		}).onDelete("cascade"),
+	pgPolicy("notification_push_delivery_service_only", { as: "permissive", for: "all", to: ["service_role"], using: sql`true`, withCheck: sql`true`  }),
 ]);
 
 export const subscription = pgTable("subscription", {
@@ -271,8 +327,8 @@ export const organization = pgTable("organization", {
 }, (table) => [
 	unique("organization_slug_key").on(table.slug),
 	unique("organization_email_key").on(table.email),
-	pgPolicy("organization_create", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`true`  }),
-	pgPolicy("organization_read", { as: "permissive", for: "select", to: ["authenticated"] }),
+	pgPolicy("organization_read", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(id) OR kit.user_is_invited_to_org(id))` }),
+	pgPolicy("organization_create", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("organization_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("organization_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
@@ -316,8 +372,8 @@ export const organizationRolePermission = pgTable("organization_role_permission"
 			name: "organization_role_permission_role_id_fkey"
 		}).onDelete("cascade"),
 	unique("organization_role_permission_role_id_permission_key").on(table.roleId, table.permission),
-	pgPolicy("organization_role_permission_read", { as: "permissive", for: "select", to: ["authenticated"], using: sql`kit.user_is_member_of_org(organization_id)` }),
-	pgPolicy("organization_role_permission_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("organization_role_permission_insert", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'member.manage'::org_permission))`  }),
+	pgPolicy("organization_role_permission_read", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("organization_role_permission_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("organization_role_permission_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
@@ -442,62 +498,6 @@ export const notification = pgTable("notification", {
   WHERE (("user".id = notification.user_id) AND ("user".auth_user_id = auth.uid()))))`  }),
 ]);
 
-export const notificationDevice = pgTable("notification_device", {
-	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-	userId: uuid("user_id").notNull(),
-	platform: varchar({ length: 32 }).notNull(),
-	provider: varchar({ length: 64 }).notNull(),
-	token: varchar({ length: 512 }).notNull(),
-	enabled: boolean().default(true).notNull(),
-	metadata: jsonb().default({}).notNull(),
-	lastSeenAt: timestamp("last_seen_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-	index("idx_notification_device_user_enabled").using("btree", table.userId.asc().nullsLast().op("uuid_ops"), table.enabled.asc().nullsLast().op("bool_ops")),
-	unique("uq_notification_device_provider_token").on(table.provider, table.token),
-	foreignKey({
-			columns: [table.userId],
-			foreignColumns: [user.id],
-			name: "notification_device_user_id_fkey"
-		}).onDelete("cascade"),
-	pgPolicy("notification_device_all", { as: "permissive", for: "all", to: ["authenticated"], using: sql`(EXISTS ( SELECT 1
-   FROM "user"
-  WHERE (("user".id = notification_device.user_id) AND ("user".auth_user_id = auth.uid()))))`, withCheck: sql`(EXISTS ( SELECT 1
-   FROM "user"
-  WHERE (("user".id = notification_device.user_id) AND ("user".auth_user_id = auth.uid()))))`  }),
-]);
-
-export const notificationPushDelivery = pgTable("notification_push_delivery", {
-	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-	notificationId: uuid("notification_id").notNull(),
-	deviceId: uuid("device_id").notNull(),
-	status: notificationPushDeliveryStatus().default('queued').notNull(),
-	attempts: integer().default(0).notNull(),
-	nextAttemptAt: timestamp("next_attempt_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	lastAttemptAt: timestamp("last_attempt_at", { withTimezone: true, mode: 'string' }),
-	sentAt: timestamp("sent_at", { withTimezone: true, mode: 'string' }),
-	lastError: text("last_error"),
-	providerMessageId: varchar("provider_message_id", { length: 320 }),
-	providerResponse: jsonb("provider_response").default({}).notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-	unique("uq_notification_push_delivery_notification_device").on(table.notificationId, table.deviceId),
-	index("idx_notification_push_delivery_status_next_attempt").using("btree", table.status.asc().nullsLast().op("enum_ops"), table.nextAttemptAt.asc().nullsLast().op("timestamptz_ops")),
-	foreignKey({
-			columns: [table.notificationId],
-			foreignColumns: [notification.id],
-			name: "notification_push_delivery_notification_id_fkey"
-		}).onDelete("cascade"),
-	foreignKey({
-			columns: [table.deviceId],
-			foreignColumns: [notificationDevice.id],
-			name: "notification_push_delivery_device_id_fkey"
-		}).onDelete("cascade"),
-	pgPolicy("notification_push_delivery_service_only", { as: "permissive", for: "all", to: ["service_role"], using: sql`true`, withCheck: sql`true`  }),
-]);
-
 export const participantDataSchema = pgTable("participant_data_schema", {
 	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	organizationId: uuid("organization_id").notNull(),
@@ -521,7 +521,7 @@ export const participantDataSchema = pgTable("participant_data_schema", {
 			foreignColumns: [organization.id],
 			name: "participant_data_schema_organization_id_fkey"
 		}).onDelete("cascade"),
-	unique("participant_data_schema_organization_id_slug_key").on(table.organizationId, table.slug),
+	unique("participant_data_schema_slug_key").on(table.slug),
 	pgPolicy("participant_data_schema_update_2", { as: "permissive", for: "update", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.update'::org_permission))` }),
 	pgPolicy("participant_data_schema_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("participant_data_schema_select", { as: "permissive", for: "select", to: ["authenticated"] }),
@@ -568,7 +568,7 @@ export const slot = pgTable("slot", {
 			foreignColumns: [service.id],
 			name: "slot_service_id_fkey"
 		}).onDelete("set null"),
-	pgPolicy("slot_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND (kit.has_org_permission(organization_id, 'slot_admin.select'::org_permission) OR (kit.has_org_permission(organization_id, 'slot.select'::org_permission) AND (company_member_id = kit.get_user_id()))))` }),
+	pgPolicy("slot_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND (kit.has_org_permission(organization_id, 'slot.all.select'::org_permission) OR (kit.has_org_permission(organization_id, 'slot.me.select'::org_permission) AND (company_member_id = kit.get_user_id()))))` }),
 	pgPolicy("slot_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("slot_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("slot_update", { as: "permissive", for: "update", to: ["authenticated"] }),
@@ -621,7 +621,7 @@ export const slotOccurrence = pgTable("slot_occurrence", {
 			foreignColumns: [slot.id],
 			name: "slot_occurrence_slot_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("slot_occurrence_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND (kit.has_org_permission(organization_id, 'slot_admin.select'::org_permission) OR (kit.has_org_permission(organization_id, 'slot.select'::org_permission) AND (company_member_id = kit.get_user_id()))))` }),
+	pgPolicy("slot_occurrence_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND (kit.has_org_permission(organization_id, 'slot.all.select'::org_permission) OR (kit.has_org_permission(organization_id, 'slot.me.select'::org_permission) AND (company_member_id = kit.get_user_id()))))` }),
 	pgPolicy("slot_occurrence_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("slot_occurrence_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	pgPolicy("slot_occurrence_update", { as: "permissive", for: "update", to: ["authenticated"] }),
@@ -690,7 +690,7 @@ export const dateMemo = pgTable("date_memo", {
 			foreignColumns: [user.id],
 			name: "date_memo_user_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("date_memo_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND (kit.has_org_permission(organization_id, 'slot_admin.select'::org_permission) OR (kit.has_org_permission(organization_id, 'slot.select'::org_permission) AND (user_id = kit.get_user_id()))))` }),
+	pgPolicy("date_memo_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND (kit.has_org_permission(organization_id, 'slot.all.select'::org_permission) OR (kit.has_org_permission(organization_id, 'slot.me.select'::org_permission) AND (user_id = kit.get_user_id()))))` }),
 	pgPolicy("date_memo_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("date_memo_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("date_memo_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
@@ -717,7 +717,7 @@ export const bookingSmsReminder = pgTable("booking_sms_reminder", {
 			foreignColumns: [organization.id],
 			name: "booking_sms_reminder_organization_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("booking_sms_reminder_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
+	pgPolicy("booking_sms_reminder_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`kit.can_select_booking(booking_id)` }),
 	pgPolicy("booking_sms_reminder_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("booking_sms_reminder_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("booking_sms_reminder_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
@@ -789,19 +789,20 @@ export const servicePriceMatrixInterval = pgTable("service_price_matrix_interval
 			foreignColumns: [organization.id],
 			name: "service_price_matrix_interval_organization_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("service_price_matrix_interval_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.select'::org_permission))` }),
-	pgPolicy("service_price_matrix_interval_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("service_price_matrix_interval_insert_1", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.insert'::org_permission))`  }),
+	pgPolicy("service_price_matrix_interval_select", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("service_price_matrix_interval_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("service_price_matrix_interval_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
 
-export const planobyStripeEventLog = pgTable("stripe_event_log", {
+export const stripeEventLog = pgTable("stripe_event_log", {
 	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	stripeEventId: varchar("stripe_event_id", { length: 255 }).notNull(),
 	eventType: varchar("event_type", { length: 255 }).notNull(),
 	organizationId: uuid("organization_id"),
 	bookingId: uuid("booking_id"),
 	payload: jsonb().default({}).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	processedAt: timestamp("processed_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
 	index("idx_stripe_event_log_booking").using("btree", table.bookingId.asc().nullsLast().op("uuid_ops")),
@@ -817,7 +818,7 @@ export const planobyStripeEventLog = pgTable("stripe_event_log", {
 			name: "stripe_event_log_organization_id_fkey"
 		}).onDelete("set null"),
 	unique("stripe_event_log_stripe_event_id_key").on(table.stripeEventId),
-	pgPolicy("stripe_event_log_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`((organization_id IS NULL) OR (kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission)))` }),
+	pgPolicy("stripe_event_log_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`((organization_id IS NULL) OR ((booking_id IS NOT NULL) AND kit.can_select_booking(booking_id)) OR ((booking_id IS NULL) AND kit.user_is_member_of_org(organization_id) AND (kit.has_org_permission(organization_id, 'booking.all.select'::org_permission) OR kit.has_org_permission(organization_id, 'setting.manage'::org_permission))))` }),
 	pgPolicy("stripe_event_log_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("stripe_event_log_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("stripe_event_log_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
@@ -923,7 +924,7 @@ export const invoice = pgTable("invoice", {
 		}).onDelete("cascade"),
 	unique("uq_planoby_invoice_number").on(table.organizationId, table.year, table.sequence),
 	unique("uq_planoby_invoice_booking").on(table.bookingId),
-	pgPolicy("planoby_invoice_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
+	pgPolicy("planoby_invoice_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`kit.can_select_booking(booking_id)` }),
 	pgPolicy("planoby_invoice_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("planoby_invoice_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("planoby_invoice_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
@@ -971,7 +972,7 @@ export const creditNote = pgTable("credit_note", {
 		}).onDelete("cascade"),
 	unique("uq_planoby_credit_note_number").on(table.organizationId, table.year, table.sequence),
 	unique("uq_planoby_credit_note_refund").on(table.stripeRefundId),
-	pgPolicy("planoby_credit_note_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
+	pgPolicy("planoby_credit_note_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`kit.can_select_booking(booking_id)` }),
 	pgPolicy("planoby_credit_note_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("planoby_credit_note_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("planoby_credit_note_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
@@ -1060,6 +1061,31 @@ export const checkout = pgTable("checkout", {
 	check("checkout_settings_is_object_chk", sql`jsonb_typeof(settings) = 'object'::text`),
 ]);
 
+export const bookingPaymentRetryToken = pgTable("booking_payment_retry_token", {
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+	organizationId: uuid("organization_id").notNull(),
+	bookingId: uuid("booking_id").notNull(),
+	tokenHash: varchar("token_hash", { length: 128 }).notNull(),
+	expiresAt: timestamp("expires_at", { withTimezone: true, mode: 'string' }).notNull(),
+	usedAt: timestamp("used_at", { withTimezone: true, mode: 'string' }),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_booking_payment_retry_token_booking").using("btree", table.bookingId.asc().nullsLast().op("uuid_ops")),
+	index("idx_booking_payment_retry_token_org").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
+	index("idx_booking_payment_retry_token_valid").using("btree", table.tokenHash.asc().nullsLast().op("text_ops"), table.expiresAt.asc().nullsLast().op("text_ops")).where(sql`(used_at IS NULL)`),
+	foreignKey({
+			columns: [table.bookingId],
+			foreignColumns: [booking.id],
+			name: "booking_payment_retry_token_booking_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "booking_payment_retry_token_organization_id_fkey"
+		}).onDelete("cascade"),
+	unique("booking_payment_retry_token_token_hash_key").on(table.tokenHash),
+]);
+
 export const servicePriceExtra = pgTable("service_price_extra", {
 	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	organizationId: uuid("organization_id").notNull(),
@@ -1119,7 +1145,7 @@ export const bookingCommunicationThread = pgTable("booking_communication_thread"
 			name: "booking_communication_thread_organization_id_fkey"
 		}).onDelete("cascade"),
 	unique("uq_booking_communication_thread_booking_channel_participant").on(table.bookingId, table.channel, table.participantKey),
-	pgPolicy("booking_communication_thread_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
+	pgPolicy("booking_communication_thread_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`kit.can_select_booking(booking_id)` }),
 	pgPolicy("booking_communication_thread_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("booking_communication_thread_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("booking_communication_thread_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
@@ -1149,18 +1175,19 @@ export const bookingCommunicationMessage = pgTable("booking_communication_messag
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
-	index("idx_booking_communication_message_booking_channel_created_at").using("btree", table.bookingId.asc().nullsLast().op("uuid_ops"), table.channel.asc().nullsLast().op("timestamptz_ops"), table.createdAt.desc().nullsFirst().op("uuid_ops")),
-	index("idx_booking_communication_message_booking_created_at").using("btree", table.bookingId.asc().nullsLast().op("timestamptz_ops"), table.createdAt.desc().nullsFirst().op("uuid_ops")),
+	index("idx_booking_communication_message_booking_channel_created_at").using("btree", table.bookingId.asc().nullsLast().op("uuid_ops"), table.channel.asc().nullsLast().op("text_ops"), table.createdAt.desc().nullsFirst().op("text_ops")),
+	index("idx_booking_communication_message_booking_created_at").using("btree", table.bookingId.asc().nullsLast().op("uuid_ops"), table.createdAt.desc().nullsFirst().op("uuid_ops")),
 	index("idx_booking_communication_message_booking_id").using("btree", table.bookingId.asc().nullsLast().op("uuid_ops")),
 	index("idx_booking_communication_message_in_reply_to_rfc").using("btree", table.inReplyToRfc.asc().nullsLast().op("text_ops")),
 	index("idx_booking_communication_message_message_id_rfc").using("btree", table.messageIdRfc.asc().nullsLast().op("text_ops")),
-	index("idx_booking_communication_message_org_channel_created_at").using("btree", table.organizationId.asc().nullsLast().op("timestamptz_ops"), table.channel.asc().nullsLast().op("timestamptz_ops"), table.createdAt.desc().nullsFirst().op("timestamptz_ops")),
+	index("idx_booking_communication_message_org_channel_created_at").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.channel.asc().nullsLast().op("text_ops"), table.createdAt.desc().nullsFirst().op("uuid_ops")),
 	index("idx_booking_communication_message_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
 	index("idx_booking_communication_message_provider_message_id").using("btree", table.providerMessageId.asc().nullsLast().op("text_ops")),
 	index("idx_booking_communication_message_status").using("btree", table.status.asc().nullsLast().op("text_ops")),
-	index("idx_booking_communication_message_thread_created_at").using("btree", table.threadId.asc().nullsLast().op("uuid_ops"), table.createdAt.asc().nullsLast().op("uuid_ops")),
+	index("idx_booking_communication_message_thread_created_at").using("btree", table.threadId.asc().nullsLast().op("timestamptz_ops"), table.createdAt.asc().nullsLast().op("timestamptz_ops")),
 	index("idx_booking_communication_message_thread_id").using("btree", table.threadId.asc().nullsLast().op("uuid_ops")),
 	uniqueIndex("uq_booking_communication_message_provider_message").using("btree", table.provider.asc().nullsLast().op("text_ops"), table.providerMessageId.asc().nullsLast().op("text_ops")).where(sql`(provider_message_id IS NOT NULL)`),
+	uniqueIndex("uq_booking_communication_message_sms_event_key").using("btree", sql`organization_id`, sql`booking_id`, sql`channel`, sql`((metadata ->> 'sms_event_key'::text))`).where(sql`(((direction)::text = 'outbound'::text) AND ((channel)::text = 'sms'::text) AND (metadata ? 'sms_event_key'::text))`),
 	foreignKey({
 			columns: [table.bookingId],
 			foreignColumns: [booking.id],
@@ -1176,7 +1203,7 @@ export const bookingCommunicationMessage = pgTable("booking_communication_messag
 			foreignColumns: [bookingCommunicationThread.id],
 			name: "booking_communication_message_thread_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("booking_communication_message_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
+	pgPolicy("booking_communication_message_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`kit.can_select_booking(booking_id)` }),
 	pgPolicy("booking_communication_message_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("booking_communication_message_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("booking_communication_message_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
@@ -1217,7 +1244,7 @@ export const bookingCommunicationStatusEvent = pgTable("booking_communication_st
 			foreignColumns: [organization.id],
 			name: "booking_communication_status_event_organization_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("booking_communication_status_event_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
+	pgPolicy("booking_communication_status_event_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`kit.can_select_booking(booking_id)` }),
 	pgPolicy("booking_communication_status_event_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("booking_communication_status_event_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("booking_communication_status_event_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
@@ -1250,7 +1277,7 @@ export const organizationDiscountCode = pgTable("organization_discount_code", {
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
-	index("idx_org_discount_code_org_state_expires").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.state.asc().nullsLast().op("enum_ops"), table.expiresOn.asc().nullsLast().op("date_ops")),
+	index("idx_org_discount_code_org_state_expires").using("btree", table.organizationId.asc().nullsLast().op("date_ops"), table.state.asc().nullsLast().op("enum_ops"), table.expiresOn.asc().nullsLast().op("enum_ops")),
 	index("idx_organization_discount_code_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
 	uniqueIndex("uq_org_discount_code_org_code_normalized").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.codeNormalized.asc().nullsLast().op("uuid_ops")),
 	foreignKey({
@@ -1263,6 +1290,7 @@ export const organizationDiscountCode = pgTable("organization_discount_code", {
 	pgPolicy("organization_discount_code_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("organization_discount_code_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
 	check("chk_discount_code_format", sql`(code_normalized)::text ~ '^[A-Z0-9-]{4,32}$'::text`),
+	check("chk_discount_conditions", sql`CHECK (planoby_discount_conditions_are_valid(conditions`),
 	check("chk_discount_fixed_amount", sql`(fixed_amount IS NULL) OR (fixed_amount >= (0)::numeric)`),
 	check("chk_discount_max_total_uses", sql`(max_total_uses IS NULL) OR (max_total_uses > 0)`),
 	check("chk_discount_min_participants_required", sql`(min_participants_required IS NULL) OR (min_participants_required > 0)`),
@@ -1339,8 +1367,8 @@ export const googleCalendarConnection = pgTable("google_calendar_connection", {
 			foreignColumns: [user.id],
 			name: "google_calendar_connection_user_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("google_calendar_connection_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(user_id = kit.get_user_id())` }),
-	pgPolicy("google_calendar_connection_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("google_calendar_connection_insert", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(user_id = kit.get_user_id())`  }),
+	pgPolicy("google_calendar_connection_select", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("google_calendar_connection_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("google_calendar_connection_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
@@ -1481,6 +1509,7 @@ export const booking = pgTable("booking", {
 	publishedAt: timestamp("published_at", { withTimezone: true, mode: 'string' }),
 	paymentMode: varchar("payment_mode", { length: 64 }).default('no_payment_required').notNull(),
 	paymentStatus: bookingPaymentStatus("payment_status").default('none').notNull(),
+	confirmationFailureReservesSlot: boolean("confirmation_failure_reserves_slot").default(false).notNull(),
 	stripeConnectAccountId: varchar("stripe_connect_account_id", { length: 255 }),
 	setupIntentId: varchar("setup_intent_id", { length: 255 }),
 	paymentIntentId: varchar("payment_intent_id", { length: 255 }),
@@ -1538,13 +1567,14 @@ export const booking = pgTable("booking", {
 }, (table) => [
 	index("idx_booking_company_member_id").using("btree", table.companyMemberId.asc().nullsLast().op("uuid_ops")),
 	index("idx_booking_occurrence_id").using("btree", table.slotOccurrenceId.asc().nullsLast().op("uuid_ops")),
-	index("idx_booking_org_customer_vat_number").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.customerVatNumber.asc().nullsLast().op("uuid_ops")).where(sql`(customer_vat_number IS NOT NULL)`),
-	index("idx_booking_org_fiscal_party_type").using("btree", table.organizationId.asc().nullsLast().op("enum_ops"), table.fiscalPartyTypeResolved.asc().nullsLast().op("uuid_ops")),
+	index("idx_booking_org_customer_vat_number").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.customerVatNumber.asc().nullsLast().op("text_ops")).where(sql`(customer_vat_number IS NOT NULL)`),
+	index("idx_booking_org_fiscal_party_type").using("btree", table.organizationId.asc().nullsLast().op("enum_ops"), table.fiscalPartyTypeResolved.asc().nullsLast().op("enum_ops")),
 	index("idx_booking_org_member").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.companyMemberId.asc().nullsLast().op("uuid_ops")),
+	index("idx_booking_org_member_start_at").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.companyMemberId.asc().nullsLast().op("uuid_ops"), table.startAt.asc().nullsLast().op("uuid_ops")),
 	index("idx_booking_org_normalized_email_start_created").using("btree", sql`organization_id`, sql`lower(TRIM(BOTH FROM COALESCE(email, ''::character varying)))`, sql`start_at`, sql`created_at`),
-	index("idx_booking_org_payment_refunded_amount").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.paymentRefundedAmount.asc().nullsLast().op("numeric_ops")),
+	index("idx_booking_org_payment_refunded_amount").using("btree", table.organizationId.asc().nullsLast().op("numeric_ops"), table.paymentRefundedAmount.asc().nullsLast().op("numeric_ops")),
 	index("idx_booking_org_payment_status").using("btree", table.organizationId.asc().nullsLast().op("enum_ops"), table.paymentStatus.asc().nullsLast().op("enum_ops")),
-	index("idx_booking_org_state").using("btree", table.organizationId.asc().nullsLast().op("enum_ops"), table.state.asc().nullsLast().op("enum_ops")),
+	index("idx_booking_org_state").using("btree", table.organizationId.asc().nullsLast().op("enum_ops"), table.state.asc().nullsLast().op("uuid_ops")),
 	index("idx_booking_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
 	index("idx_booking_payment_intent_id").using("btree", table.paymentIntentId.asc().nullsLast().op("text_ops")),
 	index("idx_booking_relative_id").using("btree", table.relativeId.asc().nullsLast().op("int4_ops")),
@@ -1580,11 +1610,10 @@ export const booking = pgTable("booking", {
 			foreignColumns: [slotOccurrence.id],
 			name: "booking_slot_occurrence_id_fkey"
 		}).onDelete("set null"),
-	pgPolicy("booking_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
+	pgPolicy("booking_delete_3", { as: "permissive", for: "delete", to: ["authenticated"], using: sql`kit.can_delete_booking_row(organization_id, company_member_id)` }),
+	pgPolicy("booking_select", { as: "permissive", for: "select", to: ["authenticated"] }),
 	pgPolicy("booking_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("booking_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
-	pgPolicy("booking_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
-	pgPolicy("booking_insert_4", { as: "permissive", for: "insert", to: ["public"] }),
 ]);
 
 export const fiscalPdpConnection = pgTable("fiscal_pdp_connection", {
@@ -1611,10 +1640,10 @@ export const fiscalPdpConnection = pgTable("fiscal_pdp_connection", {
 			name: "fiscal_pdp_connection_organization_id_fkey"
 		}).onDelete("cascade"),
 	unique("uq_fiscal_pdp_connection_org").on(table.organizationId),
-	pgPolicy("fiscal_pdp_connection_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
-	pgPolicy("fiscal_pdp_connection_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("fiscal_pdp_connection_insert", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'setting.manage'::org_permission))`  }),
 	pgPolicy("fiscal_pdp_connection_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("fiscal_pdp_connection_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
+	pgPolicy("fiscal_pdp_connection_select", { as: "permissive", for: "select", to: ["authenticated"] }),
 	check("chk_fiscal_pdp_provider_slug", sql`char_length(TRIM(BOTH FROM provider_slug)) > 0`),
 ]);
 
@@ -1672,10 +1701,10 @@ export const fiscalTransmission = pgTable("fiscal_transmission", {
 			name: "fiscal_transmission_organization_id_fkey"
 		}).onDelete("cascade"),
 	unique("uq_fiscal_transmission_idempotency").on(table.organizationId, table.idempotencyKey),
-	pgPolicy("fiscal_transmission_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
-	pgPolicy("fiscal_transmission_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("fiscal_transmission_insert", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'setting.manage'::org_permission))`  }),
 	pgPolicy("fiscal_transmission_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("fiscal_transmission_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
+	pgPolicy("fiscal_transmission_select", { as: "permissive", for: "select", to: ["authenticated"] }),
 	check("chk_fiscal_transmission_attempts", sql`(attempt_count >= 0) AND (max_attempts >= 1)`),
 ]);
 
@@ -1717,10 +1746,10 @@ export const fiscalTransactionReportItem = pgTable("fiscal_transaction_report_it
 			foreignColumns: [fiscalTransmission.id],
 			name: "fiscal_transaction_report_item_transmission_id_fkey"
 		}).onDelete("set null"),
-	pgPolicy("fiscal_transaction_report_item_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
-	pgPolicy("fiscal_transaction_report_item_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("fiscal_transaction_report_item_insert", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'setting.manage'::org_permission))`  }),
 	pgPolicy("fiscal_transaction_report_item_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("fiscal_transaction_report_item_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
+	pgPolicy("fiscal_transaction_report_item_select", { as: "permissive", for: "select", to: ["authenticated"] }),
 ]);
 
 export const fiscalPaymentReportItem = pgTable("fiscal_payment_report_item", {
@@ -1759,10 +1788,10 @@ export const fiscalPaymentReportItem = pgTable("fiscal_payment_report_item", {
 			foreignColumns: [fiscalTransmission.id],
 			name: "fiscal_payment_report_item_transmission_id_fkey"
 		}).onDelete("set null"),
-	pgPolicy("fiscal_payment_report_item_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
-	pgPolicy("fiscal_payment_report_item_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("fiscal_payment_report_item_insert", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'setting.manage'::org_permission))`  }),
 	pgPolicy("fiscal_payment_report_item_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("fiscal_payment_report_item_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
+	pgPolicy("fiscal_payment_report_item_select", { as: "permissive", for: "select", to: ["authenticated"] }),
 ]);
 
 export const vatValidationLog = pgTable("vat_validation_log", {
@@ -1791,10 +1820,10 @@ export const vatValidationLog = pgTable("vat_validation_log", {
 			foreignColumns: [organization.id],
 			name: "vat_validation_log_organization_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("vat_validation_log_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
-	pgPolicy("vat_validation_log_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("vat_validation_log_insert", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'setting.manage'::org_permission))`  }),
 	pgPolicy("vat_validation_log_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("vat_validation_log_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
+	pgPolicy("vat_validation_log_select", { as: "permissive", for: "select", to: ["authenticated"] }),
 ]);
 
 export const fiscalExportJob = pgTable("fiscal_export_job", {
@@ -1818,44 +1847,10 @@ export const fiscalExportJob = pgTable("fiscal_export_job", {
 			foreignColumns: [organization.id],
 			name: "fiscal_export_job_organization_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("fiscal_export_job_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
-	pgPolicy("fiscal_export_job_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("fiscal_export_job_insert", { as: "permissive", for: "insert", to: ["authenticated"], withCheck: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'setting.manage'::org_permission))`  }),
 	pgPolicy("fiscal_export_job_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("fiscal_export_job_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
-]);
-
-export const serviceParticipantDataSchema = pgTable("service_participant_data_schema", {
-	organizationId: uuid("organization_id").notNull(),
-	serviceId: uuid("service_id").notNull(),
-	participantDataSchemaId: uuid("participant_data_schema_id").notNull(),
-	orderPosition: integer("order_position").default(0).notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-	index("idx_service_participant_data_schema_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
-	index("idx_service_participant_data_schema_participant_data_schema_id").using("btree", table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
-	index("idx_service_participant_data_schema_service_order_position").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops"), table.orderPosition.asc().nullsLast().op("int4_ops")),
-	index("idx_service_participant_data_schema_service_id").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops")),
-	foreignKey({
-			columns: [table.organizationId],
-			foreignColumns: [organization.id],
-			name: "service_participant_data_schema_organization_id_fkey"
-		}).onDelete("cascade"),
-	foreignKey({
-			columns: [table.participantDataSchemaId],
-			foreignColumns: [participantDataSchema.id],
-			name: "service_participant_data_schema_participant_data_schema_id_fkey"
-		}).onDelete("cascade"),
-	foreignKey({
-			columns: [table.serviceId],
-			foreignColumns: [service.id],
-			name: "service_participant_data_schema_service_id_fkey"
-		}).onDelete("cascade"),
-	primaryKey({ columns: [table.serviceId, table.participantDataSchemaId], name: "service_participant_data_schema_pkey"}),
-	pgPolicy("service_participant_data_schema_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.select'::org_permission))` }),
-	pgPolicy("service_participant_data_schema_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
-	pgPolicy("service_participant_data_schema_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
-	pgPolicy("service_participant_data_schema_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
+	pgPolicy("fiscal_export_job_select", { as: "permissive", for: "select", to: ["authenticated"] }),
 ]);
 
 export const checkoutService = pgTable("checkout_service", {
@@ -1937,7 +1932,7 @@ export const invoiceCounter = pgTable("invoice_counter", {
 			name: "invoice_counter_organization_id_fkey"
 		}).onDelete("cascade"),
 	primaryKey({ columns: [table.organizationId, table.year], name: "planoby_invoice_counter_pkey"}),
-	pgPolicy("planoby_invoice_counter_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'booking.select'::org_permission))` }),
+	pgPolicy("planoby_invoice_counter_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND (kit.has_org_permission(organization_id, 'booking.all.select'::org_permission) OR kit.has_org_permission(organization_id, 'setting.manage'::org_permission)))` }),
 	pgPolicy("planoby_invoice_counter_insert", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("planoby_invoice_counter_update", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("planoby_invoice_counter_delete", { as: "permissive", for: "delete", to: ["authenticated"] }),
@@ -1990,7 +1985,12 @@ export const organizationDiscountCodeExtraScope = pgTable("organization_discount
 	index("idx_org_discount_code_extra_scope_org_schema").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops"), table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
 	index("idx_organization_discount_code_extra_scope_discount_code_id").using("btree", table.discountCodeId.asc().nullsLast().op("uuid_ops")),
 	index("idx_organization_discount_code_extra_scope_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
-	index("idx_organization_discount_code_extra_scope_participant_data_schema_id").using("btree", table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
+	index("idx_organization_discount_code_extra_scope_participant_data_sch").using("btree", table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
+	foreignKey({
+			columns: [table.participantDataSchemaId],
+			foreignColumns: [participantDataSchema.id],
+			name: "organization_discount_code_extr_participant_data_schema_id_fkey"
+		}).onDelete("cascade"),
 	foreignKey({
 			columns: [table.discountCodeId],
 			foreignColumns: [organizationDiscountCode.id],
@@ -2001,16 +2001,45 @@ export const organizationDiscountCodeExtraScope = pgTable("organization_discount
 			foreignColumns: [organization.id],
 			name: "organization_discount_code_extra_scope_organization_id_fkey"
 		}).onDelete("cascade"),
-	foreignKey({
-			columns: [table.participantDataSchemaId],
-			foreignColumns: [participantDataSchema.id],
-			name: "organization_discount_code_extra_scope_participant_data_schema_id_fkey"
-		}).onDelete("cascade"),
 	primaryKey({ columns: [table.discountCodeId, table.participantDataSchemaId], name: "organization_discount_code_extra_scope_pkey"}),
 	pgPolicy("organization_discount_code_extra_scope_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.select'::org_permission))` }),
 	pgPolicy("organization_discount_code_extra_scope_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
 	pgPolicy("organization_discount_code_extra_scope_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
 	pgPolicy("organization_discount_code_extra_scope_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
+]);
+
+export const serviceParticipantDataSchema = pgTable("service_participant_data_schema", {
+	organizationId: uuid("organization_id").notNull(),
+	serviceId: uuid("service_id").notNull(),
+	participantDataSchemaId: uuid("participant_data_schema_id").notNull(),
+	orderPosition: integer("order_position").default(0).notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_service_participant_data_schema_organization_id").using("btree", table.organizationId.asc().nullsLast().op("uuid_ops")),
+	index("idx_service_participant_data_schema_participant_data_schema_id").using("btree", table.participantDataSchemaId.asc().nullsLast().op("uuid_ops")),
+	index("idx_service_participant_data_schema_service_id").using("btree", table.serviceId.asc().nullsLast().op("uuid_ops")),
+	index("idx_service_participant_data_schema_service_order_position").using("btree", table.serviceId.asc().nullsLast().op("int4_ops"), table.orderPosition.asc().nullsLast().op("uuid_ops")),
+	foreignKey({
+			columns: [table.organizationId],
+			foreignColumns: [organization.id],
+			name: "service_participant_data_schema_organization_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.participantDataSchemaId],
+			foreignColumns: [participantDataSchema.id],
+			name: "service_participant_data_schema_participant_data_schema_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.serviceId],
+			foreignColumns: [service.id],
+			name: "service_participant_data_schema_service_id_fkey"
+		}).onDelete("cascade"),
+	primaryKey({ columns: [table.serviceId, table.participantDataSchemaId], name: "service_participant_data_schema_pkey"}),
+	pgPolicy("service_participant_data_schema_select", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(kit.user_is_member_of_org(organization_id) AND kit.has_org_permission(organization_id, 'service.select'::org_permission))` }),
+	pgPolicy("service_participant_data_schema_insert_1", { as: "permissive", for: "insert", to: ["authenticated"] }),
+	pgPolicy("service_participant_data_schema_update_2", { as: "permissive", for: "update", to: ["authenticated"] }),
+	pgPolicy("service_participant_data_schema_delete_3", { as: "permissive", for: "delete", to: ["authenticated"] }),
 ]);
 
 export const servicePriceMatrixCell = pgTable("service_price_matrix_cell", {
@@ -2054,4 +2083,4 @@ export const agendaSlotDay = pgView("agenda_slot_day", {	slotOccurrenceId: uuid(
 	serviceCalendarColor: varchar("service_calendar_color", { length: 50 }),
 	serviceDuration: varchar("service_duration", { length: 50 }),
 	bookings: jsonb(),
-}).as(sql`SELECT so.id AS slot_occurrence_id, so.organization_id, so.company_member_id AS organization_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name AS service_name, s.calendar_color AS service_calendar_color, s.duration AS service_duration, COALESCE(jsonb_agg(jsonb_build_object('id', b.id, 'relative_id', b.relative_id, 'state', b.state, 'firstname', b.firstname, 'lastname', b.lastname, 'email', b.email, 'phone', b.phone, 'participants', b.participants, 'customer_note', b.customer_note, 'start_at', b.start_at, 'end_at', b.end_at) ORDER BY b.start_at, b.created_at) FILTER (WHERE b.id IS NOT NULL), '[]'::jsonb) AS bookings FROM slot_occurrence so LEFT JOIN service s ON s.id = so.service_id LEFT JOIN booking b ON b.slot_occurrence_id = so.id GROUP BY so.id, so.organization_id, so.company_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name, s.calendar_color, s.duration`);
+}).as(sql`SELECT so.id AS slot_occurrence_id, so.organization_id, so.company_member_id AS organization_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name AS service_name, s.calendar_color AS service_calendar_color, s.duration AS service_duration, COALESCE(jsonb_agg(jsonb_build_object('id', b.id, 'relative_id', b.relative_id, 'state', b.state, 'firstname', b.firstname, 'lastname', b.lastname, 'email', b.email, 'phone', b.phone, 'participants', b.participants, 'customer_note', b.customer_note, 'start_at', b.start_at, 'end_at', b.end_at) ORDER BY b.start_at, b.created_at) FILTER (WHERE b.id IS NOT NULL), '[]'::jsonb) AS bookings FROM slot_occurrence so LEFT JOIN service s ON s.id = so.service_id LEFT JOIN booking b ON b.slot_occurrence_id = so.id AND planoby_booking_counts_toward_slot(b.state, b.confirmation_failure_reserves_slot) GROUP BY so.id, so.organization_id, so.company_member_id, so.date, so.start_at, so.end_at, so.state, so.visible, so.slot_id, so.service_id, s.name, s.calendar_color, s.duration`);

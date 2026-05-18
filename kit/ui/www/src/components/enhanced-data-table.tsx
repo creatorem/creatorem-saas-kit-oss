@@ -3,6 +3,7 @@
 import { Icon } from '@kit/ui/icon';
 import { cn } from '@kit/utils';
 import { Column, flexRender, Table as ReactTable, Row } from '@tanstack/react-table';
+import { AnimatePresence, motion } from 'motion/react';
 import * as React from 'react';
 import { Badge } from '../shadcn/badge';
 import { Button } from '../shadcn/button';
@@ -35,6 +36,7 @@ type EnhancedDataTableProps<TData> = React.ComponentPropsWithoutRef<typeof Table
     fixedHeader?: boolean;
     onRowClicked?: (row: Row<TData>) => void;
     getRowClassName?: (row: Row<TData>) => string | undefined;
+    deletingRowIds?: string[];
 };
 
 function EnhancedDataTable<TData>({
@@ -42,6 +44,7 @@ function EnhancedDataTable<TData>({
     fixedHeader,
     onRowClicked,
     getRowClassName,
+    deletingRowIds = [],
     ...other
 }: EnhancedDataTableProps<TData>): React.JSX.Element {
     const visibleColumns = table.getAllColumns().filter((c) => c.getIsVisible()).length;
@@ -84,6 +87,7 @@ function EnhancedDataTable<TData>({
 
     const renderTableBody = () => {
         const rows = table.getRowModel().rows;
+        const deletingRowIdsSet = new Set(deletingRowIds);
 
         if (!rows?.length) {
             return (
@@ -99,23 +103,52 @@ function EnhancedDataTable<TData>({
 
         return (
             <TableBody>
-                {rows.map((row) => (
-                    <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && 'selected'}
-                        className={cn('last:border-b-0', onRowClicked && 'cursor-pointer', getRowClassName?.(row))}
-                        onClick={() => onRowClicked?.(row)}
-                    >
-                        {row.getVisibleCells().map((cell) => {
-                            const cellClassName = (cell.column.columnDef.meta as any)?.cellClassName;
-                            return (
-                                <TableCell key={cell.id} className={cn(cellClassName)}>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </TableCell>
-                            );
-                        })}
-                    </TableRow>
-                ))}
+                <AnimatePresence initial={false}>
+                    {rows.map((row) => {
+                        const isDeleting = deletingRowIdsSet.has(row.id);
+
+                        return (
+                            <motion.tr
+                                key={row.id}
+                                layout="position"
+                                data-slot="table-row"
+                                data-state={row.getIsSelected() && 'selected'}
+                                className={cn(
+                                    'hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors last:border-b-0',
+                                    onRowClicked && !isDeleting && 'cursor-pointer',
+                                    getRowClassName?.(row),
+                                )}
+                                initial={{ opacity: 1, backgroundColor: 'rgba(0,0,0,0)' }}
+                                animate={
+                                    isDeleting
+                                        ? { opacity: 0.15, backgroundColor: 'rgba(239,68,68,0.25)' }
+                                        : { opacity: 1, backgroundColor: 'rgba(0,0,0,0)' }
+                                }
+                                exit={{ opacity: 0, backgroundColor: 'rgba(239,68,68,0.35)' }}
+                                transition={{
+                                    duration: isDeleting ? 0.28 : 0.16,
+                                    ease: 'easeOut',
+                                }}
+                                style={{ pointerEvents: isDeleting ? 'none' : undefined }}
+                                onClick={() => {
+                                    if (isDeleting) {
+                                        return;
+                                    }
+                                    onRowClicked?.(row);
+                                }}
+                            >
+                                {row.getVisibleCells().map((cell) => {
+                                    const cellClassName = (cell.column.columnDef.meta as any)?.cellClassName;
+                                    return (
+                                        <TableCell key={cell.id} className={cn(cellClassName)}>
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </TableCell>
+                                    );
+                                })}
+                            </motion.tr>
+                        );
+                    })}
+                </AnimatePresence>
             </TableBody>
         );
     };

@@ -17,10 +17,10 @@ export type Database = {
     Functions: {
       graphql: {
         Args: {
-          variables?: Json
+          extensions?: Json
           operationName?: string
           query?: string
-          extensions?: Json
+          variables?: Json
         }
         Returns: Json
       }
@@ -40,41 +40,52 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      accept_invitation: {
-        Args: { invitation_id: string }
-        Returns: string
+      accept_invitation: { Args: { invitation_id: string }; Returns: string }
+      can_delete_booking: { Args: { p_booking_id: string }; Returns: boolean }
+      can_delete_booking_row: {
+        Args: { p_company_member_id: string; p_organization_id: string }
+        Returns: boolean
+      }
+      can_insert_booking: { Args: { p_booking_id: string }; Returns: boolean }
+      can_insert_booking_row: {
+        Args: { p_company_member_id: string; p_organization_id: string }
+        Returns: boolean
+      }
+      can_select_booking: { Args: { p_booking_id: string }; Returns: boolean }
+      can_select_booking_row: {
+        Args: { p_company_member_id: string; p_organization_id: string }
+        Returns: boolean
+      }
+      can_update_booking: { Args: { p_booking_id: string }; Returns: boolean }
+      can_update_booking_row: {
+        Args: { p_company_member_id: string; p_organization_id: string }
+        Returns: boolean
       }
       debug_jwt_info: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
-          total_user_sessions: number
           auth_user_id: string
+          detected_current_session: string
+          jwt_full: Json
           jwt_session_id: string
           jwt_sid: string
-          jwt_full: Json
-          detected_current_session: string
+          total_user_sessions: number
         }[]
       }
-      get_user_email: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      get_user_id: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      get_user_email: { Args: never; Returns: string }
+      get_user_id: { Args: never; Returns: string }
       get_user_sessions: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
-          ip: unknown
-          user_agent: string
-          not_after: string
           aal: string
-          factor_id: string
-          updated_at: string
           created_at: string
-          user_id: string
+          factor_id: string
           id: string
+          ip: unknown
+          not_after: string
+          updated_at: string
+          user_agent: string
+          user_id: string
         }[]
       }
       has_multiple_member_manage_permissions: {
@@ -83,35 +94,20 @@ export type Database = {
       }
       has_org_permission: {
         Args: {
-          permission_name: Database["public"]["Enums"]["org_permission"]
           org_id: string
+          permission_name: Database["public"]["Enums"]["org_permission"]
         }
         Returns: boolean
       }
-      revoke_all_other_sessions: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      revoke_user_session: {
-        Args: { session_id: string }
-        Returns: boolean
-      }
+      revoke_all_other_sessions: { Args: never; Returns: number }
+      revoke_user_session: { Args: { session_id: string }; Returns: boolean }
       update_session_details: {
-        Args: { session_id: string; new_ip?: unknown; new_user_agent?: string }
+        Args: { new_ip?: unknown; new_user_agent?: string; session_id: string }
         Returns: boolean
       }
-      user_is_invited_to_org: {
-        Args: { org_id: string }
-        Returns: boolean
-      }
-      user_is_member_of_org: {
-        Args: { org_id: string }
-        Returns: boolean
-      }
-      user_is_owner_of_org: {
-        Args: { org_id: string }
-        Returns: boolean
-      }
+      user_is_invited_to_org: { Args: { org_id: string }; Returns: boolean }
+      user_is_member_of_org: { Args: { org_id: string }; Returns: boolean }
+      user_is_owner_of_org: { Args: { org_id: string }; Returns: boolean }
       user_org_role_is_higher_than: {
         Args: { org_id: string; target_user_id: string }
         Returns: boolean
@@ -363,6 +359,7 @@ export type Database = {
       booking: {
         Row: {
           company_member_id: string | null
+          confirmation_failure_reserves_slot: boolean
           created_at: string
           customer_billing_address_line1: string | null
           customer_billing_address_line2: string | null
@@ -392,9 +389,31 @@ export type Database = {
           payment_captured_at: string | null
           payment_currency: string | null
           payment_discount_amount: number
+          payment_discount_breakdown: Json
           payment_discount_code: string | null
           payment_discount_code_normalized: string | null
+          payment_discount_condition_mode:
+            | Database["public"]["Enums"]["discount_condition_mode"]
+            | null
+          payment_discount_conditions: Json
+          payment_discount_extra_scope_ids: Json
+          payment_discount_min_participants_required: number | null
+          payment_discount_min_subtotal_before_discount_amount: number | null
           payment_discount_name: string | null
+          payment_discount_participant_limit_count: number | null
+          payment_discount_participant_ordering:
+            | Database["public"]["Enums"]["discount_participant_ordering"]
+            | null
+          payment_discount_reward_mode:
+            | Database["public"]["Enums"]["discount_reward_mode"]
+            | null
+          payment_discount_reward_quantity: number | null
+          payment_discount_state:
+            | Database["public"]["Enums"]["discount_state"]
+            | null
+          payment_discount_target_scope:
+            | Database["public"]["Enums"]["discount_target_scope"]
+            | null
           payment_discount_type:
             | Database["public"]["Enums"]["discount_type"]
             | null
@@ -433,6 +452,7 @@ export type Database = {
         }
         Insert: {
           company_member_id?: string | null
+          confirmation_failure_reserves_slot?: boolean
           created_at?: string
           customer_billing_address_line1?: string | null
           customer_billing_address_line2?: string | null
@@ -462,9 +482,31 @@ export type Database = {
           payment_captured_at?: string | null
           payment_currency?: string | null
           payment_discount_amount?: number
+          payment_discount_breakdown?: Json
           payment_discount_code?: string | null
           payment_discount_code_normalized?: string | null
+          payment_discount_condition_mode?:
+            | Database["public"]["Enums"]["discount_condition_mode"]
+            | null
+          payment_discount_conditions?: Json
+          payment_discount_extra_scope_ids?: Json
+          payment_discount_min_participants_required?: number | null
+          payment_discount_min_subtotal_before_discount_amount?: number | null
           payment_discount_name?: string | null
+          payment_discount_participant_limit_count?: number | null
+          payment_discount_participant_ordering?:
+            | Database["public"]["Enums"]["discount_participant_ordering"]
+            | null
+          payment_discount_reward_mode?:
+            | Database["public"]["Enums"]["discount_reward_mode"]
+            | null
+          payment_discount_reward_quantity?: number | null
+          payment_discount_state?:
+            | Database["public"]["Enums"]["discount_state"]
+            | null
+          payment_discount_target_scope?:
+            | Database["public"]["Enums"]["discount_target_scope"]
+            | null
           payment_discount_type?:
             | Database["public"]["Enums"]["discount_type"]
             | null
@@ -503,6 +545,7 @@ export type Database = {
         }
         Update: {
           company_member_id?: string | null
+          confirmation_failure_reserves_slot?: boolean
           created_at?: string
           customer_billing_address_line1?: string | null
           customer_billing_address_line2?: string | null
@@ -532,9 +575,31 @@ export type Database = {
           payment_captured_at?: string | null
           payment_currency?: string | null
           payment_discount_amount?: number
+          payment_discount_breakdown?: Json
           payment_discount_code?: string | null
           payment_discount_code_normalized?: string | null
+          payment_discount_condition_mode?:
+            | Database["public"]["Enums"]["discount_condition_mode"]
+            | null
+          payment_discount_conditions?: Json
+          payment_discount_extra_scope_ids?: Json
+          payment_discount_min_participants_required?: number | null
+          payment_discount_min_subtotal_before_discount_amount?: number | null
           payment_discount_name?: string | null
+          payment_discount_participant_limit_count?: number | null
+          payment_discount_participant_ordering?:
+            | Database["public"]["Enums"]["discount_participant_ordering"]
+            | null
+          payment_discount_reward_mode?:
+            | Database["public"]["Enums"]["discount_reward_mode"]
+            | null
+          payment_discount_reward_quantity?: number | null
+          payment_discount_state?:
+            | Database["public"]["Enums"]["discount_state"]
+            | null
+          payment_discount_target_scope?:
+            | Database["public"]["Enums"]["discount_target_scope"]
+            | null
           payment_discount_type?:
             | Database["public"]["Enums"]["discount_type"]
             | null
@@ -921,6 +986,51 @@ export type Database = {
           },
           {
             foreignKeyName: "booking_communication_thread_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_payment_retry_token: {
+        Row: {
+          booking_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          organization_id: string
+          token_hash: string
+          used_at: string | null
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          organization_id: string
+          token_hash: string
+          used_at?: string | null
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          organization_id?: string
+          token_hash?: string
+          used_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_payment_retry_token_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_payment_retry_token_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organization"
@@ -2091,6 +2201,116 @@ export type Database = {
           },
         ]
       }
+      notification_device: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          id: string
+          last_seen_at: string
+          metadata: Json
+          platform: string
+          provider: string
+          token: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          last_seen_at?: string
+          metadata?: Json
+          platform: string
+          provider: string
+          token: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          last_seen_at?: string
+          metadata?: Json
+          platform?: string
+          provider?: string
+          token?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_device_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_push_delivery: {
+        Row: {
+          attempts: number
+          created_at: string
+          device_id: string
+          id: string
+          last_attempt_at: string | null
+          last_error: string | null
+          next_attempt_at: string
+          notification_id: string
+          provider_message_id: string | null
+          provider_response: Json
+          sent_at: string | null
+          status: Database["public"]["Enums"]["notification_push_delivery_status"]
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          device_id: string
+          id?: string
+          last_attempt_at?: string | null
+          last_error?: string | null
+          next_attempt_at?: string
+          notification_id: string
+          provider_message_id?: string | null
+          provider_response?: Json
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["notification_push_delivery_status"]
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          device_id?: string
+          id?: string
+          last_attempt_at?: string | null
+          last_error?: string | null
+          next_attempt_at?: string
+          notification_id?: string
+          provider_message_id?: string | null
+          provider_response?: Json
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["notification_push_delivery_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_push_delivery_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "notification_device"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_push_delivery_notification_id_fkey"
+            columns: ["notification_id"]
+            isOneToOne: false
+            referencedRelation: "notification"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organization: {
         Row: {
           address: string | null
@@ -2129,9 +2349,10 @@ export type Database = {
       }
       organization_discount_code: {
         Row: {
-          active: boolean
           code: string
           code_normalized: string
+          condition_mode: Database["public"]["Enums"]["discount_condition_mode"]
+          conditions: Json
           created_at: string
           expires_on: string | null
           fixed_amount: number | null
@@ -2139,16 +2360,25 @@ export type Database = {
           limit_per_email: boolean
           max_total_uses: number | null
           metadata: Json
+          min_participants_required: number | null
+          min_subtotal_before_discount_amount: number | null
           name: string
           organization_id: string
+          participant_limit_count: number | null
+          participant_ordering: Database["public"]["Enums"]["discount_participant_ordering"]
           percentage_amount: number | null
+          reward_mode: Database["public"]["Enums"]["discount_reward_mode"]
+          reward_quantity: number | null
+          state: Database["public"]["Enums"]["discount_state"]
+          target_scope: Database["public"]["Enums"]["discount_target_scope"]
           type: Database["public"]["Enums"]["discount_type"]
           updated_at: string
         }
         Insert: {
-          active?: boolean
           code: string
           code_normalized: string
+          condition_mode?: Database["public"]["Enums"]["discount_condition_mode"]
+          conditions?: Json
           created_at?: string
           expires_on?: string | null
           fixed_amount?: number | null
@@ -2156,16 +2386,25 @@ export type Database = {
           limit_per_email?: boolean
           max_total_uses?: number | null
           metadata?: Json
+          min_participants_required?: number | null
+          min_subtotal_before_discount_amount?: number | null
           name: string
           organization_id: string
+          participant_limit_count?: number | null
+          participant_ordering?: Database["public"]["Enums"]["discount_participant_ordering"]
           percentage_amount?: number | null
+          reward_mode?: Database["public"]["Enums"]["discount_reward_mode"]
+          reward_quantity?: number | null
+          state?: Database["public"]["Enums"]["discount_state"]
+          target_scope?: Database["public"]["Enums"]["discount_target_scope"]
           type: Database["public"]["Enums"]["discount_type"]
           updated_at?: string
         }
         Update: {
-          active?: boolean
           code?: string
           code_normalized?: string
+          condition_mode?: Database["public"]["Enums"]["discount_condition_mode"]
+          conditions?: Json
           created_at?: string
           expires_on?: string | null
           fixed_amount?: number | null
@@ -2173,15 +2412,69 @@ export type Database = {
           limit_per_email?: boolean
           max_total_uses?: number | null
           metadata?: Json
+          min_participants_required?: number | null
+          min_subtotal_before_discount_amount?: number | null
           name?: string
           organization_id?: string
+          participant_limit_count?: number | null
+          participant_ordering?: Database["public"]["Enums"]["discount_participant_ordering"]
           percentage_amount?: number | null
+          reward_mode?: Database["public"]["Enums"]["discount_reward_mode"]
+          reward_quantity?: number | null
+          state?: Database["public"]["Enums"]["discount_state"]
+          target_scope?: Database["public"]["Enums"]["discount_target_scope"]
           type?: Database["public"]["Enums"]["discount_type"]
           updated_at?: string
         }
         Relationships: [
           {
             foreignKeyName: "organization_discount_code_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_discount_code_extra_scope: {
+        Row: {
+          created_at: string
+          discount_code_id: string
+          organization_id: string
+          participant_data_schema_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          discount_code_id: string
+          organization_id: string
+          participant_data_schema_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          discount_code_id?: string
+          organization_id?: string
+          participant_data_schema_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_discount_code_extr_participant_data_schema_id_fkey"
+            columns: ["participant_data_schema_id"]
+            isOneToOne: false
+            referencedRelation: "participant_data_schema"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_discount_code_extra_scope_discount_code_id_fkey"
+            columns: ["discount_code_id"]
+            isOneToOne: false
+            referencedRelation: "organization_discount_code"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_discount_code_extra_scope_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organization"
@@ -2625,51 +2918,6 @@ export type Database = {
           },
         ]
       }
-      stripe_event_log: {
-        Row: {
-          booking_id: string | null
-          event_type: string
-          id: string
-          organization_id: string | null
-          payload: Json
-          processed_at: string
-          stripe_event_id: string
-        }
-        Insert: {
-          booking_id?: string | null
-          event_type: string
-          id?: string
-          organization_id?: string | null
-          payload?: Json
-          processed_at?: string
-          stripe_event_id: string
-        }
-        Update: {
-          booking_id?: string | null
-          event_type?: string
-          id?: string
-          organization_id?: string | null
-          payload?: Json
-          processed_at?: string
-          stripe_event_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "stripe_event_log_booking_id_fkey"
-            columns: ["booking_id"]
-            isOneToOne: false
-            referencedRelation: "booking"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "stripe_event_log_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: false
-            referencedRelation: "organization"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       service: {
         Row: {
           calendar_color: string
@@ -2750,6 +2998,7 @@ export type Database = {
       service_participant_data_schema: {
         Row: {
           created_at: string
+          order_position: number
           organization_id: string
           participant_data_schema_id: string
           service_id: string
@@ -2757,6 +3006,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          order_position?: number
           organization_id: string
           participant_data_schema_id: string
           service_id: string
@@ -2764,6 +3014,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          order_position?: number
           organization_id?: string
           participant_data_schema_id?: string
           service_id?: string
@@ -3222,6 +3473,54 @@ export type Database = {
           },
         ]
       }
+      stripe_event_log: {
+        Row: {
+          booking_id: string | null
+          created_at: string
+          event_type: string
+          id: string
+          organization_id: string | null
+          payload: Json
+          processed_at: string
+          stripe_event_id: string
+        }
+        Insert: {
+          booking_id?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          organization_id?: string | null
+          payload?: Json
+          processed_at?: string
+          stripe_event_id: string
+        }
+        Update: {
+          booking_id?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          organization_id?: string | null
+          payload?: Json
+          processed_at?: string
+          stripe_event_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stripe_event_log_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stripe_event_log_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscription: {
         Row: {
           created_at: string
@@ -3483,38 +3782,61 @@ export type Database = {
     }
     Functions: {
       planoby_align_date_to_weekly_days: {
-        Args: { p_days: Json; p_date: string; p_direction?: number }
+        Args: { p_date: string; p_days: Json; p_direction?: number }
+        Returns: string
+      }
+      planoby_booking_counts_toward_slot: {
+        Args: {
+          p_confirmation_failure_reserves_slot?: boolean
+          p_state: Database["public"]["Enums"]["booking_state"]
+        }
+        Returns: boolean
+      }
+      planoby_bootstrap_dev_outdoor_owner: {
+        Args: {
+          p_org_name?: string
+          p_org_slug?: string
+          p_user_email?: string
+          p_user_name?: string
+          p_user_password?: string
+        }
         Returns: string
       }
       planoby_bootstrap_dev_reset_account: {
         Args: {
-          p_user_name?: string
-          p_user_email?: string
-          p_org_slug?: string
           p_auth_user_id: string
           p_org_name?: string
+          p_org_slug?: string
+          p_user_email?: string
+          p_user_name?: string
         }
         Returns: string
       }
       planoby_build_seeded_participants: {
         Args: {
           p_default_count?: number
+          p_organization_id: string
           p_seed: number
           p_service_id: string
-          p_organization_id: string
         }
         Returns: Json
       }
-      planoby_cron_worker_base_url: {
-        Args: Record<PropertyKey, never>
-        Returns: string
+      planoby_cron_worker_base_url: { Args: never; Returns: string }
+      planoby_cron_worker_secret: { Args: never; Returns: string }
+      planoby_discount_condition_is_valid: {
+        Args: { p_condition: Json }
+        Returns: boolean
       }
-      planoby_cron_worker_secret: {
-        Args: Record<PropertyKey, never>
-        Returns: string
+      planoby_discount_conditions_are_valid: {
+        Args: { p_conditions: Json }
+        Returns: boolean
       }
       planoby_get_service_prices_json: {
         Args: { p_service_id: string }
+        Returns: Json
+      }
+      planoby_migrate_legacy_outdoor_activities: {
+        Args: { p_organization_name?: string; p_owner_email?: string }
         Returns: Json
       }
       planoby_org_setting_json: {
@@ -3522,7 +3844,7 @@ export type Database = {
         Returns: Json
       }
       planoby_org_setting_text: {
-        Args: { p_name: string; p_organization_id: string; p_default?: string }
+        Args: { p_default?: string; p_name: string; p_organization_id: string }
         Returns: string
       }
       planoby_org_timezone_value: {
@@ -3538,23 +3860,20 @@ export type Database = {
         Returns: undefined
       }
       planoby_resolve_slot_occurrence_id: {
-        Args: { p_slot_id: string; p_day: string }
+        Args: { p_day: string; p_slot_id: string }
         Returns: string
       }
       planoby_seed_combinaison_schema: {
         Args: { p_organization_id: string }
         Returns: Json
       }
-      planoby_should_emit_webhooks: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
+      planoby_should_emit_webhooks: { Args: never; Returns: boolean }
       planoby_slot_matches_day_core: {
         Args: {
-          p_meta_frequency: string
-          p_frequency: string
-          p_slot_date: string
           p_day: string
+          p_frequency: string
+          p_meta_frequency: string
+          p_slot_date: string
         }
         Returns: boolean
       }
@@ -3572,8 +3891,8 @@ export type Database = {
       }
       planoby_sync_slot_occurrences: {
         Args: {
-          p_window_end?: string
           p_slot_id: string
+          p_window_end?: string
           p_window_start?: string
         }
         Returns: undefined
@@ -3583,7 +3902,7 @@ export type Database = {
         Returns: string
       }
       user_org_role_is_higher_than: {
-        Args: { target_user_id: string; org_id: string }
+        Args: { org_id: string; target_user_id: string }
         Returns: boolean
       }
     }
@@ -3609,8 +3928,16 @@ export type Database = {
         | "refunded"
       content_state: "draft" | "published" | "archived"
       credit_note_status: "issued" | "void"
+      discount_condition_mode: "all" | "any"
+      discount_participant_ordering:
+        | "form_order"
+        | "lowest_price"
+        | "highest_price"
       discount_redemption_status: "reserved" | "consumed" | "released"
-      discount_type: "percentage" | "fixed"
+      discount_reward_mode: "single" | "all_eligible"
+      discount_state: "draft" | "published" | "archived"
+      discount_target_scope: "all" | "participant_base" | "extras"
+      discount_type: "percentage" | "fixed" | "free_participant" | "free_extra"
       fiscal_classification_mode: "auto" | "force_b2b" | "force_b2c"
       fiscal_export_status: "pending" | "completed" | "failed"
       fiscal_party_type: "b2c" | "b2b_fr" | "b2b_non_fr"
@@ -3628,16 +3955,26 @@ export type Database = {
       frequency_type: "once" | "day" | "week" | "month" | "year"
       invoice_status: "issued" | "partially_refunded" | "refunded"
       matrix_axis: "row" | "col"
+      notification_push_delivery_status:
+        | "queued"
+        | "processing"
+        | "sent"
+        | "failed"
+        | "invalid_token"
       notification_type: "info" | "warning" | "error" | "success"
       org_permission:
         | "organization.manage"
         | "member.manage"
         | "setting.manage"
         | "media.manage"
-        | "booking.select"
-        | "booking.insert"
-        | "booking.update"
-        | "booking.delete"
+        | "booking.me.select"
+        | "booking.me.insert"
+        | "booking.me.update"
+        | "booking.me.delete"
+        | "booking.all.select"
+        | "booking.all.insert"
+        | "booking.all.update"
+        | "booking.all.delete"
         | "service.select"
         | "service.insert"
         | "service.update"
@@ -3646,14 +3983,14 @@ export type Database = {
         | "checkout.insert"
         | "checkout.update"
         | "checkout.delete"
-        | "slot.select"
-        | "slot.insert"
-        | "slot.update"
-        | "slot.delete"
-        | "slot_admin.select"
-        | "slot_admin.insert"
-        | "slot_admin.update"
-        | "slot_admin.delete"
+        | "slot.me.select"
+        | "slot.me.insert"
+        | "slot.me.update"
+        | "slot.me.delete"
+        | "slot.all.select"
+        | "slot.all.insert"
+        | "slot.all.update"
+        | "slot.all.delete"
       pdp_connection_status:
         | "not_connected"
         | "connecting"
@@ -3685,6 +4022,7 @@ export type Database = {
           owner: string | null
           owner_id: string | null
           public: boolean | null
+          type: Database["storage"]["Enums"]["buckettype"]
           updated_at: string | null
         }
         Insert: {
@@ -3697,6 +4035,7 @@ export type Database = {
           owner?: string | null
           owner_id?: string | null
           public?: boolean | null
+          type?: Database["storage"]["Enums"]["buckettype"]
           updated_at?: string | null
         }
         Update: {
@@ -3709,9 +4048,156 @@ export type Database = {
           owner?: string | null
           owner_id?: string | null
           public?: boolean | null
+          type?: Database["storage"]["Enums"]["buckettype"]
           updated_at?: string | null
         }
         Relationships: []
+      }
+      buckets_analytics: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          format: string
+          id: string
+          name: string
+          type: Database["storage"]["Enums"]["buckettype"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          format?: string
+          id?: string
+          name: string
+          type?: Database["storage"]["Enums"]["buckettype"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          format?: string
+          id?: string
+          name?: string
+          type?: Database["storage"]["Enums"]["buckettype"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      buckets_vectors: {
+        Row: {
+          created_at: string
+          id: string
+          type: Database["storage"]["Enums"]["buckettype"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          type?: Database["storage"]["Enums"]["buckettype"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          type?: Database["storage"]["Enums"]["buckettype"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      iceberg_namespaces: {
+        Row: {
+          bucket_name: string
+          catalog_id: string
+          created_at: string
+          id: string
+          metadata: Json
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          bucket_name: string
+          catalog_id: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          bucket_name?: string
+          catalog_id?: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "iceberg_namespaces_catalog_id_fkey"
+            columns: ["catalog_id"]
+            isOneToOne: false
+            referencedRelation: "buckets_analytics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      iceberg_tables: {
+        Row: {
+          bucket_name: string
+          catalog_id: string
+          created_at: string
+          id: string
+          location: string
+          name: string
+          namespace_id: string
+          remote_table_id: string | null
+          shard_id: string | null
+          shard_key: string | null
+          updated_at: string
+        }
+        Insert: {
+          bucket_name: string
+          catalog_id: string
+          created_at?: string
+          id?: string
+          location: string
+          name: string
+          namespace_id: string
+          remote_table_id?: string | null
+          shard_id?: string | null
+          shard_key?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bucket_name?: string
+          catalog_id?: string
+          created_at?: string
+          id?: string
+          location?: string
+          name?: string
+          namespace_id?: string
+          remote_table_id?: string | null
+          shard_id?: string | null
+          shard_key?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "iceberg_tables_catalog_id_fkey"
+            columns: ["catalog_id"]
+            isOneToOne: false
+            referencedRelation: "buckets_analytics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "iceberg_tables_namespace_id_fkey"
+            columns: ["namespace_id"]
+            isOneToOne: false
+            referencedRelation: "iceberg_namespaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       migrations: {
         Row: {
@@ -3740,7 +4226,6 @@ export type Database = {
           created_at: string | null
           id: string
           last_accessed_at: string | null
-          level: number | null
           metadata: Json | null
           name: string | null
           owner: string | null
@@ -3755,7 +4240,6 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_accessed_at?: string | null
-          level?: number | null
           metadata?: Json | null
           name?: string | null
           owner?: string | null
@@ -3770,7 +4254,6 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_accessed_at?: string | null
-          level?: number | null
           metadata?: Json | null
           name?: string | null
           owner?: string | null
@@ -3790,38 +4273,6 @@ export type Database = {
           },
         ]
       }
-      prefixes: {
-        Row: {
-          bucket_id: string
-          created_at: string | null
-          level: number
-          name: string
-          updated_at: string | null
-        }
-        Insert: {
-          bucket_id: string
-          created_at?: string | null
-          level?: number
-          name: string
-          updated_at?: string | null
-        }
-        Update: {
-          bucket_id?: string
-          created_at?: string | null
-          level?: number
-          name?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "prefixes_bucketId_fkey"
-            columns: ["bucket_id"]
-            isOneToOne: false
-            referencedRelation: "buckets"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       s3_multipart_uploads: {
         Row: {
           bucket_id: string
@@ -3829,6 +4280,7 @@ export type Database = {
           id: string
           in_progress_size: number
           key: string
+          metadata: Json | null
           owner_id: string | null
           upload_signature: string
           user_metadata: Json | null
@@ -3840,6 +4292,7 @@ export type Database = {
           id: string
           in_progress_size?: number
           key: string
+          metadata?: Json | null
           owner_id?: string | null
           upload_signature: string
           user_metadata?: Json | null
@@ -3851,6 +4304,7 @@ export type Database = {
           id?: string
           in_progress_size?: number
           key?: string
+          metadata?: Json | null
           owner_id?: string | null
           upload_signature?: string
           user_metadata?: Json | null
@@ -3920,62 +4374,89 @@ export type Database = {
           },
         ]
       }
+      vector_indexes: {
+        Row: {
+          bucket_id: string
+          created_at: string
+          data_type: string
+          dimension: number
+          distance_metric: string
+          id: string
+          metadata_configuration: Json | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          bucket_id: string
+          created_at?: string
+          data_type: string
+          dimension: number
+          distance_metric: string
+          id?: string
+          metadata_configuration?: Json | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          bucket_id?: string
+          created_at?: string
+          data_type?: string
+          dimension?: number
+          distance_metric?: string
+          id?: string
+          metadata_configuration?: Json | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vector_indexes_bucket_id_fkey"
+            columns: ["bucket_id"]
+            isOneToOne: false
+            referencedRelation: "buckets_vectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      add_prefixes: {
-        Args: { _name: string; _bucket_id: string }
-        Returns: undefined
-      }
-      can_insert_object: {
-        Args: { name: string; owner: string; bucketid: string; metadata: Json }
-        Returns: undefined
-      }
-      delete_prefix: {
-        Args: { _name: string; _bucket_id: string }
+      allow_any_operation: {
+        Args: { expected_operations: string[] }
         Returns: boolean
       }
-      extension: {
-        Args: { name: string }
+      allow_only_operation: {
+        Args: { expected_operation: string }
+        Returns: boolean
+      }
+      can_insert_object: {
+        Args: { bucketid: string; metadata: Json; name: string; owner: string }
+        Returns: undefined
+      }
+      extension: { Args: { name: string }; Returns: string }
+      filename: { Args: { name: string }; Returns: string }
+      foldername: { Args: { name: string }; Returns: string[] }
+      get_common_prefix: {
+        Args: { p_delimiter: string; p_key: string; p_prefix: string }
         Returns: string
-      }
-      filename: {
-        Args: { name: string }
-        Returns: string
-      }
-      foldername: {
-        Args: { name: string }
-        Returns: string[]
-      }
-      get_level: {
-        Args: { name: string }
-        Returns: number
-      }
-      get_prefix: {
-        Args: { name: string }
-        Returns: string
-      }
-      get_prefixes: {
-        Args: { name: string }
-        Returns: string[]
       }
       get_size_by_bucket: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
-          size: number
           bucket_id: string
+          size: number
         }[]
       }
       list_multipart_uploads_with_delimiter: {
         Args: {
-          prefix_param: string
-          next_upload_token?: string
-          next_key_token?: string
-          max_keys?: number
-          delimiter_param: string
           bucket_id: string
+          delimiter_param: string
+          max_keys?: number
+          next_key_token?: string
+          next_upload_token?: string
+          prefix_param: string
         }
         Returns: {
           created_at: string
@@ -3985,104 +4466,89 @@ export type Database = {
       }
       list_objects_with_delimiter: {
         Args: {
-          start_after?: string
-          max_keys?: number
+          _bucket_id: string
           delimiter_param: string
-          prefix_param: string
+          max_keys?: number
           next_token?: string
-          bucket_id: string
+          prefix_param: string
+          sort_order?: string
+          start_after?: string
         }
         Returns: {
-          updated_at: string
-          metadata: Json
+          created_at: string
           id: string
+          last_accessed_at: string
+          metadata: Json
           name: string
+          updated_at: string
         }[]
       }
-      operation: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      operation: { Args: never; Returns: string }
       search: {
         Args: {
-          sortorder?: string
-          sortcolumn?: string
-          prefix: string
           bucketname: string
-          limits?: number
           levels?: number
+          limits?: number
           offsets?: number
+          prefix: string
           search?: string
+          sortcolumn?: string
+          sortorder?: string
         }
         Returns: {
           created_at: string
-          metadata: Json
-          last_accessed_at: string
-          name: string
           id: string
+          last_accessed_at: string
+          metadata: Json
+          name: string
           updated_at: string
         }[]
       }
-      search_legacy_v1: {
+      search_by_timestamp: {
         Args: {
-          sortcolumn?: string
-          prefix: string
-          bucketname: string
-          limits?: number
-          levels?: number
-          offsets?: number
-          search?: string
-          sortorder?: string
+          p_bucket_id: string
+          p_level: number
+          p_limit: number
+          p_prefix: string
+          p_sort_column: string
+          p_sort_column_after: string
+          p_sort_order: string
+          p_start_after: string
         }
         Returns: {
           created_at: string
-          updated_at: string
           id: string
-          name: string
-          metadata: Json
-          last_accessed_at: string
-        }[]
-      }
-      search_v1_optimised: {
-        Args: {
-          prefix: string
-          bucketname: string
-          limits?: number
-          levels?: number
-          offsets?: number
-          search?: string
-          sortcolumn?: string
-          sortorder?: string
-        }
-        Returns: {
-          id: string
-          name: string
-          updated_at: string
-          created_at: string
+          key: string
           last_accessed_at: string
           metadata: Json
+          name: string
+          updated_at: string
         }[]
       }
       search_v2: {
         Args: {
-          start_after?: string
-          prefix: string
-          limits?: number
           bucket_name: string
           levels?: number
+          limits?: number
+          prefix: string
+          sort_column?: string
+          sort_column_after?: string
+          sort_order?: string
+          start_after?: string
         }
         Returns: {
-          key: string
-          name: string
-          id: string
-          updated_at: string
-          metadata: Json
           created_at: string
+          id: string
+          key: string
+          last_accessed_at: string
+          metadata: Json
+          name: string
+          updated_at: string
         }[]
       }
     }
     Enums: {
-      [_ in never]: never
+      buckettype: "STANDARD" | "ANALYTICS" | "VECTOR"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -4090,21 +4556,25 @@ export type Database = {
   }
 }
 
-type DefaultSchema = Database[Extract<keyof Database, "public">]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
@@ -4122,14 +4592,16 @@ export type Tables<
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
@@ -4145,14 +4617,16 @@ export type TablesInsert<
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
@@ -4168,14 +4642,16 @@ export type TablesUpdate<
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
@@ -4183,14 +4659,16 @@ export type Enums<
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
@@ -4227,8 +4705,17 @@ export const Constants = {
       ],
       content_state: ["draft", "published", "archived"],
       credit_note_status: ["issued", "void"],
+      discount_condition_mode: ["all", "any"],
+      discount_participant_ordering: [
+        "form_order",
+        "lowest_price",
+        "highest_price",
+      ],
       discount_redemption_status: ["reserved", "consumed", "released"],
-      discount_type: ["percentage", "fixed"],
+      discount_reward_mode: ["single", "all_eligible"],
+      discount_state: ["draft", "published", "archived"],
+      discount_target_scope: ["all", "participant_base", "extras"],
+      discount_type: ["percentage", "fixed", "free_participant", "free_extra"],
       fiscal_classification_mode: ["auto", "force_b2b", "force_b2c"],
       fiscal_export_status: ["pending", "completed", "failed"],
       fiscal_party_type: ["b2c", "b2b_fr", "b2b_non_fr"],
@@ -4248,16 +4735,27 @@ export const Constants = {
       frequency_type: ["once", "day", "week", "month", "year"],
       invoice_status: ["issued", "partially_refunded", "refunded"],
       matrix_axis: ["row", "col"],
+      notification_push_delivery_status: [
+        "queued",
+        "processing",
+        "sent",
+        "failed",
+        "invalid_token",
+      ],
       notification_type: ["info", "warning", "error", "success"],
       org_permission: [
         "organization.manage",
         "member.manage",
         "setting.manage",
         "media.manage",
-        "booking.select",
-        "booking.insert",
-        "booking.update",
-        "booking.delete",
+        "booking.me.select",
+        "booking.me.insert",
+        "booking.me.update",
+        "booking.me.delete",
+        "booking.all.select",
+        "booking.all.insert",
+        "booking.all.update",
+        "booking.all.delete",
         "service.select",
         "service.insert",
         "service.update",
@@ -4266,14 +4764,14 @@ export const Constants = {
         "checkout.insert",
         "checkout.update",
         "checkout.delete",
-        "slot.select",
-        "slot.insert",
-        "slot.update",
-        "slot.delete",
-        "slot_admin.select",
-        "slot_admin.insert",
-        "slot_admin.update",
-        "slot_admin.delete",
+        "slot.me.select",
+        "slot.me.insert",
+        "slot.me.update",
+        "slot.me.delete",
+        "slot.all.select",
+        "slot.all.insert",
+        "slot.all.update",
+        "slot.all.delete",
       ],
       pdp_connection_status: [
         "not_connected",
@@ -4293,6 +4791,9 @@ export const Constants = {
     },
   },
   storage: {
-    Enums: {},
+    Enums: {
+      buckettype: ["STANDARD", "ANALYTICS", "VECTOR"],
+    },
   },
 } as const
+

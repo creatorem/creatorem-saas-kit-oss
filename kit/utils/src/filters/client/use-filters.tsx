@@ -1,7 +1,7 @@
 'use client';
 import 'client-only';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import {
@@ -66,17 +66,35 @@ const useFilterStore = create<FilterStore>()(
 );
 
 export function useEnqueueFilter<T extends ClientFilterSlug>(tag: T, newFilter: Filter<T>): void {
-    initializeEnqueueFilter(tag, newFilter);
+    const filterFnRef = useRef(newFilter.fn);
 
     useEffect(() => {
-        useFilterStore.getState().addFilter(tag, newFilter);
-    }, [tag, newFilter]);
+        filterFnRef.current = newFilter.fn;
+    }, [newFilter.fn]);
+
+    const stableFilter = useMemo(() => {
+        const wrappedFilter = {
+            ...newFilter,
+            fn: ((...args: unknown[]) => {
+                const currentFn = filterFnRef.current as (...fnArgs: unknown[]) => unknown;
+                return currentFn(...args);
+            }) as Filter<T>['fn'],
+        } as Filter<T>;
+
+        return wrappedFilter;
+    }, [newFilter.name, newFilter.once, newFilter.priority, 'async' in newFilter ? newFilter.async : undefined]);
+
+    initializeEnqueueFilter(tag, stableFilter);
+
+    useEffect(() => {
+        useFilterStore.getState().addFilter(tag, stableFilter);
+    }, [tag, stableFilter]);
 
     useEffect(() => {
         return () => {
-            useFilterStore.getState().removeFilter(tag, newFilter.name);
+            useFilterStore.getState().removeFilter(tag, stableFilter.name);
         };
-    }, [tag, newFilter.name]);
+    }, [tag, stableFilter.name]);
 }
 
 export function useApplyFilter<T extends ClientFilterSlug & SyncFilterSlug>(

@@ -15,8 +15,8 @@ export const sharedRouteEnvs = () => createEnv({
     },
     server: {},
     runtimeEnv: {
-        NEXT_PUBLIC_MARKETING_URL: process.env.NEXT_PUBLIC_MARKETING_URL,
-        NEXT_PUBLIC_DASHBOARD_URL: process.env.NEXT_PUBLIC_DASHBOARD_URL,
+        NEXT_PUBLIC_MARKETING_URL: process.env.NEXT_PUBLIC_MARKETING_URL ?? process.env.EXPO_PUBLIC_MARKETING_URL,
+        NEXT_PUBLIC_DASHBOARD_URL: process.env.NEXT_PUBLIC_DASHBOARD_URL ?? process.env.EXPO_PUBLIC_DASHBOARD_URL,
     },
     emptyStringAsUndefined: true,
 })

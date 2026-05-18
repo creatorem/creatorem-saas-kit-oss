@@ -1,0 +1,586 @@
+- generic:
+  - generic:
+    - generic:
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - button:
+                      - img
+                      - generic: Toggle Sidebar
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button:
+                            - img
+                          - button:
+                            - img
+                          - button:
+                            - img
+                          - heading [level=2]: May
+                        - generic:
+                          - generic:
+                            - button:
+                              - generic: Bookings
+                              - img
+                          - button [active]:
+                            - img
+                        - generic:
+                          - button:
+                            - img
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic:
+                                      - button:
+                                        - generic: Sat
+                                        - generic: "16"
+                                      - button: Add memo
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic: 08:00
+                                - generic:
+                                  - generic: 09:00
+                                - generic:
+                                  - generic: 10:00
+                                - generic:
+                                  - generic: 11:00
+                                - generic:
+                                  - generic: 12:00
+                                - generic:
+                                  - generic: 13:00
+                                - generic:
+                                  - generic: 14:00
+                                - generic:
+                                  - generic: 15:00
+                                - generic:
+                                  - generic: 16:00
+                                - generic:
+                                  - generic: 17:00
+                                - generic:
+                                  - generic: 18:00
+                                - generic:
+                                  - generic: 19:00
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic:
+                                      - generic:
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic:
+                                                          - generic:
+                                                            - generic:
+                                                              - generic:
+                                                                - generic:
+                                                                  - generic: 810€
+                                                                  - img
+                                                                  - generic: "81"
+                                                                  - text: /2
+                                                                - time:
+                                                                  - generic: 10:30 -
+                                                                  - generic: 13:30
+                                                              - generic: Canyon de la Languouettte
+                                                              - generic:
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Elio Vincent
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Maya Fournier
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Maya Fournier
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Sofia Roux
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Sofia Roux
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Arthur Giraud
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Sofia Roux
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Arthur Giraud
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Arthur Giraud
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Iris Michel
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Mason Bertrand
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Olivia Thomas
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Emma Martin
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Chloe Moreau
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Lucas Petit
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Jules Garcia
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Olivia Thomas
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Chloe Moreau
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Jules Garcia
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Olivia Thomas
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Hugo Lefebvre
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Chloe Moreau
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Jules Garcia
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Liam Bernard
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Mia Durand
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Ava Robert
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Liam Bernard
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Hugo Lefebvre
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Ava Robert
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Liam Bernard
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Leo Simon
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Lina David
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Ava Robert
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Hugo Lefebvre
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Iris Michel
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Leo Simon
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Noah Dubois
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Ethan Leroy
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Mia Durand
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Leo Simon
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Lina David
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Ethan Leroy
+                                                      - generic:
+                                                        - generic:
+                                                          - img
+                                                          - generic: boris
+                                                - generic:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic:
+                                                          - generic:
+                                                            - generic:
+                                                              - generic:
+                                                                - generic:
+                                                                  - generic:
+                                                                    - img
+                                                                  - generic: 860€
+                                                                  - img
+                                                                  - generic: "86"
+                                                                  - text: /5
+                                                                - time:
+                                                                  - generic: 17:30 -
+                                                                  - generic: 22:30
+                                                              - generic: Surf
+                                                              - generic:
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Maya Fournier
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Sofia Roux
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Maya Fournier
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Sofia Roux
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Sofia Roux
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Arthur Giraud
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Arthur Giraud
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Elio Vincent
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Elio Vincent
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Elio Vincent
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Jules Garcia
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Chloe Moreau
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Olivia Thomas
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Chloe Moreau
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Jules Garcia
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Liam Bernard
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Mia Durand
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Hugo Lefebvre
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Liam Bernard
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Mia Durand
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Hugo Lefebvre
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Ava Robert
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Liam Bernard
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Leo Simon
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Mia Durand
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Lina David
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Ava Robert
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Leo Simon
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Lina David
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Ava Robert
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Iris Michel
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Leo Simon
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: ·
+                                                                    - text: · Lina David
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Noah Dubois
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Ethan Leroy
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Iris Michel
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Noah Dubois
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Ethan Leroy
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 10€ · 1
+                                                                    - img
+                                                                    - text: · Iris Michel
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 30€ · 3
+                                                                    - img
+                                                                    - text: · Emma Martin
+                                                                - generic:
+                                                                  - generic:
+                                                                    - text: 20€ · 2
+                                                                    - img
+                                                                    - text: · Lucas Petit
+                                                      - generic:
+                                                        - generic:
+                                                          - img
+                                                          - generic: boris
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e13] [cursor=pointer]:
+    - img [ref=e14]
+  - alert
+  - dialog "Agenda bookings" [ref=e452]:
+    - generic [ref=e454]:
+      - heading "Agenda bookings" [level=2] [ref=e455]
+      - paragraph [ref=e456]: Agenda bookings
+    - generic [ref=e458]:
+      - generic [ref=e461]: Selected slots
+      - generic [ref=e466]: Select slots in the agenda to display participant details.

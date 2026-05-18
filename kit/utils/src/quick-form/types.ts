@@ -106,7 +106,10 @@ export type QuickFormWrapperConfig<
     Inputs extends SettingsInputsBase = SettingsInputsBase,
 > = {
     type: 'wrapper';
+    wrapperType?: 'plain' | 'section';
     className?: string;
+    sectionClassName?: string;
+    sectionInnerClassName?: string;
     header?: React.ReactNode;
     footer?: React.ReactNode;
     settings: QuickFormUIConfig<T, Inputs>[];
@@ -276,9 +279,13 @@ export function isFormConfig<T extends QuickFormSchemaMap, I extends SettingsInp
 /* Components definitions */
 
 export type SettingWrapperComponent = React.FC<{
+    wrapperType?: 'plain' | 'section';
     className?: string;
+    sectionClassName?: string;
+    sectionInnerClassName?: string;
     header?: React.ReactNode;
     footer?: React.ReactNode;
+    depth?: number;
     children: React.ReactNode;
 }>;
 

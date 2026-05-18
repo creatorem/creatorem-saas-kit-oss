@@ -9,6 +9,12 @@
       "default": "./src/www/index.ts",
       "types": "./src/www/index.ts"
     },
+    "./native/large-secure-store": {
+      "react-native": "./src/native/large-secure-store.ts",
+      "import": "./src/native/large-secure-store.ts",
+      "default": "./src/native/large-secure-store.ts",
+      "types": "./src/native/large-secure-store.ts"
+    },
     "./envs": {
       "types": "./envs.ts",
       "import": "./envs.ts"

@@ -2,7 +2,7 @@ import type { TrpcClientWithQuery } from '@creatorem/next-trpc/query-client';
 import type { toast as rnToast } from '@kit/native-ui/sonner';
 import { useSignOut, useSupabase } from '@kit/supabase';
 import type { toast as wwwToast } from '@kit/ui/sonner';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UAParser } from 'ua-parser-js';
 import type { authRouter } from '../../router/router';
@@ -113,9 +113,14 @@ export const useAuthSessions = ({
     const [revokingAll, setRevokingAll] = useState(false);
     const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
     const [locationCache, setLocationCache] = useState<Record<string, LocationInfo>>({});
+    const locationCacheRef = useRef<Record<string, LocationInfo>>({});
 
     const supabase = useSupabase();
     const signOut = useSignOut();
+
+    useEffect(() => {
+        locationCacheRef.current = locationCache;
+    }, [locationCache]);
 
     const getCurrentSessionId = useCallback(async (): Promise<string | null> => {
         try {
@@ -160,8 +165,10 @@ export const useAuthSessions = ({
 
     const fetchLocationForIP = useCallback(
         async (ip: string): Promise<string> => {
-            if (!ip || locationCache[ip]) {
-                return locationCache[ip]?.location || t('unknownLocation');
+            const cachedLocation = locationCacheRef.current[ip];
+
+            if (!ip || cachedLocation) {
+                return cachedLocation?.location || t('unknownLocation');
             }
 
             // Set loading state
@@ -193,7 +200,7 @@ export const useAuthSessions = ({
                 return fallbackLocation;
             }
         },
-        [locationCache, t],
+        [clientTrpc, t],
     );
 
     const fetchSessions = useCallback(async () => {

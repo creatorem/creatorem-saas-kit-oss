@@ -1,0 +1,485 @@
+- generic [ref=e1]:
+  - main [ref=e20]:
+    - generic [ref=e24]:
+      - generic [ref=e26]:
+        - button "Toggle sidebar" [ref=e27] [cursor=pointer]:
+          - img
+          - generic [ref=e28]: Toggle Sidebar
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - button "Today" [ref=e32] [cursor=pointer]:
+              - img
+            - button "Previous period" [ref=e33] [cursor=pointer]:
+              - img
+            - button "Next period" [ref=e34] [cursor=pointer]:
+              - img
+            - heading "May" [level=2] [ref=e35]
+          - generic [ref=e36]:
+            - button "Edit slots" [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]: Bookings
+              - img
+            - button "Open agenda tools" [expanded] [ref=e40] [cursor=pointer]:
+              - img
+          - button "1 Day" [ref=e42] [cursor=pointer]:
+            - img
+      - generic [ref=e47]:
+        - generic [ref=e54]:
+          - button "Sat 16" [ref=e55]:
+            - generic [ref=e56]: Sat
+            - generic [ref=e57]: "16"
+          - button "Add memo for 2026-05-16" [ref=e58] [cursor=pointer]: Add memo
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e64]: 08:00
+            - generic [ref=e67]: 09:00
+            - generic [ref=e70]: 10:00
+            - generic [ref=e73]: 11:00
+            - generic [ref=e76]: 12:00
+            - generic [ref=e79]: 13:00
+            - generic [ref=e82]: 14:00
+            - generic [ref=e85]: 15:00
+            - generic [ref=e88]: 16:00
+            - generic [ref=e91]: 17:00
+            - generic [ref=e94]: 18:00
+            - generic [ref=e97]: 19:00
+          - generic [ref=e109]:
+            - generic [ref=e115]:
+              - generic [ref=e119]:
+                - generic [ref=e120]:
+                  - generic [ref=e121]:
+                    - generic [ref=e122]: 810€
+                    - img [ref=e123]
+                    - generic [ref=e125]: "81"
+                    - text: /2
+                  - time [ref=e126]:
+                    - generic [ref=e127]: 10:30 -
+                    - generic [ref=e128]: 13:30
+                - generic [ref=e129]: Canyon de la Languouettte
+                - generic [ref=e130]:
+                  - generic [ref=e133]:
+                    - text: 30€ · 3
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e134]
+                    - text: · Elio Vincent
+                  - generic [ref=e137]:
+                    - text: 20€ · 2
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e138]
+                    - text: · Maya Fournier
+                  - generic [ref=e141]:
+                    - text: 10€ · 1
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e142]
+                    - text: · Maya Fournier
+                  - generic [ref=e145]:
+                    - text: 10€ · 1
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e146]
+                    - text: · Sofia Roux
+                  - generic [ref=e149]:
+                    - text: 30€ · 3
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e150]
+                    - text: · Sofia Roux
+                  - generic [ref=e153]:
+                    - text: 20€ · 2
+                    - img
+                    - text: ·
+                    - generic "Confirmation failed" [ref=e154]
+                    - text: · Arthur Giraud
+                  - generic [ref=e157]:
+                    - text: 20€ · 2
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e158]
+                    - text: · Sofia Roux
+                  - generic [ref=e161]:
+                    - text: 10€ · 1
+                    - img
+                    - text: ·
+                    - generic "Confirmation failed" [ref=e162]
+                    - text: · Arthur Giraud
+                  - generic [ref=e165]:
+                    - text: 30€ · 3
+                    - img
+                    - text: ·
+                    - generic "Confirmation failed" [ref=e166]
+                    - text: · Arthur Giraud
+                  - generic [ref=e169]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Iris Michel
+                  - generic [ref=e172]:
+                    - text: 30€ · 3
+                    - img
+                    - text: ·
+                    - generic "Requires payment method" [ref=e173]
+                    - text: · Mason Bertrand
+                  - generic [ref=e176]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Olivia Thomas
+                  - generic [ref=e179]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Emma Martin
+                  - generic [ref=e182]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Chloe Moreau
+                  - generic [ref=e185]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Lucas Petit
+                  - generic [ref=e188]:
+                    - text: 30€ · 3
+                    - img
+                    - text: ·
+                    - generic "Requires payment method" [ref=e189]
+                    - text: · Jules Garcia
+                  - generic [ref=e192]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Olivia Thomas
+                  - generic [ref=e195]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Chloe Moreau
+                  - generic [ref=e198]:
+                    - text: 20€ · 2
+                    - img
+                    - text: ·
+                    - generic "Requires payment method" [ref=e199]
+                    - text: · Jules Garcia
+                  - generic [ref=e202]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Olivia Thomas
+                  - generic [ref=e205]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Hugo Lefebvre
+                  - generic [ref=e208]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Chloe Moreau
+                  - generic [ref=e211]:
+                    - text: 10€ · 1
+                    - img
+                    - text: ·
+                    - generic "Requires payment method" [ref=e212]
+                    - text: · Jules Garcia
+                  - generic [ref=e215]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Liam Bernard
+                  - generic [ref=e218]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Mia Durand
+                  - generic [ref=e221]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Ava Robert
+                  - generic [ref=e224]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Liam Bernard
+                  - generic [ref=e227]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Hugo Lefebvre
+                  - generic [ref=e230]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Ava Robert
+                  - generic [ref=e233]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Liam Bernard
+                  - generic [ref=e236]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Leo Simon
+                  - generic [ref=e239]:
+                    - text: 20€ · 2
+                    - img
+                    - text: ·
+                    - generic "Requires payment method" [ref=e240]
+                    - text: · Lina David
+                  - generic [ref=e243]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Ava Robert
+                  - generic [ref=e246]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Hugo Lefebvre
+                  - generic [ref=e249]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Iris Michel
+                  - generic [ref=e252]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Leo Simon
+                  - generic [ref=e255]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Noah Dubois
+                  - generic [ref=e258]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Ethan Leroy
+                  - generic [ref=e261]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Mia Durand
+                  - generic [ref=e264]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Leo Simon
+                  - generic [ref=e267]:
+                    - text: 10€ · 1
+                    - img
+                    - text: ·
+                    - generic "Requires payment method" [ref=e268]
+                    - text: · Lina David
+                  - generic [ref=e271]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Ethan Leroy
+              - generic [ref=e275]:
+                - img
+                - generic [ref=e276]: boris
+            - generic [ref=e279]:
+              - generic [ref=e283]:
+                - generic [ref=e284]:
+                  - generic [ref=e285]:
+                    - img [ref=e287]
+                    - generic [ref=e289]: 860€
+                    - img [ref=e290]
+                    - generic [ref=e292]: "86"
+                    - text: /5
+                  - time [ref=e293]:
+                    - generic [ref=e294]: 17:30 -
+                    - generic [ref=e295]: 22:30
+                - generic [ref=e296]: Surf
+                - generic [ref=e297]:
+                  - generic [ref=e300]:
+                    - text: 30€ · 3
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e301]
+                    - text: · Maya Fournier
+                  - generic [ref=e304]:
+                    - text: 30€ · 3
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e305]
+                    - text: · Sofia Roux
+                  - generic [ref=e308]:
+                    - text: 20€ · 2
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e309]
+                    - text: · Maya Fournier
+                  - generic [ref=e312]:
+                    - text: 20€ · 2
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e313]
+                    - text: · Sofia Roux
+                  - generic [ref=e316]:
+                    - text: 10€ · 1
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e317]
+                    - text: · Sofia Roux
+                  - generic [ref=e320]:
+                    - text: 30€ · 3
+                    - img
+                    - text: ·
+                    - generic "Confirmation failed" [ref=e321]
+                    - text: · Arthur Giraud
+                  - generic [ref=e324]:
+                    - text: 20€ · 2
+                    - img
+                    - text: ·
+                    - generic "Confirmation failed" [ref=e325]
+                    - text: · Arthur Giraud
+                  - generic [ref=e328]:
+                    - text: 20€ · 2
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e329]
+                    - text: · Elio Vincent
+                  - generic [ref=e332]:
+                    - text: 10€ · 1
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e333]
+                    - text: · Elio Vincent
+                  - generic [ref=e336]:
+                    - text: 30€ · 3
+                    - img
+                    - text: ·
+                    - generic "Canceled" [ref=e337]
+                    - text: · Elio Vincent
+                  - generic [ref=e340]:
+                    - text: 10€ · 1
+                    - img
+                    - text: ·
+                    - generic "Requires payment method" [ref=e341]
+                    - text: · Jules Garcia
+                  - generic [ref=e344]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Chloe Moreau
+                  - generic [ref=e347]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Olivia Thomas
+                  - generic [ref=e350]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Chloe Moreau
+                  - generic [ref=e353]:
+                    - text: 30€ · 3
+                    - img
+                    - text: ·
+                    - generic "Requires payment method" [ref=e354]
+                    - text: · Jules Garcia
+                  - generic [ref=e357]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Liam Bernard
+                  - generic [ref=e360]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Mia Durand
+                  - generic [ref=e363]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Hugo Lefebvre
+                  - generic [ref=e366]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Liam Bernard
+                  - generic [ref=e369]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Mia Durand
+                  - generic [ref=e372]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Hugo Lefebvre
+                  - generic [ref=e375]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Ava Robert
+                  - generic [ref=e378]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Liam Bernard
+                  - generic [ref=e381]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Leo Simon
+                  - generic [ref=e384]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Mia Durand
+                  - generic [ref=e387]:
+                    - text: 10€ · 1
+                    - img
+                    - text: ·
+                    - generic "Requires payment method" [ref=e388]
+                    - text: · Lina David
+                  - generic [ref=e391]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Ava Robert
+                  - generic [ref=e394]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Leo Simon
+                  - generic [ref=e397]:
+                    - text: 30€ · 3
+                    - img
+                    - text: ·
+                    - generic "Requires payment method" [ref=e398]
+                    - text: · Lina David
+                  - generic [ref=e401]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Ava Robert
+                  - generic [ref=e404]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Iris Michel
+                  - generic [ref=e407]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Leo Simon
+                  - generic [ref=e410]:
+                    - text: 20€ · 2
+                    - img
+                    - text: ·
+                    - generic "Requires payment method" [ref=e411]
+                    - text: · Lina David
+                  - generic [ref=e414]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Noah Dubois
+                  - generic [ref=e417]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Ethan Leroy
+                  - generic [ref=e420]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Iris Michel
+                  - generic [ref=e423]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Noah Dubois
+                  - generic [ref=e426]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Ethan Leroy
+                  - generic [ref=e429]:
+                    - text: 10€ · 1
+                    - img
+                    - text: · Iris Michel
+                  - generic [ref=e432]:
+                    - text: 30€ · 3
+                    - img
+                    - text: · Emma Martin
+                  - generic [ref=e435]:
+                    - text: 20€ · 2
+                    - img
+                    - text: · Lucas Petit
+              - generic [ref=e439]:
+                - img
+                - generic [ref=e440]: boris
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e13] [cursor=pointer]:
+    - img [ref=e14]
+  - alert [ref=e17]
+  - dialog [ref=e445]:
+    - textbox [active]
+    - generic [ref=e446]:
+      - button "Select slot" [ref=e447] [cursor=pointer]:
+        - img
+      - button "Filter slots" [ref=e448] [cursor=pointer]:
+        - img
+      - button "See small calendar" [ref=e449] [cursor=pointer]:
+        - img
+      - button "Settings" [ref=e450] [cursor=pointer]:
+        - img

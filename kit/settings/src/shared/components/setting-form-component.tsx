@@ -25,6 +25,39 @@ export interface SettingFormComponentProps {
 //     [key: string]: any; // Allow any additional props that will be passed to the input component
 // };
 
+type AnySettingConfig = {
+    type?: string;
+    className?: string;
+    wrapperType?: 'plain' | 'section';
+    settings?: AnySettingConfig[];
+    [key: string]: any;
+};
+
+const convertSettings = (settings: AnySettingConfig[]): AnySettingConfig[] => {
+    return settings.map((setting) => {
+        if (setting.type === 'form') {
+            return {
+                type: 'wrapper',
+                wrapperType: 'plain',
+                className: setting.className,
+                header: setting.header,
+                footer: setting.footer,
+                settings: convertSettings(setting.settings || []),
+            } as AnySettingConfig;
+        }
+
+        if (setting.type === 'wrapper' && Array.isArray(setting.settings)) {
+            return {
+                ...setting,
+                wrapperType: setting.wrapperType ?? 'plain',
+                settings: convertSettings(setting.settings),
+            } satisfies AnySettingConfig;
+        }
+
+        return setting;
+    });
+};
+
 export function SettingFormComponent({
     model,
     QuickForm,
@@ -46,28 +79,6 @@ export function SettingFormComponent({
 
     // Convert the serialized schema to a format QuickForm can understand
     const quickFormConfig = useMemo(() => {
-        // Convert settings to QuickForm compatible format
-        const convertSettings = (settings: any[]): any[] => {
-            return settings.map((setting) => {
-                if (setting.type === 'form') {
-                    // Convert form to wrapper for QuickForm compatibility
-                    return {
-                        type: 'wrapper',
-                        className: setting.className,
-                        header: setting.header,
-                        footer: setting.footer,
-                        settings: convertSettings(setting.settings || []),
-                    };
-                } else if (setting.type === 'wrapper' && Array.isArray(setting.settings)) {
-                    return {
-                        ...setting,
-                        settings: convertSettings(setting.settings),
-                    };
-                }
-                return setting;
-            });
-        };
-
         const schema = model.getFormSchemaById(formId);
 
         return {
@@ -75,7 +86,7 @@ export function SettingFormComponent({
             title: undefined,
             className: formConfig.className,
             schema: schema,
-            settings: convertSettings(formConfig.settings),
+            settings: convertSettings(formConfig.settings as AnySettingConfig[]) as any,
             submitButton: formConfig.submitButton || {
                 text: 'Save Changes',
                 className: 'bg-green-600 hover:bg-green-700',

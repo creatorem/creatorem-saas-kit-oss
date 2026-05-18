@@ -123,11 +123,13 @@ export function SettingsPages({ params, onNotFound, settingsSchemas, settingsUI,
     // Find the current page config based on URL segments
     const model = new SettingModel<Record<string, any>, SettingsInputsBase>(settingsSchemas, settingsUI);
     const { currentConfig } = getLocalSettingConfig(params.settings, model);
+    const { currentConfig: fallbackConfig } = getLocalSettingConfig([], model);
     const existingContext = useContext(CurrentSettings);
+    const resolvedConfig = currentConfig ?? (onNotFound ? undefined : fallbackConfig);
 
     // Render the settings page if we have a valid page config
-    if (currentConfig && isPageConfig(currentConfig)) {
-        const children = <SettingsPageRenderer {...props} model={model} pageConfig={currentConfig} />;
+    if (resolvedConfig && isPageConfig(resolvedConfig)) {
+        const children = <SettingsPageRenderer {...props} model={model} pageConfig={resolvedConfig} />;
 
         if (existingContext === null) {
             return <CurrentSettingsProvider>{children}</CurrentSettingsProvider>;
@@ -173,6 +175,7 @@ function SettingsPageRenderer({ pageConfig, ...props }: SettingsPageRendererProp
                     setting,
                     index,
                     keyPrefix: 'setting',
+                    depth: 0,
                     // pageHasTitle: Boolean(hasTabs && pageTitle),
                     ...props,
                 }),
@@ -189,12 +192,14 @@ function renderSetting({
     // pageHasTitle,
     Wrapper,
     TabsRenderer,
+    depth,
     ...props
 }: {
     model: SettingModel<Record<string, any>, SettingsInputsBase>;
     setting: PageSettingConfig<Record<string, any>, SettingsInputsBase>;
     index: number;
     keyPrefix: string;
+    depth: number;
     // pageHasTitle: boolean;
 } & Pick<
     SettingsPagesProps,
@@ -221,6 +226,7 @@ function renderSetting({
                             setting: tabSetting,
                             index: nestedIndex,
                             keyPrefix: `${key}-tab-${tabIndex}`,
+                            depth,
                             // pageHasTitle,
                             Wrapper,
                             TabsRenderer,
@@ -280,15 +286,20 @@ function renderSetting({
         return (
             <React.Fragment key={key}>
                 <Wrapper
+                    wrapperType={quickFormSetting.wrapperType}
                     header={quickFormSetting.header}
                     footer={quickFormSetting.footer}
                     className={quickFormSetting.className}
+                    sectionClassName={quickFormSetting.sectionClassName}
+                    sectionInnerClassName={quickFormSetting.sectionInnerClassName}
+                    depth={depth}
                 >
                     {quickFormSetting.settings.map((nestedSetting: any, nestedIndex: number) =>
                         renderSetting({
                             setting: nestedSetting,
                             index: nestedIndex,
                             keyPrefix: `${key}-nested`,
+                            depth: depth + 1,
                             // pageHasTitle,
                             Wrapper,
                             TabsRenderer,
