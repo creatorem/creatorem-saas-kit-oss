@@ -1,0 +1,7 @@
+interface:
+  display_name: "Creatorem Kit"
+  short_description: "Work safely in the Creatorem SaaS kit"
+  default_prompt: "Use $creatorem-kit to plan or implement this Creatorem SaaS Kit change with the right repo ownership, Supabase workflow, and merge policy."
+
+policy:
+  allow_implicit_invocation: true
