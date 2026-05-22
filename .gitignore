@@ -12,6 +12,8 @@
 .direnv
 .envrc
 
+.env.preview
+
 # dependencies
 node_modules
 .pnp
