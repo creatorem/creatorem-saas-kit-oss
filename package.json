@@ -30,7 +30,7 @@
     "supabase:stop": "supabase stop",
     "supabase:test": "supabase db test",
     "supabase:deploy": "pnpm exec creatorem generate-sql --production && supabase link --project-ref $SUPABASE_PROJECT_REF && supabase db push",
-    "db:reset": "pnpm exec creatorem generate-sql apps/planoby-dashboard/.creatorem/setup.json && supabase db reset && node tooling/scripts/src/bootstrap-planoby-dev-reset.mjs",
+    "db:reset": "pnpm exec creatorem generate-sql apps/planoby-dashboard/.creatorem/setup.json && supabase db reset",
     "db:types": "supabase gen types typescript --local > kit/db/core/src/database.types.ts && pnpm run --filter @kit/drizzle drizzle:pull",
     "supabase:db:dump:local": "supabase db dump --local --data-only",
     "detect-untranslated": "tsx tooling/scripts/src/detect-untranslated-text.ts"
