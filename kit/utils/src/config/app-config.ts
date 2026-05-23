@@ -48,6 +48,20 @@ const schema = z.object({
                             height: z.number(),
                         })
                         .optional(),
+                    footer: z
+                        .object({
+                            /**
+                             * Whether the legal/company address block is displayed in email templates.
+                             * Defaults to true when omitted.
+                             */
+                            showAddress: z.boolean().optional(),
+                            /**
+                             * Optional custom address text used in email template footer.
+                             * Falls back to the legacy default address text when omitted.
+                             */
+                            address: z.string().optional(),
+                        })
+                        .optional(),
                 })
                 .optional(),
             /**
