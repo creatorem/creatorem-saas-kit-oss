@@ -2,6 +2,14 @@
 
 This file captures the App Store Connect and ANSSI encryption declaration data for Planoby iOS releases.
 
+## Current Documentation Status
+
+- Technical annex: complete at `output/pdf/planoby-app-encryption-technical-annex.pdf`.
+- Official ANSSI blank form: downloaded at `output/pdf/anssi-crypto-declaration-form-blank.pdf`.
+- Final Apple upload file: not complete until the ANSSI form is filled with applicant identity details, dated, signed, and exported/scanned as a PDF.
+
+Do not upload this markdown file to App Store Connect. Upload the completed and signed French encryption declaration PDF. If App Store Connect allows only one file, merge the signed ANSSI declaration and the technical annex into one PDF before upload.
+
 ## App Store Connect Answers
 
 - App: Planoby

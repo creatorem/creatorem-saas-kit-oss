@@ -12,6 +12,10 @@
 .direnv
 .envrc
 
+/tmp
+/output
+/docs
+
 .env.preview
 
 # dependencies
