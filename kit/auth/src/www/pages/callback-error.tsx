@@ -19,7 +19,9 @@ export const CallbackErrorPage = async ({ authConfig, getServerI18n, ...props }:
     const { error, callback, code } = await props.searchParams;
     const signInPath = authConfig.urls.signIn.replace('[lang]', language);
     const redirectPath = callback ?? authConfig.urls.callback.replace('[lang]', language);
-    const errorMessage = error ? t(error, { defaultValue: error }) : t('p_auth:authenticationErrorAlertBody');
+    const translatedError = error ? t(error, { defaultValue: error }) : '';
+    const errorMessage =
+        error && translatedError !== error ? translatedError : t('p_auth:authenticationErrorAlertBody');
 
     return (
         <div className={'flex flex-col space-y-4 py-4'}>

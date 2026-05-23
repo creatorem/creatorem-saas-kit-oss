@@ -104,7 +104,7 @@ function isCodeVerifierMismatchError(error: string) {
 function getAuthErrorMessage(params: { error: string; code?: string }) {
     if (params.code) {
         if (params.code === 'otp_expired') {
-            return 'p_auth:errors.otp_expired';
+            return 'p_auth:errors.supabase.otp_expired';
         }
     }
 

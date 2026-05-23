@@ -287,7 +287,8 @@
             "invalid_credentials": "The credentials entered are invalid",
             "email_address_not_authorized": "This email address is not authorized.",
             "email_address_invalid": "Invalid email address.",
-            "codeVerifierMismatch": "It looks like you're trying to sign in using a different browser than the one you used to request the sign in link. Please try again using the same browser."
+            "codeVerifierMismatch": "It looks like you're trying to sign in using a different browser than the one you used to request the sign in link. Please try again using the same browser.",
+            "otp_expired": "The email link has expired. Please try again."
         }
     }
 }

@@ -287,7 +287,8 @@
             "invalid_credentials": "Les identifiants saisis sont invalides",
             "email_address_not_authorized": "Cette adresse email n'est pas autorisée.",
             "email_address_invalid": "Adresse email invalide.",
-            "codeVerifierMismatch": "Il semble que vous essayiez de vous connecter en utilisant un navigateur différent de celui utilisé pour demander le lien de connexion. Veuillez réessayer en utilisant le même navigateur."
+            "codeVerifierMismatch": "Il semble que vous essayiez de vous connecter en utilisant un navigateur différent de celui utilisé pour demander le lien de connexion. Veuillez réessayer en utilisant le même navigateur.",
+            "otp_expired": "Le lien par email a expiré. Veuillez réessayer."
         }
     }
 }

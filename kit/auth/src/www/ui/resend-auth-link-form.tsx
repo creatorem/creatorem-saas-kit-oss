@@ -29,17 +29,6 @@ export function ResendAuthLinkForm(props: { redirectPath?: string }) {
         },
     });
 
-    if (resendLink.data && !resendLink.isPending) {
-        return (
-            <Alert variant={'success'}>
-                <Icon name="Check" className="size-4 shrink-0" />
-                <AlertTitle>{t('resendLinkSuccessTitle')}</AlertTitle>
-
-                <AlertDescription>{t('resendLinkSuccessDescription')}</AlertDescription>
-            </Alert>
-        );
-    }
-
     const handleSubmit = useCallback(
         async (data: z.infer<typeof resendLinkSchema>) => {
             try {
@@ -53,8 +42,19 @@ export function ResendAuthLinkForm(props: { redirectPath?: string }) {
                 toast.error(t('resendLinkToastError'));
             }
         },
-        [resendLink, props.redirectPath],
+        [resendLink, props.redirectPath, t],
     );
+
+    if (resendLink.data && !resendLink.isPending) {
+        return (
+            <Alert variant={'success'}>
+                <Icon name="Check" className="size-4 shrink-0" />
+                <AlertTitle>{t('resendLinkSuccessTitle')}</AlertTitle>
+
+                <AlertDescription>{t('resendLinkSuccessDescription')}</AlertDescription>
+            </Alert>
+        );
+    }
 
     return (
         <Form {...form}>
