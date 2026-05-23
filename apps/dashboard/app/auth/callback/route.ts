@@ -5,4 +5,6 @@ import { initServerFilters } from '~/lib/init-server-filters';
 
 initServerFilters();
 
-export const GET = createCallbackRoute(authConfig, getServerI18n);
+export const GET = createCallbackRoute(authConfig, getServerI18n, {
+    errorPath: '/auth/callback-error',
+});

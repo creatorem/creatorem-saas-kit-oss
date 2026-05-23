@@ -24,6 +24,7 @@ export class AuthCallbackEngine {
 
         const authCode = searchParams.get(PARAMS.CODE);
         const inputError = searchParams.get(PARAMS.ERROR);
+        const inputErrorCode = searchParams.get(PARAMS.ERROR_CODE);
         const nextUrlPathFromParams = searchParams.get(PARAMS.NEXT);
         const errorPath = params.errorPath ?? DEFAULT_ERROR_PATH;
 
@@ -62,6 +63,7 @@ export class AuthCallbackEngine {
         if (inputError) {
             return onError({
                 error: inputError,
+                code: inputErrorCode ?? undefined,
                 path: errorPath,
             });
         }
@@ -79,8 +81,11 @@ function onError({ error, path, code }: { error: string; path: string; code?: st
 
     const searchParams = new URLSearchParams({
         [PARAMS.ERROR]: errorMessage,
-        [PARAMS.CODE]: code ?? '',
     });
+
+    if (code) {
+        searchParams.set(PARAMS.CODE, code);
+    }
 
     const nextPath = `${path}?${searchParams.toString()}`;
 
@@ -124,4 +129,5 @@ const PARAMS = {
     EMAIL: 'email',
     CODE: 'code',
     ERROR: 'error',
+    ERROR_CODE: 'error_code',
 } as const;
