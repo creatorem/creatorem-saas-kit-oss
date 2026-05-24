@@ -63,6 +63,16 @@ interface AuthHookRequest {
     };
 }
 
+const htmlToPlainText = (html: string): string =>
+    html
+        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/\s+/g, ' ')
+        .trim();
+
 function generateConfirmationURL(email_data: AuthHookRequest['email_data']) {
     const baseUrl = email_data.site_url + (process.env.NODE_ENV === 'production' ? '/verify' : '/auth/v1/verify');
 
@@ -183,16 +193,61 @@ export const createAuthEmailWebhookHandler = (appConfig: AppConfig) => {
             }
 
             // Send the email using the configured email provider
-            await EmailProvider.sendEmail({
+            const providerResult = await EmailProvider.sendEmail({
                 to: authRequest.user.email,
                 subject: emailSubject,
                 html: emailHtml,
+                text: htmlToPlainText(emailHtml),
             });
+
+            const providerResultObject =
+                providerResult && typeof providerResult === 'object'
+                    ? (providerResult as {
+                          accepted?: unknown;
+                          rejected?: unknown;
+                          response?: unknown;
+                          messageId?: unknown;
+                      })
+                    : null;
+
+            const accepted = Array.isArray(providerResultObject?.accepted)
+                ? providerResultObject.accepted.filter((value): value is string => typeof value === 'string')
+                : [];
+            const rejected = Array.isArray(providerResultObject?.rejected)
+                ? providerResultObject.rejected.filter((value): value is string => typeof value === 'string')
+                : [];
+            const smtpResponse =
+                typeof providerResultObject?.response === 'string' ? providerResultObject.response : null;
+            const messageId =
+                typeof providerResultObject?.messageId === 'string' ? providerResultObject.messageId : null;
+
+            const hasSmtpDeliveryArrays =
+                Array.isArray(providerResultObject?.accepted) || Array.isArray(providerResultObject?.rejected);
+
+            if (hasSmtpDeliveryArrays) {
+                const normalizedTarget = authRequest.user.email.trim().toLowerCase();
+                const acceptedNormalized = accepted.map((value) => value.trim().toLowerCase());
+                const rejectedNormalized = rejected.map((value) => value.trim().toLowerCase());
+
+                if (
+                    acceptedNormalized.length === 0 ||
+                    rejectedNormalized.includes(normalizedTarget) ||
+                    !acceptedNormalized.includes(normalizedTarget)
+                ) {
+                    throw new Error(
+                        `Auth email provider did not accept target recipient. accepted=${accepted.join(',')} rejected=${rejected.join(',')} response=${smtpResponse ?? 'n/a'}`,
+                    );
+                }
+            }
 
             logger.info(
                 {
                     event_type: authRequest.email_data.email_action_type,
                     email: authRequest.user.email,
+                    accepted,
+                    rejected,
+                    smtpResponse,
+                    providerMessageId: messageId,
                 },
                 'Email sent successfully',
             );
