@@ -23,13 +23,6 @@ export function useEmailPasswordSignIn(supabase?: SupabaseClient<Database>) {
             throw response.error.message;
         }
 
-        const user = response.data?.user;
-        const identities = user?.identities ?? [];
-
-        if (identities.length === 0) {
-            throw new Error('User already registered');
-        }
-
         return response.data;
     };
 

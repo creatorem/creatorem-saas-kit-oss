@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import { Platform } from 'react-native';
 import { LargeSecureStore } from './large-secure-store';
+import { normalizeSupabaseUrl } from '../shared/normalize-supabase-url';
 
 const storage = Platform.OS === 'web' ? AsyncStorage : new LargeSecureStore();
 
@@ -16,9 +17,17 @@ export const getSupabaseClient = () => {
         return clientInstance;
     }
 
+    const rawUrl = envs.native().EXPO_PUBLIC_SUPABASE_API_URL;
+    const normalizedUrl = normalizeSupabaseUrl(rawUrl);
+    if (__DEV__ && normalizedUrl !== rawUrl) {
+        console.warn(
+            `[supabase/native] Normalized EXPO_PUBLIC_SUPABASE_API_URL from "${rawUrl}" to "${normalizedUrl}".`,
+        );
+    }
+
     // Create and cache the client instance
     clientInstance = createClient<Database>(
-        envs.native().EXPO_PUBLIC_SUPABASE_API_URL,
+        normalizedUrl,
         envs.native().EXPO_PUBLIC_SUPABASE_ANON_KEY,
         {
             auth: {

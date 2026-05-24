@@ -1,6 +1,7 @@
 import { Database } from '@kit/db';
 import { envs } from '@kit/supabase-client/envs';
 import { createBrowserClient } from '@supabase/ssr';
+import { normalizeSupabaseUrl } from '../shared/normalize-supabase-url';
 
 // Memoize the Supabase client to prevent creating multiple connections
 let clientInstance: ReturnType<typeof createBrowserClient<Database>> | null = null;
@@ -25,10 +26,15 @@ export const getSupabaseClient = () => {
         throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY is not set');
     }
 
-    const client = createBrowserClient<Database>(
-        envs.www().NEXT_PUBLIC_SUPABASE_URL,
-        envs.www().NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    );
+    const rawUrl = envs.www().NEXT_PUBLIC_SUPABASE_URL;
+    const normalizedUrl = normalizeSupabaseUrl(rawUrl);
+    if (typeof __DEV__ !== 'undefined' && __DEV__ && normalizedUrl !== rawUrl) {
+        console.warn(
+            `[supabase/www] Normalized NEXT_PUBLIC_SUPABASE_URL from "${rawUrl}" to "${normalizedUrl}".`,
+        );
+    }
+
+    const client = createBrowserClient<Database>(normalizedUrl, envs.www().NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
     if (!client) {
         throw new Error('Failed to create Supabase client');
