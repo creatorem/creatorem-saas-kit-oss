@@ -23,6 +23,7 @@
     "typecheck": "turbo typecheck --affected --cache-dir=.turbo",
     "analyze": "turbo analyze --cache-dir=.turbo",
     "test": "turbo test --cache-dir=.turbo",
+    "verify:planoby:client": "node ./tooling/scripts/run-planoby-client-verification.mjs",
     "syncpack:list": "pnpm dlx syncpack list-mismatches",
     "syncpack:fix": "pnpm dlx syncpack fix-mismatches",
     "docs:check": "pnpm --filter creatorem docs:check",
