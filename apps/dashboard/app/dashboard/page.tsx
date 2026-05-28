@@ -22,13 +22,10 @@ export default async function DashboardPage({
 }): Promise<React.JSX.Element> {
     const awaitedParams = await searchParams;
     const db = await getDBClient();
-    const user = await db.user.require();
+    await db.user.require();
 
     await initServerFilters();
-    const shouldRedirect = await applyServerAsyncFilter(
-        'server_redirect_root_dashboard',
-        dashboardRoutes.paths.dashboard.slug.index.replace('[slug]', user.id),
-    );
+    const shouldRedirect = await applyServerAsyncFilter('server_redirect_root_dashboard', null);
     if (shouldRedirect) {
         const redirectUrl = awaitedParams.tour === 'true' ? `${shouldRedirect}?tour=true` : shouldRedirect;
         return redirect(redirectUrl);
